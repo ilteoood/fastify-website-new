@@ -1,0 +1,28 @@
+version: 2
+
+updates:
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "daily"
+    cooldown:
+      default-days: 1
+    groups:
+      astro:
+        patterns: ["@astrojs/*", "astro"]
+      tailwind:
+        patterns: ["@tailwindcss/*", "tailwindcss"]
+    commit-message:
+      prefix: "deps"
+      prefix-development: "deps-dev"
+      include: "scope"
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "daily"
+    cooldown:
+      default-days: 1
+    commit-message:
+      prefix: "ci"
+      include: "scope"
