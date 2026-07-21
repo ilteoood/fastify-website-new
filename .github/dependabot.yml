@@ -7,9 +7,6 @@ updates:
       interval: "daily"
     cooldown:
       default-days: 1
-      semver-major-days: 30
-      semver-minor-days: 7
-      semver-patch-days: 3
     groups:
       dev-dependencies:
         dependency-type: "development"
@@ -21,9 +18,6 @@ updates:
       prefix: "deps"
       prefix-development: "deps-dev"
       include: "scope"
-    labels:
-      - "dependencies"
-      - "npm"
 
   - package-ecosystem: "github-actions"
     directory: "/"
@@ -31,12 +25,6 @@ updates:
       interval: "daily"
     cooldown:
       default-days: 1
-      semver-major-days: 30
-      semver-minor-days: 7
-      semver-patch-days: 3
     commit-message:
       prefix: "ci"
       include: "scope"
-    labels:
-      - "dependencies"
-      - "github-actions"
