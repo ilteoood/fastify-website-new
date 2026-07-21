@@ -176,7 +176,7 @@ function rewriteTarget(target, relDir, version) {
       .replace(/\.mdx?$/i, "")
       .replace(/\/(index|Index)$/, "")
       .replace(/^(index|Index)$/, "");
-    const url = `${BASE}/docs/${version}/${p}`.replace(/\/+$/, "") + "/";
+    const url = `${BASE}/docs/${version}/${p}/`;
     return anchor ? `${url}#${anchor}` : url;
   }
 
@@ -190,8 +190,7 @@ function rewriteTarget(target, relDir, version) {
       .replace(/\.mdx?$/i, "")
       .replace(/\/(index|Index)$/, "")
       .replace(/^(index|Index)$/, "");
-    let url = `${BASE}/docs/${version}/${joined}`.replace(/\/+$/, "");
-    url += "/";
+    const url = `${BASE}/docs/${version}/${joined}/` ;
     return anchor ? `${url}#${anchor}` : url;
   }
   if (joined.includes("resources/")) {

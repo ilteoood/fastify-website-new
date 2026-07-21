@@ -1,8 +1,8 @@
 ---
-import { getCollection } from 'astro:content';
-import Icon from './Icon.astro';
-import versionsData from '../data/versions.json';
-import { withBase } from '../lib/href';
+import { getCollection } from "astro:content";
+import Icon from "./Icon.astro";
+import versionsData from "../data/versions.json";
+import { withBase } from "../lib/href";
 
 interface Props {
   current: string;
@@ -11,16 +11,20 @@ interface Props {
 }
 const { current, version, prose = true } = Astro.props;
 
-const SECTION_ORDER: Record<string, number> = { Overview: 0, Guides: 1, Reference: 2 };
+const SECTION_ORDER: Record<string, number> = {
+  Overview: 0,
+  Guides: 1,
+  Reference: 2,
+};
 
 const routeFor = (id: string) => {
-  const slug = id.replace(/\/(index|Index)$/, '');
+  const slug = id.replace(/\/(index|Index)$/, "");
   return withBase(`/docs/${slug}/`);
 };
 
-const all = await getCollection('docs');
+const all = await getCollection("docs");
 const versionDocs = all
-  .filter((d) => d.id.split('/')[0] === version)
+  .filter((d) => d.id.split("/")[0] === version)
   .sort((a, b) => {
     const sa = SECTION_ORDER[a.data.section] ?? 9;
     const sb = SECTION_ORDER[b.data.section] ?? 9;
@@ -39,28 +43,44 @@ const sections = sectionNames.map((name) => ({
 
 const idx = versionDocs.findIndex((d) => d.id === current);
 const prev = idx > 0 ? versionDocs[idx - 1] : null;
-const next = idx >= 0 && idx < versionDocs.length - 1 ? versionDocs[idx + 1] : null;
+const next =
+  idx >= 0 && idx < versionDocs.length - 1 ? versionDocs[idx + 1] : null;
 
-const breadcrumb = current.split('/').slice(1).filter((s) => !/^index$/i.test(s));
+const breadcrumb = current
+  .split("/")
+  .slice(1)
+  .filter((s) => !/^index$/i.test(s));
 ---
+
 <div class="mx-auto max-w-7xl px-4 sm:px-6">
   <div class="lg:grid lg:grid-cols-[16rem_1fr] lg:gap-10">
     <!-- Sidebar -->
     <aside class="hidden lg:block">
-      <div class="sticky top-16 max-h-[calc(100vh-4rem)] overflow-y-auto py-8 pr-4">
+      <div
+        class="sticky top-16 max-h-[calc(100vh-4rem)] overflow-y-auto py-8 pr-4"
+      >
         <label class="mb-3 block">
-          <span class="mb-1.5 block font-mono text-[0.62rem] uppercase tracking-[0.16em] text-muted">version</span>
+          <span
+            class="mb-1.5 block font-mono text-[0.62rem] uppercase tracking-[0.16em] text-muted"
+            >version</span
+          >
           <div class="relative">
             <select
               data-version-switch
               class="w-full appearance-none rounded-md border border-border bg-surface-2 px-3 py-2 pr-8 text-sm font-medium text-fg focus:border-amber focus:outline-none"
               aria-label="Select documentation version"
             >
-              {versionsData.versions.map((v) => (
-                <option value={v.name} selected={v.name === version}>{v.label}</option>
-              ))}
+              {
+                versionsData.versions.map((v) => (
+                  <option value={v.name} selected={v.name === version}>
+                    {v.label}
+                  </option>
+                ))
+              }
             </select>
-            <span class="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-muted">
+            <span
+              class="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-muted"
+            >
               <Icon name="arrow" size={14} class="rotate-90" />
             </span>
           </div>
@@ -72,52 +92,71 @@ const breadcrumb = current.split('/').slice(1).filter((s) => !/^index$/i.test(s)
           class="mb-5 flex w-full items-center gap-2 rounded-md border border-border bg-surface px-3 py-2 text-sm text-muted transition-colors hover:text-fg"
         >
           <Icon name="search" size={16} /> Search
-          <kbd class="ml-auto rounded border border-border px-1.5 font-mono text-[0.65rem]">⌘K</kbd>
+          <kbd
+            class="ml-auto rounded border border-border px-1.5 font-mono text-[0.65rem]"
+            >⌘K</kbd
+          >
         </button>
 
         <nav aria-label="Documentation">
-          {sections.map((section) => (
-            <div class="mb-6">
-              <p class="mb-2 font-mono text-[0.65rem] uppercase tracking-[0.16em] text-muted">{section.name}</p>
-              <ul class="space-y-0.5 border-l border-border">
-                {section.items.map((item) => {
-                  const active = item.id === current;
-                  return (
-                    <li>
-                      <a
-                        href={routeFor(item.id)}
-                        class:list={[
-                          '-ml-px block border-l-2 py-1.5 pl-4 text-sm transition-colors',
-                          active
-                            ? 'border-amber font-medium text-amber-ink'
-                            : 'border-transparent text-fg-soft hover:border-border-strong hover:text-fg',
-                        ]}
-                        aria-current={active ? 'page' : undefined}
-                      >
-                        {item.data.title}
-                      </a>
-                    </li>
-                  );
-                })}
-              </ul>
-            </div>
-          ))}
+          {
+            sections.map((section) => (
+              <div class="mb-6">
+                <p class="mb-2 font-mono text-[0.65rem] uppercase tracking-[0.16em] text-muted">
+                  {section.name}
+                </p>
+                <ul class="space-y-0.5 border-l border-border">
+                  {section.items.map((item) => {
+                    const active = item.id === current;
+                    return (
+                      <li>
+                        <a
+                          href={routeFor(item.id)}
+                          class:list={[
+                            "-ml-px block border-l-2 py-1.5 pl-4 text-sm transition-colors",
+                            active
+                              ? "border-amber font-medium text-amber-ink"
+                              : "border-transparent text-fg-soft hover:border-border-strong hover:text-fg",
+                          ]}
+                          aria-current={active ? "page" : undefined}
+                        >
+                          {item.data.title}
+                        </a>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </div>
+            ))
+          }
         </nav>
       </div>
     </aside>
 
     <!-- Content -->
     <div class="min-w-0 py-10">
-      <nav class="mb-6 flex flex-wrap items-center gap-2 font-mono text-xs text-muted" aria-label="Breadcrumb">
-        <a href={withBase('/docs/latest/')} class="hover:text-fg">docs</a>
-        <span class="rounded border border-border px-1.5 py-0.5 text-amber-ink">{version}</span>
-        {breadcrumb.map((seg) => (
-          <><span>/</span><span class="text-fg-soft">{seg}</span></>
-        ))}
+      <nav
+        class="mb-6 flex flex-wrap items-center gap-2 font-mono text-xs text-muted"
+        aria-label="Breadcrumb"
+      >
+        <a href={withBase("/docs/latest/")} class="hover:text-fg">docs</a>
+        <span class="rounded border border-border px-1.5 py-0.5 text-amber-ink"
+          >{version}</span
+        >
+        {
+          breadcrumb.map((seg) => (
+            <>
+              <>
+                <span>/</span>
+                <span class="text-fg-soft">{seg}</span>
+              </>
+            </>
+          ))
+        }
       </nav>
 
       <article
-        class:list={[prose && 'prose-fastify']}
+        class:list={[prose && "prose-fastify"]}
         data-pagefind-body
         data-pagefind-filter="version[data-version]"
         data-version={version}
@@ -125,24 +164,48 @@ const breadcrumb = current.split('/').slice(1).filter((s) => !/^index$/i.test(s)
         <slot />
       </article>
 
-      <nav class="mt-14 grid gap-3 border-t border-border pt-8 sm:grid-cols-2" aria-label="Pagination">
-        {prev ? (
-          <a href={routeFor(prev.id)} class="card group p-4 transition-colors hover:border-border-strong">
-            <span class="font-mono text-xs text-muted">← Previous</span>
-            <div class="mt-1 font-medium text-fg group-hover:text-amber-ink">{prev.data.title}</div>
-          </a>
-        ) : <span></span>}
-        {next && (
-          <a href={routeFor(next.id)} class="card group p-4 text-right transition-colors hover:border-border-strong sm:col-start-2">
-            <span class="font-mono text-xs text-muted">Next →</span>
-            <div class="mt-1 font-medium text-fg group-hover:text-amber-ink">{next.data.title}</div>
-          </a>
-        )}
+      <nav
+        class="mt-14 grid gap-3 border-t border-border pt-8 sm:grid-cols-2"
+        aria-label="Pagination"
+      >
+        {
+          prev ? (
+            <a
+              href={routeFor(prev.id)}
+              class="card group p-4 transition-colors hover:border-border-strong"
+            >
+              <span class="font-mono text-xs text-muted">← Previous</span>
+              <div class="mt-1 font-medium text-fg group-hover:text-amber-ink">
+                {prev.data.title}
+              </div>
+            </a>
+          ) : (
+            <span />
+          )
+        }
+        {
+          next && (
+            <a
+              href={routeFor(next.id)}
+              class="card group p-4 text-right transition-colors hover:border-border-strong sm:col-start-2"
+            >
+              <span class="font-mono text-xs text-muted">Next →</span>
+              <div class="mt-1 font-medium text-fg group-hover:text-amber-ink">
+                {next.data.title}
+              </div>
+            </a>
+          )
+        }
       </nav>
 
       <p class="mt-8 font-mono text-xs text-muted">
         Generated from the
-        <a href="https://github.com/fastify/fastify/tree/main/docs" class="text-amber-ink hover:underline" target="_blank" rel="noopener noreferrer">fastify/fastify</a>
+        <a
+          href="https://github.com/fastify/fastify/tree/main/docs"
+          class="text-amber-ink hover:underline"
+          target="_blank"
+          rel="noopener noreferrer">fastify/fastify</a
+        >
         repository.
       </p>
     </div>
@@ -150,8 +213,12 @@ const breadcrumb = current.split('/').slice(1).filter((s) => !/^index$/i.test(s)
 </div>
 
 <script>
-  const sel = document.querySelector<HTMLSelectElement>('[data-version-switch]');
-  sel?.addEventListener('change', () => {
-    window.location.href = `${import.meta.env.BASE_URL}docs/${sel.value}/`;
+import { withBase } from "~/lib/href";
+
+  const sel = document.querySelector<HTMLSelectElement>(
+    "[data-version-switch]",
+  );
+  sel?.addEventListener("change", () => {
+    window.location.href = withBase(`/docs/${sel.value}/`);
   });
 </script>
