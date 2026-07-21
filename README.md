@@ -18,16 +18,24 @@ requests-per-second velocity gauge in the hero.
 
 ## Commands
 
-| Command | Action |
-| --- | --- |
-| `npm install` | Install dependencies |
-| `npm run dev` | Start the dev server at `localhost:4321` |
-| `npm run build` | Build to `dist/` and generate the Pagefind search index |
-| `npm run preview` | Preview the production build locally |
+| Command            | Action                                                         |
+| ------------------ | -------------------------------------------------------------- |
+| `pnpm install`     | Install dependencies                                           |
+| `pnpm run dev`     | Start the dev server at `localhost:4321`                       |
+| `pnpm run build`   | Build to `dist/` and generate the Pagefind search index        |
+| `pnpm run preview` | Preview the production build locally                           |
+| `pnpm run lint`    | Lint with [oxlint](https://oxc.rs)                             |
+| `pnpm run format`  | Format with [oxfmt](https://oxc.rs) (`format:check` to verify) |
+| `pnpm run check`   | Run lint + format check (used by CI on every PR)               |
 
 > Search only works against a production build (`npm run build`), because the
 > Pagefind index is generated from the built HTML. In `dev` the search modal
 > shows a graceful fallback message.
+>
+> Icons come from [Lucide](https://lucide.dev) (`@lucide/astro`). The GitHub
+> star count is fetched client-side on page load so it always matches GitHub.
+> Internal links respect Astro's `base` via the `withBase` helper in
+> [src/lib/href.ts](src/lib/href.ts).
 
 ## Project structure
 
@@ -112,5 +120,3 @@ deployment → Source** to **GitHub Actions**.
 > (`https://<user>.github.io/<repo>/`), set Astro's
 > [`base`](https://docs.astro.build/en/reference/configuration-reference/#base)
 > and add a matching custom domain / `CNAME` accordingly.
-
-

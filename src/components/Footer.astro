@@ -1,6 +1,7 @@
 ---
 import Logo from './Logo.astro';
 import Icon from './Icon.astro';
+import { withBase } from '../lib/href';
 
 const columns = [
   {
@@ -32,19 +33,19 @@ const columns = [
   },
 ];
 ---
-<footer class="relative mt-24 border-t border-[var(--border)] bg-[var(--surface)]/40">
+<footer class="relative mt-24 border-t border-border bg-surface/40">
   <div class="mx-auto max-w-7xl px-4 py-14 sm:px-6">
     <div class="grid gap-10 md:grid-cols-[1.4fr_1fr_1fr_1fr]">
       <div>
         <Logo />
         <p class="mt-4 max-w-xs text-sm leading-relaxed text-muted">
           A fast and low overhead web framework for Node.js. An
-          <a href="https://openjsf.org/" class="text-fg-soft underline decoration-[var(--border-strong)] underline-offset-2 hover:text-amber-ink">OpenJS Foundation</a>
+          <a href="https://openjsf.org/" class="text-fg-soft underline decoration-border-strong underline-offset-2 hover:text-amber-ink">OpenJS Foundation</a>
           At Large project.
         </p>
         <div class="mt-5 flex gap-2">
-          <a href="https://github.com/fastify/fastify" class="rounded-md border border-[var(--border)] p-2 text-muted hover:text-fg" aria-label="GitHub" target="_blank" rel="noopener noreferrer"><Icon name="github" size={18} /></a>
-          <a href="https://discord.gg/fastify" class="rounded-md border border-[var(--border)] p-2 text-muted hover:text-fg" aria-label="Discord" target="_blank" rel="noopener noreferrer"><Icon name="discord" size={18} /></a>
+          <a href="https://github.com/fastify/fastify" class="rounded-md border border-border p-2 text-muted hover:text-fg" aria-label="GitHub" target="_blank" rel="noopener noreferrer"><Icon name="github" size={18} /></a>
+          <a href="https://discord.gg/fastify" class="rounded-md border border-border p-2 text-muted hover:text-fg" aria-label="Discord" target="_blank" rel="noopener noreferrer"><Icon name="discord" size={18} /></a>
         </div>
       </div>
 
@@ -54,7 +55,7 @@ const columns = [
           <ul class="mt-4 space-y-2.5">
             {col.links.map((link) => (
               <li>
-                <a href={link.href} class="text-sm text-fg-soft transition-colors hover:text-amber-ink">{link.label}</a>
+                <a href={withBase(link.href)} class="text-sm text-fg-soft transition-colors hover:text-amber-ink">{link.label}</a>
               </li>
             ))}
           </ul>
@@ -62,7 +63,7 @@ const columns = [
       ))}
     </div>
 
-    <div class="mt-12 flex flex-col gap-4 border-t border-[var(--border)] pt-6 text-xs text-muted sm:flex-row sm:items-center sm:justify-between">
+    <div class="mt-12 flex flex-col gap-4 border-t border-border pt-6 text-xs text-muted sm:flex-row sm:items-center sm:justify-between">
       <p>Copyright OpenJS Foundation and Fastify contributors. All rights reserved.</p>
       <p class="font-mono">Licensed MIT · Built with Astro</p>
     </div>

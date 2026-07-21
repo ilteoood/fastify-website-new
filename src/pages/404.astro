@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Icon from '../components/Icon.astro';
+import { withBase } from '../lib/href';
 ---
 <BaseLayout title="Page not found — Fastify">
   <section class="relative overflow-hidden bg-telemetry">
@@ -14,10 +15,10 @@ import Icon from '../components/Icon.astro';
         This handler isn't registered. Head back home, or jump straight into the docs.
       </p>
       <div class="mt-8 flex flex-wrap justify-center gap-3">
-        <a href="/" class="inline-flex items-center gap-2 rounded-lg bg-amber px-5 py-3 font-medium text-[#0a0b0d] transition-transform hover:-translate-y-0.5">
+        <a href={withBase('/')} class="inline-flex items-center gap-2 rounded-lg bg-amber px-5 py-3 font-medium text-[#0a0b0d] transition-transform hover:-translate-y-0.5">
           Back home <Icon name="arrow" size={18} />
         </a>
-        <a href="/docs/" class="inline-flex items-center gap-2 rounded-lg border border-[var(--border)] bg-[var(--surface)] px-5 py-3 font-medium text-fg transition-colors hover:border-[var(--border-strong)]">
+        <a href={withBase('/docs/')} class="inline-flex items-center gap-2 rounded-lg border border-border bg-surface px-5 py-3 font-medium text-fg transition-colors hover:border-border-strong">
           Read the docs
         </a>
       </div>

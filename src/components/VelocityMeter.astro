@@ -21,7 +21,7 @@ const tickValues = [0, 17000, 34000];
 ---
 <div class="relative">
   <!-- packet streaks -->
-  <div class="pointer-events-none absolute inset-x-0 top-8 -z-0 space-y-6 overflow-hidden opacity-70" aria-hidden="true">
+  <div class="pointer-events-none absolute inset-x-0 top-8 z-0 space-y-6 overflow-hidden opacity-70" aria-hidden="true">
     {[0, 1, 2, 3, 4].map((i) => (
       <div class="h-px w-full">
         <div
@@ -33,7 +33,7 @@ const tickValues = [0, 17000, 34000];
     ))}
   </div>
 
-  <div class="relative rounded-2xl border border-[var(--border)] bg-[var(--surface)]/70 p-6 backdrop-blur-xl">
+  <div class="relative rounded-2xl border border-border bg-surface/70 p-6 backdrop-blur-xl">
     <div class="flex items-center justify-between">
       <span class="font-mono text-[0.7rem] uppercase tracking-[0.2em] text-muted">throughput</span>
       <span class="flex items-center gap-1.5 font-mono text-[0.7rem] text-teal">
@@ -85,7 +85,7 @@ const tickValues = [0, 17000, 34000];
       <div class="mt-1 font-mono text-xs uppercase tracking-[0.2em] text-muted">requests / second</div>
     </div>
 
-    <div class="mt-5 grid grid-cols-3 gap-2 border-t border-[var(--border)] pt-4">
+    <div class="mt-5 grid grid-cols-3 gap-2 border-t border-border pt-4">
       <div>
         <div class="font-display text-lg font-semibold text-fg">0.9<span class="text-sm text-muted">ms</span></div>
         <div class="font-mono text-[0.6rem] uppercase tracking-wider text-muted">p99 latency</div>

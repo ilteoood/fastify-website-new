@@ -1,4 +1,28 @@
 ---
+// Thin wrapper that renders icons from Lucide (https://lucide.dev). Existing
+// call sites keep using `<Icon name="…" />`; the wrapper maps those names to the
+// corresponding Lucide component. Brand marks (GitHub, Discord) are kept as
+// inline SVGs because Lucide intentionally does not ship brand icons.
+import {
+  ArrowRight,
+  Braces,
+  Check,
+  Copy,
+  ExternalLink,
+  Heart,
+  Menu,
+  Moon,
+  Package,
+  Plug,
+  ScrollText,
+  Search,
+  Star,
+  Sun,
+  Type,
+  X,
+  Zap,
+} from '@lucide/astro';
+
 interface Props {
   name: string;
   class?: string;
@@ -6,43 +30,48 @@ interface Props {
 }
 const { name, class: className = '', size = 24 } = Astro.props;
 
-const paths: Record<string, string> = {
-  bolt: '<path d="M13 2 4.5 13.5H11l-1 8.5 8.5-11.5H12l1-8.5Z"/>',
-  plug: '<path d="M9 2v6M15 2v6M7 8h10v3a5 5 0 0 1-5 5 5 5 0 0 1-5-5V8ZM12 16v6"/>',
-  schema: '<path d="M12 3 3 8l9 5 9-5-9-5ZM3 16l9 5 9-5M3 12l9 5 9-5"/>',
-  log: '<path d="M4 5h16M4 10h16M4 15h10M4 20h16"/>',
-  heart: '<path d="M20.8 6.6a5 5 0 0 0-7.1 0L12 8.3l-1.7-1.7a5 5 0 1 0-7.1 7.1L12 22l8.8-8.3a5 5 0 0 0 0-7.1Z"/>',
-  ts: '<path d="M3 3h18v18H3zM8 12h6M11 12v6M15.5 16.2a2 2 0 0 0 3.3-1.4c0-2.2-3-1.6-3-3.3a1.6 1.6 0 0 1 2.8-.9"/>',
-  arrow: '<path d="M5 12h14M13 6l6 6-6 6"/>',
-  github: '<path d="M12 2a10 10 0 0 0-3.2 19.5c.5.1.7-.2.7-.5v-1.7c-2.8.6-3.4-1.3-3.4-1.3-.5-1.2-1.1-1.5-1.1-1.5-.9-.6.1-.6.1-.6 1 0 1.5 1 1.5 1 .9 1.5 2.3 1.1 2.9.8 0-.6.3-1.1.6-1.4-2.2-.2-4.6-1.1-4.6-5 0-1.1.4-2 1-2.7 0-.3-.4-1.3.1-2.7 0 0 .8-.3 2.7 1a9.4 9.4 0 0 1 5 0c1.9-1.3 2.7-1 2.7-1 .5 1.4.2 2.4.1 2.7.6.7 1 1.6 1 2.7 0 3.9-2.3 4.7-4.6 5 .4.3.7.9.7 1.9v2.7c0 .3.2.6.7.5A10 10 0 0 0 12 2Z"/>',
-  discord: '<path d="M19.5 5.3A17 17 0 0 0 15.4 4l-.2.4a13 13 0 0 1 3.6 1.8 12 12 0 0 0-10.5 0A13 13 0 0 1 11.9 4l-.3-.4A17 17 0 0 0 7.5 5.3C4.9 9.1 4.2 12.8 4.5 16.5a17 17 0 0 0 5.1 2.6l.6-1a11 11 0 0 1-1.8-.9l.4-.3a12 12 0 0 0 10.3 0l.4.3a11 11 0 0 1-1.8.9l.6 1a17 17 0 0 0 5.1-2.6c.4-4.3-.7-8-3.5-11.2ZM9.7 14.3c-.9 0-1.6-.8-1.6-1.8s.7-1.8 1.6-1.8 1.7.8 1.6 1.8c0 1-.7 1.8-1.6 1.8Zm4.6 0c-.9 0-1.6-.8-1.6-1.8s.7-1.8 1.6-1.8 1.7.8 1.6 1.8c0 1-.7 1.8-1.6 1.8Z"/>',
-  search: '<path d="M11 4a7 7 0 1 0 0 14 7 7 0 0 0 0-14ZM20 20l-4-4"/>',
-  sun: '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4 12H2M22 12h-2M5 5 4 4M20 20l-1-1M19 5l1-1M4 20l1-1"/>',
-  moon: '<path d="M21 12.8A8 8 0 0 1 11.2 3a7 7 0 1 0 9.8 9.8Z"/>',
-  copy: '<path d="M9 9h10v10H9zM5 15V5h10"/>',
-  check: '<path d="M5 12l5 5L20 7"/>',
-  npm: '<path d="M3 5h18v12h-9v2H8v-2H3V5Zm3 3v6h2V9h1v5h2V8H6Zm7 0v6h4v-1h-2V8h-2Z"/>',
-  external: '<path d="M14 5h5v5M19 5l-9 9M11 5H5v14h14v-6"/>',
-  menu: '<path d="M4 7h16M4 12h16M4 17h16"/>',
-  close: '<path d="M6 6l12 12M18 6 6 18"/>',
-  star: '<path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1 6.2-5.5-2.9-5.5 2.9 1-6.2L3 9.6l6.2-.9L12 3Z"/>',
+const lucide: Record<string, any> = {
+  bolt: Zap,
+  plug: Plug,
+  schema: Braces,
+  log: ScrollText,
+  heart: Heart,
+  ts: Type,
+  arrow: ArrowRight,
+  search: Search,
+  sun: Sun,
+  moon: Moon,
+  copy: Copy,
+  check: Check,
+  external: ExternalLink,
+  menu: Menu,
+  close: X,
+  star: Star,
+  npm: Package,
 };
 
-const solid = new Set(['github', 'discord', 'npm', 'star']);
-const isSolid = solid.has(name);
-const inner = paths[name] ?? '';
+const brand: Record<string, string> = {
+  github:
+    '<path d="M12 2a10 10 0 0 0-3.2 19.5c.5.1.7-.2.7-.5v-1.7c-2.8.6-3.4-1.3-3.4-1.3-.5-1.2-1.1-1.5-1.1-1.5-.9-.6.1-.6.1-.6 1 0 1.5 1 1.5 1 .9 1.5 2.3 1.1 2.9.8 0-.6.3-1.1.6-1.4-2.2-.2-4.6-1.1-4.6-5 0-1.1.4-2 1-2.7 0-.3-.4-1.3.1-2.7 0 0 .8-.3 2.7 1a9.4 9.4 0 0 1 5 0c1.9-1.3 2.7-1 2.7-1 .5 1.4.2 2.4.1 2.7.6.7 1 1.6 1 2.7 0 3.9-2.3 4.7-4.6 5 .4.3.7.9.7 1.9v2.7c0 .3.2.6.7.5A10 10 0 0 0 12 2Z"/>',
+  discord:
+    '<path d="M19.5 5.3A17 17 0 0 0 15.4 4l-.2.4a13 13 0 0 1 3.6 1.8 12 12 0 0 0-10.5 0A13 13 0 0 1 11.9 4l-.3-.4A17 17 0 0 0 7.5 5.3C4.9 9.1 4.2 12.8 4.5 16.5a17 17 0 0 0 5.1 2.6l.6-1a11 11 0 0 1-1.8-.9l.4-.3a12 12 0 0 0 10.3 0l.4.3a11 11 0 0 1-1.8.9l.6 1a17 17 0 0 0 5.1-2.6c.4-4.3-.7-8-3.5-11.2ZM9.7 14.3c-.9 0-1.6-.8-1.6-1.8s.7-1.8 1.6-1.8 1.7.8 1.6 1.8c0 1-.7 1.8-1.6 1.8Zm4.6 0c-.9 0-1.6-.8-1.6-1.8s.7-1.8 1.6-1.8 1.7.8 1.6 1.8c0 1-.7 1.8-1.6 1.8Z"/>',
+};
+
+const LucideIcon = lucide[name];
 ---
-<svg
-  xmlns="http://www.w3.org/2000/svg"
-  width={size}
-  height={size}
-  viewBox="0 0 24 24"
-  fill={isSolid ? 'currentColor' : 'none'}
-  stroke={isSolid ? 'none' : 'currentColor'}
-  stroke-width="1.6"
-  stroke-linecap="round"
-  stroke-linejoin="round"
-  class={className}
-  aria-hidden="true"
-  set:html={inner}
-/>
+{
+  LucideIcon ? (
+    <LucideIcon size={size} stroke-width={1.75} class={className} />
+  ) : brand[name] ? (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      class={className}
+      aria-hidden="true"
+      set:html={brand[name]}
+    />
+  ) : null
+}

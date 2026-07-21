@@ -2,6 +2,7 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Icon from '../../components/Icon.astro';
 import { getCollection } from 'astro:content';
+import { withBase } from '../../lib/href';
 
 const posts = (await getCollection('blog')).sort(
   (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
@@ -10,7 +11,7 @@ const fmt = (d: Date) =>
   d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
 ---
 <BaseLayout title="Blog — Fastify" description="News and updates from the Fastify team.">
-  <section class="relative overflow-hidden border-b border-[var(--border)] bg-telemetry">
+  <section class="relative overflow-hidden border-b border-border bg-telemetry">
     <div class="pointer-events-none absolute inset-x-0 top-0 h-72 glow-amber opacity-60"></div>
     <div class="relative mx-auto max-w-7xl px-4 py-16 sm:px-6">
       <p class="eyebrow">// blog</p>
@@ -22,7 +23,7 @@ const fmt = (d: Date) =>
   <section class="mx-auto max-w-4xl px-4 py-14 sm:px-6">
     <div class="space-y-4">
       {posts.map((post) => (
-        <a href={`/blog/${post.id}/`} class="card group block p-6 transition-colors hover:border-[var(--border-strong)]">
+        <a href={withBase(`/blog/${post.id}/`)} class="card group block p-6 transition-colors hover:border-border-strong">
           <div class="flex items-center gap-3 font-mono text-xs text-muted">
             <time datetime={post.data.date.toISOString()}>{fmt(post.data.date)}</time>
             <span>·</span>

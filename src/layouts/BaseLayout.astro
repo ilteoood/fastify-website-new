@@ -7,6 +7,7 @@ import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
 import Search from '../components/Search.astro';
 import { SITE } from '../data/site';
+import { withBase } from '../lib/href';
 
 interface Props {
   title?: string;
@@ -25,7 +26,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? SITE.url).href;
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/svg+xml" href={withBase('/favicon.svg')} />
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
@@ -43,7 +44,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? SITE.url).href;
     </script>
   </head>
   <body class="min-h-screen bg-bg text-fg antialiased">
-    <a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[100] focus:rounded-md focus:bg-amber focus:px-4 focus:py-2 focus:text-[#0a0b0d]">
+    <a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-100 focus:rounded-md focus:bg-amber focus:px-4 focus:py-2 focus:text-[#0a0b0d]">
       Skip to content
     </a>
     {!hideChrome && <Nav />}
@@ -77,6 +78,25 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? SITE.url).href;
       document.querySelector('[data-menu-open]')?.addEventListener('click', openMenu);
       document.querySelector('[data-menu-close]')?.addEventListener('click', closeMenu);
       menu?.querySelectorAll('a').forEach((a) => a.addEventListener('click', closeMenu));
+
+      // Live GitHub star count — fetched client-side when the page loads.
+      (async () => {
+        const els = document.querySelectorAll('[data-github-stars]');
+        if (!els.length) return;
+        const format = (n: number) =>
+          n >= 1000 ? `${(n / 1000).toFixed(1).replace(/\.0$/, '')}k` : String(n);
+        try {
+          let count = Number(sessionStorage.getItem('fastify-stars')) || 0;
+          if (!count) {
+            const res = await fetch('https://api.github.com/repos/fastify/fastify');
+            if (!res.ok) return;
+            const data = await res.json();
+            count = data.stargazers_count;
+            try { sessionStorage.setItem('fastify-stars', String(count)); } catch (e) {}
+          }
+          if (count) els.forEach((el) => { el.textContent = format(count); });
+        } catch (e) {}
+      })();
     </script>
   </body>
 </html>

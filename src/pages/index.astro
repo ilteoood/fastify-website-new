@@ -1,11 +1,12 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
-import Icon from '../components/Icon.astro';
-import VelocityMeter from '../components/VelocityMeter.astro';
-import CodeTabs from '../components/CodeTabs.astro';
-import InstallCommand from '../components/InstallCommand.astro';
 import BenchBars from '../components/BenchBars.astro';
-import { FEATURES, SPONSORS, LEADS, SITE, PLUGINS } from '../data/site';
+import CodeTabs from '../components/CodeTabs.astro';
+import Icon from '../components/Icon.astro';
+import InstallCommand from '../components/InstallCommand.astro';
+import VelocityMeter from '../components/VelocityMeter.astro';
+import { FEATURES, LEADS, PLUGINS, SITE, SPONSORS } from '../data/site';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { withBase } from '../lib/href';
 
 const esmCode = `// Import the framework and instantiate it
 import Fastify from 'fastify'
@@ -72,10 +73,10 @@ const featuredPlugins = PLUGINS.slice(0, 6);
 <BaseLayout>
   <!-- ============ HERO ============ -->
   <section class="relative overflow-hidden bg-telemetry">
-    <div class="pointer-events-none absolute inset-x-0 top-0 h-[520px] glow-amber opacity-70"></div>
+    <div class="pointer-events-none absolute inset-x-0 top-0 h-130 glow-amber opacity-70"></div>
     <div class="relative mx-auto grid max-w-7xl gap-14 px-4 pb-16 pt-16 sm:px-6 lg:grid-cols-[1.05fr_0.95fr] lg:items-center lg:pt-24">
       <div>
-        <div class="inline-flex items-center gap-2 rounded-full border border-[var(--border)] bg-[var(--surface)]/60 px-3 py-1.5">
+        <div class="inline-flex items-center gap-2 rounded-full border border-border bg-surface/60 px-3 py-1.5">
           <span class="size-1.5 rounded-full bg-teal"></span>
           <span class="font-mono text-xs text-fg-soft">Fastify {SITE.version} · Node.js 20+</span>
         </div>
@@ -93,7 +94,7 @@ const featuredPlugins = PLUGINS.slice(0, 6);
 
         <div class="mt-8 flex flex-wrap items-center gap-3">
           <a
-            href="/docs/latest/Guides/Getting-Started/"
+            href={withBase('/docs/latest/Guides/Getting-Started/')}
             class="group inline-flex items-center gap-2 rounded-lg bg-amber px-5 py-3 font-medium text-[#0a0b0d] transition-transform hover:-translate-y-0.5"
           >
             Get started
@@ -102,14 +103,14 @@ const featuredPlugins = PLUGINS.slice(0, 6);
           <InstallCommand />
         </div>
 
-        <dl class="mt-12 grid max-w-lg grid-cols-3 gap-6 border-t border-[var(--border)] pt-6">
+        <dl class="mt-12 grid max-w-lg grid-cols-3 gap-6 border-t border-border pt-6">
           <div>
             <dt class="font-mono text-[0.65rem] uppercase tracking-[0.16em] text-muted">downloads / mo</dt>
             <dd class="mt-1 font-display text-2xl font-semibold text-fg">{SITE.downloads}</dd>
           </div>
           <div>
             <dt class="font-mono text-[0.65rem] uppercase tracking-[0.16em] text-muted">github stars</dt>
-            <dd class="mt-1 font-display text-2xl font-semibold text-fg">{SITE.stars}</dd>
+            <dd class="mt-1 font-display text-2xl font-semibold text-fg" data-github-stars>{SITE.stars}</dd>
           </div>
           <div>
             <dt class="font-mono text-[0.65rem] uppercase tracking-[0.16em] text-muted">plugins</dt>
@@ -122,10 +123,10 @@ const featuredPlugins = PLUGINS.slice(0, 6);
     </div>
 
     <!-- sponsor marquee -->
-    <div class="relative border-y border-[var(--border)] bg-[var(--surface)]/30 py-5">
+    <div class="relative border-y border-border bg-surface/30 py-5">
       <div class="mx-auto flex max-w-7xl items-center gap-6 px-4 sm:px-6">
         <span class="hidden shrink-0 font-mono text-[0.65rem] uppercase tracking-[0.16em] text-muted sm:block">trusted by</span>
-        <div class="relative flex-1 overflow-hidden [mask-image:linear-gradient(90deg,transparent,#000_8%,#000_92%,transparent)]">
+        <div class="relative flex-1 overflow-hidden mask-[linear-gradient(90deg,transparent,#000_8%,#000_92%,transparent)]">
           <div class="flex w-max animate-ticker gap-10">
             {marquee.map((s) => (
               <a href={s.url} target="_blank" rel="noopener noreferrer" class="shrink-0 font-display text-lg font-medium text-muted transition-colors hover:text-fg">
@@ -169,9 +170,9 @@ const featuredPlugins = PLUGINS.slice(0, 6);
     </div>
     <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
       {FEATURES.map((f) => (
-        <article class="card group relative flex flex-col p-6 transition-colors hover:border-[var(--border-strong)]">
+        <article class="card group relative flex flex-col p-6 transition-colors hover:border-border-strong">
           <div class="flex items-center justify-between">
-            <span class="grid size-11 place-items-center rounded-lg border border-[var(--border)] bg-[var(--surface-2)] text-amber-ink transition-colors group-hover:border-[var(--amber)]">
+            <span class="grid size-11 place-items-center rounded-lg border border-border bg-surface-2 text-amber-ink transition-colors group-hover:border-amber">
               <Icon name={f.icon} size={20} />
             </span>
             <span class="font-mono text-xs text-muted">{f.metric}</span>
@@ -192,16 +193,16 @@ const featuredPlugins = PLUGINS.slice(0, 6);
           A server in eight lines
         </h2>
         <p class="mt-4 text-lg leading-relaxed text-fg-soft">
-          Install Fastify, create <code class="rounded bg-[var(--surface-2)] px-1.5 py-0.5 font-mono text-sm text-amber-ink">server.js</code>,
-          and launch with <code class="rounded bg-[var(--surface-2)] px-1.5 py-0.5 font-mono text-sm text-amber-ink">node server</code>.
-          Prefer scaffolding? Reach for <a href="https://github.com/fastify/fastify-cli" class="text-amber-ink underline decoration-[var(--border-strong)] underline-offset-2">fastify-cli</a>.
+          Install Fastify, create <code class="rounded bg-surface-2 px-1.5 py-0.5 font-mono text-sm text-amber-ink">server.js</code>,
+          and launch with <code class="rounded bg-surface-2 px-1.5 py-0.5 font-mono text-sm text-amber-ink">node server</code>.
+          Prefer scaffolding? Reach for <a href="https://github.com/fastify/fastify-cli" class="text-amber-ink underline decoration-border-strong underline-offset-2">fastify-cli</a>.
         </p>
         <div class="mt-6 space-y-3">
           <InstallCommand command="npm install fastify" />
           <div class="text-sm text-muted">or scaffold a project:</div>
           <InstallCommand command="npm init fastify" />
         </div>
-        <a href="/docs/" class="mt-8 inline-flex items-center gap-2 text-sm font-medium text-amber-ink hover:underline">
+        <a href={withBase('/docs/')} class="mt-8 inline-flex items-center gap-2 text-sm font-medium text-amber-ink hover:underline">
           Explore the full documentation <Icon name="arrow" size={16} />
         </a>
       </div>
@@ -228,7 +229,7 @@ const featuredPlugins = PLUGINS.slice(0, 6);
   </section>
 
   <!-- ============ BENCHMARKS ============ -->
-  <section class="relative overflow-hidden border-y border-[var(--border)] bg-[var(--surface)]/30">
+  <section class="relative overflow-hidden border-y border-border bg-surface/30">
     <div class="mx-auto grid max-w-7xl gap-12 px-4 py-20 sm:px-6 lg:grid-cols-2 lg:items-center">
       <div>
         <p class="eyebrow">// benchmarks</p>
@@ -240,8 +241,8 @@ const featuredPlugins = PLUGINS.slice(0, 6);
           fast as possible. Compare it against other common frameworks.
         </p>
         <a
-          href="/benchmarks/"
-          class="mt-8 inline-flex items-center gap-2 rounded-lg border border-[var(--border)] bg-[var(--surface)] px-5 py-3 font-medium text-fg transition-colors hover:border-[var(--border-strong)]"
+          href={withBase('/benchmarks/')}
+          class="mt-8 inline-flex items-center gap-2 rounded-lg border border-border bg-surface px-5 py-3 font-medium text-fg transition-colors hover:border-border-strong"
         >
           See full benchmarks <Icon name="arrow" size={18} />
         </a>
@@ -265,14 +266,14 @@ const featuredPlugins = PLUGINS.slice(0, 6);
           one for your database or template engine — and it's very easy to write your own.
         </p>
       </div>
-      <a href="/ecosystem/" class="inline-flex items-center gap-2 rounded-lg bg-amber px-5 py-3 font-medium text-[#0a0b0d] transition-transform hover:-translate-y-0.5">
+      <a href={withBase('/ecosystem/')} class="inline-flex items-center gap-2 rounded-lg bg-amber px-5 py-3 font-medium text-[#0a0b0d] transition-transform hover:-translate-y-0.5">
         Explore {SITE.plugins} plugins <Icon name="arrow" size={18} />
       </a>
     </div>
     <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
       {featuredPlugins.map((p) => (
-        <a href={p.url} target="_blank" rel="noopener noreferrer" class="card group flex items-start gap-3 p-4 transition-colors hover:border-[var(--border-strong)]">
-          <span class="mt-0.5 grid size-8 shrink-0 place-items-center rounded-md border border-[var(--border)] bg-[var(--surface-2)] font-mono text-xs text-amber-ink">fp</span>
+        <a href={p.url} target="_blank" rel="noopener noreferrer" class="card group flex items-start gap-3 p-4 transition-colors hover:border-border-strong">
+          <span class="mt-0.5 grid size-8 shrink-0 place-items-center rounded-md border border-border bg-surface-2 font-mono text-xs text-amber-ink">fp</span>
           <div class="min-w-0">
             <div class="flex items-center gap-1.5 font-mono text-sm font-medium text-fg">
               {p.name}
@@ -296,7 +297,7 @@ const featuredPlugins = PLUGINS.slice(0, 6);
             Fastify is an OpenJS Foundation project maintained by a global team of lead
             maintainers and collaborators.
           </p>
-          <a href="/organizations/" class="mt-6 inline-flex items-center gap-2 text-sm font-medium text-amber-ink hover:underline">
+          <a href={withBase('/organizations/')} class="mt-6 inline-flex items-center gap-2 text-sm font-medium text-amber-ink hover:underline">
             Meet the whole team <Icon name="arrow" size={16} />
           </a>
         </div>
@@ -307,7 +308,7 @@ const featuredPlugins = PLUGINS.slice(0, 6);
                 src={`https://avatars.githubusercontent.com/${p.github}?s=120`}
                 alt={p.name}
                 width="64" height="64" loading="lazy"
-                class="size-16 rounded-full border-2 border-[var(--border)] grayscale transition-all group-hover:border-[var(--amber)] group-hover:grayscale-0"
+                class="size-16 rounded-full border-2 border-border grayscale transition-all group-hover:border-amber group-hover:grayscale-0"
               />
               <span class="max-w-20 text-center text-xs text-muted group-hover:text-fg">{p.name}</span>
             </a>
@@ -319,7 +320,7 @@ const featuredPlugins = PLUGINS.slice(0, 6);
 
   <!-- ============ CTA ============ -->
   <section class="mx-auto max-w-7xl px-4 pb-24 sm:px-6">
-    <div class="relative overflow-hidden rounded-2xl border border-[var(--border)] bg-telemetry px-6 py-16 text-center sm:px-12">
+    <div class="relative overflow-hidden rounded-2xl border border-border bg-telemetry px-6 py-16 text-center sm:px-12">
       <div class="pointer-events-none absolute inset-x-0 top-0 h-64 glow-amber"></div>
       <div class="relative">
         <h2 class="mx-auto max-w-2xl font-display text-3xl font-semibold tracking-tight sm:text-5xl">
@@ -329,10 +330,10 @@ const featuredPlugins = PLUGINS.slice(0, 6);
           Ship a production-grade API today. Start with the guide, or dive into the reference.
         </p>
         <div class="mt-8 flex flex-wrap justify-center gap-3">
-          <a href="/docs/latest/Guides/Getting-Started/" class="inline-flex items-center gap-2 rounded-lg bg-amber px-6 py-3 font-medium text-[#0a0b0d] transition-transform hover:-translate-y-0.5">
+          <a href={withBase('/docs/latest/Guides/Getting-Started/')} class="inline-flex items-center gap-2 rounded-lg bg-amber px-6 py-3 font-medium text-[#0a0b0d] transition-transform hover:-translate-y-0.5">
             Get started <Icon name="arrow" size={18} />
           </a>
-          <a href={SITE.repo} target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 rounded-lg border border-[var(--border)] bg-[var(--surface)] px-6 py-3 font-medium text-fg transition-colors hover:border-[var(--border-strong)]">
+          <a href={SITE.repo} target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 rounded-lg border border-border bg-surface px-6 py-3 font-medium text-fg transition-colors hover:border-border-strong">
             <Icon name="github" size={18} /> Star on GitHub
           </a>
         </div>

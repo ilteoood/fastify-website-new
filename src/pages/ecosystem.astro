@@ -2,9 +2,10 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Icon from '../components/Icon.astro';
 import { PLUGINS, PLUGIN_CATEGORIES, SITE } from '../data/site';
+import { withBase } from '../lib/href';
 ---
 <BaseLayout title="Ecosystem — Fastify plugins" description="Browse the Fastify plugin ecosystem: auth, databases, validation, utilities and more.">
-  <section class="relative overflow-hidden border-b border-[var(--border)] bg-telemetry">
+  <section class="relative overflow-hidden border-b border-border bg-telemetry">
     <div class="pointer-events-none absolute inset-x-0 top-0 h-72 glow-amber opacity-60"></div>
     <div class="relative mx-auto max-w-7xl px-4 py-16 sm:px-6">
       <p class="eyebrow">// ecosystem</p>
@@ -12,7 +13,7 @@ import { PLUGINS, PLUGIN_CATEGORIES, SITE } from '../data/site';
       <p class="mt-4 max-w-2xl text-lg text-fg-soft">
         Fastify has an ever-growing ecosystem of {SITE.plugins} plugins. Core plugins are
         maintained by the Fastify team; community plugins extend it even further.
-        Can't find what you need? <a href="/docs/latest/Reference/Plugins/" class="text-amber-ink underline decoration-[var(--border-strong)] underline-offset-2">Writing one is easy.</a>
+        Can't find what you need? <a href={withBase('/docs/latest/Reference/Plugins/')} class="text-amber-ink underline decoration-border-strong underline-offset-2">Writing one is easy.</a>
       </p>
     </div>
   </section>
@@ -26,7 +27,7 @@ import { PLUGINS, PLUGIN_CATEGORIES, SITE } from '../data/site';
           type="search"
           data-plugin-search
           placeholder="Search plugins…"
-          class="w-full rounded-lg border border-[var(--border)] bg-[var(--surface)] py-2.5 pl-10 pr-4 text-sm text-fg placeholder:text-muted focus:border-[var(--amber)] focus:outline-none"
+          class="w-full rounded-lg border border-border bg-surface py-2.5 pl-10 pr-4 text-sm text-fg placeholder:text-muted focus:border-amber focus:outline-none"
           aria-label="Search plugins"
         />
       </div>
@@ -39,8 +40,8 @@ import { PLUGINS, PLUGIN_CATEGORIES, SITE } from '../data/site';
             class:list={[
               'rounded-full border px-3.5 py-1.5 font-mono text-xs transition-colors',
               i === 0
-                ? 'border-[var(--amber)] bg-[var(--amber)]/10 text-amber-ink'
-                : 'border-[var(--border)] text-muted hover:border-[var(--border-strong)] hover:text-fg',
+                ? 'border-amber bg-amber/10 text-amber-ink'
+                : 'border-border text-muted hover:border-border-strong hover:text-fg',
             ]}
           >
             {cat}
@@ -59,11 +60,11 @@ import { PLUGINS, PLUGIN_CATEGORIES, SITE } from '../data/site';
           data-name={p.name.toLowerCase()}
           data-desc={p.description.toLowerCase()}
           data-category={p.category}
-          class="card group flex flex-col p-5 transition-colors hover:border-[var(--border-strong)]"
+          class="card group flex flex-col p-5 transition-colors hover:border-border-strong"
         >
           <div class="flex items-center justify-between">
-            <span class="grid size-9 place-items-center rounded-md border border-[var(--border)] bg-[var(--surface-2)] font-mono text-xs text-amber-ink">fp</span>
-            {p.official && <span class="rounded-full border border-[var(--border)] px-2 py-0.5 font-mono text-[0.6rem] uppercase tracking-wider text-teal">official</span>}
+            <span class="grid size-9 place-items-center rounded-md border border-border bg-surface-2 font-mono text-xs text-amber-ink">fp</span>
+            {p.official && <span class="rounded-full border border-border px-2 py-0.5 font-mono text-[0.6rem] uppercase tracking-wider text-teal">official</span>}
           </div>
           <div class="mt-4 flex items-center gap-1.5">
             <h3 class="font-mono text-sm font-medium text-fg">{p.name}</h3>
@@ -104,10 +105,10 @@ import { PLUGINS, PLUGIN_CATEGORIES, SITE } from '../data/site';
         catButtons.forEach((b) => {
           const on = b === btn;
           b.setAttribute('aria-pressed', on ? 'true' : 'false');
-          b.classList.toggle('border-[var(--amber)]', on);
-          b.classList.toggle('bg-[var(--amber)]/10', on);
+          b.classList.toggle('border-amber', on);
+          b.classList.toggle('bg-amber/10', on);
           b.classList.toggle('text-amber-ink', on);
-          b.classList.toggle('border-[var(--border)]', !on);
+          b.classList.toggle('border-border', !on);
           b.classList.toggle('text-muted', !on);
         });
         apply();

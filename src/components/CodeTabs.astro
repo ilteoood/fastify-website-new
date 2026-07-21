@@ -14,8 +14,8 @@ interface Props {
 }
 const { tabs, title, id } = Astro.props;
 ---
-<div class="overflow-hidden rounded-xl border border-[var(--border)] bg-[#0c0f13]" data-codetabs>
-  <div class="flex items-center justify-between border-b border-white/10 bg-white/[0.03] px-2">
+<div class="overflow-hidden rounded-xl border border-border bg-[#0c0f13]" data-codetabs>
+  <div class="flex items-center justify-between border-b border-white/10 bg-white/3 px-2">
     <div class="flex" role="tablist" aria-label={title}>
       {tabs.map((tab, i) => (
         <button
@@ -44,7 +44,7 @@ const { tabs, title, id } = Astro.props;
       class="mr-1 flex items-center gap-1.5 rounded-md px-2.5 py-1.5 font-mono text-xs text-[#8b95a1] transition-colors hover:text-white"
       aria-label="Copy code"
     >
-      <Icon name="copy" size={14} class="data-[copied]:hidden" />
+      <Icon name="copy" size={14} />
       <span data-copy-label>Copy</span>
     </button>
   </div>

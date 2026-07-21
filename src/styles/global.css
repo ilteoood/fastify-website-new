@@ -101,7 +101,10 @@
     text-rendering: optimizeLegibility;
   }
 
-  h1, h2, h3, h4 {
+  h1,
+  h2,
+  h3,
+  h4 {
     font-family: var(--font-display);
     font-weight: 600;
     letter-spacing: -0.02em;
@@ -169,20 +172,39 @@
 
 /* Motion streak keyframes for the hero */
 @keyframes streak {
-  0% { transform: translateX(-120%); opacity: 0; }
-  10% { opacity: 1; }
-  90% { opacity: 1; }
-  100% { transform: translateX(320%); opacity: 0; }
+  0% {
+    transform: translateX(-120%);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(320%);
+    opacity: 0;
+  }
 }
 
 @keyframes ticker {
-  from { transform: translateX(0); }
-  to { transform: translateX(-50%); }
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
 }
 
 @keyframes sweep {
-  0%, 100% { opacity: 0.35; }
-  50% { opacity: 1; }
+  0%,
+  100% {
+    opacity: 0.35;
+  }
+  50% {
+    opacity: 1;
+  }
 }
 
 .animate-ticker {
@@ -190,10 +212,16 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  html { scroll-behavior: auto; }
+  html {
+    scroll-behavior: auto;
+  }
   .animate-ticker,
-  [data-streak] { animation: none !important; }
-  * { transition-duration: 0.01ms !important; }
+  [data-streak] {
+    animation: none !important;
+  }
+  * {
+    transition-duration: 0.01ms !important;
+  }
 }
 
 /* ============================================================
@@ -205,7 +233,9 @@
   line-height: 1.75;
   max-width: 46rem;
 }
-.prose-fastify > :first-child { margin-top: 0; }
+.prose-fastify > :first-child {
+  margin-top: 0;
+}
 .prose-fastify h1 {
   font-family: var(--font-display);
   font-size: 2.25rem;
@@ -233,19 +263,34 @@
   margin: 2rem 0 0.75rem;
   scroll-margin-top: 6rem;
 }
-.prose-fastify p { margin: 1rem 0; }
+.prose-fastify p {
+  margin: 1rem 0;
+}
 .prose-fastify a {
   color: var(--amber-ink);
   text-decoration: underline;
   text-decoration-color: var(--border-strong);
   text-underline-offset: 3px;
 }
-.prose-fastify a:hover { text-decoration-color: var(--amber); }
-.prose-fastify strong { color: var(--fg); font-weight: 600; }
+.prose-fastify a:hover {
+  text-decoration-color: var(--amber);
+}
+.prose-fastify strong {
+  color: var(--fg);
+  font-weight: 600;
+}
 .prose-fastify ul,
-.prose-fastify ol { margin: 1rem 0; padding-left: 1.4rem; }
-.prose-fastify li { margin: 0.4rem 0; }
-.prose-fastify ul li { list-style: none; position: relative; }
+.prose-fastify ol {
+  margin: 1rem 0;
+  padding-left: 1.4rem;
+}
+.prose-fastify li {
+  margin: 0.4rem 0;
+}
+.prose-fastify ul li {
+  list-style: none;
+  position: relative;
+}
 .prose-fastify ul li::before {
   content: "";
   position: absolute;
@@ -309,7 +354,11 @@
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
-.prose-fastify hr { border: none; border-top: 1px solid var(--border); margin: 2.5rem 0; }
+.prose-fastify hr {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 2.5rem 0;
+}
 
 /* Code tabs: let Shiki's <pre> inherit the dark terminal container background
    so the frame and code area read as one consistent surface in both themes. */

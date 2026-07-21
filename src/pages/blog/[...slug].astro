@@ -2,6 +2,7 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Icon from '../../components/Icon.astro';
 import { getCollection, render } from 'astro:content';
+import { withBase } from '../../lib/href';
 
 export async function getStaticPaths() {
   const posts = await getCollection('blog');
@@ -15,7 +16,7 @@ const fmt = (d: Date) =>
 ---
 <BaseLayout title={`${post.data.title} — Fastify blog`} description={post.data.description}>
   <article class="mx-auto max-w-3xl px-4 py-14 sm:px-6">
-    <a href="/blog/" class="inline-flex items-center gap-1.5 font-mono text-xs text-muted hover:text-fg">
+    <a href={withBase('/blog/')} class="inline-flex items-center gap-1.5 font-mono text-xs text-muted hover:text-fg">
       <span class="rotate-180"><Icon name="arrow" size={14} /></span> All posts
     </a>
     <div class="mt-6 flex items-center gap-3 font-mono text-xs text-muted">
