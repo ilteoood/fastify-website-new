@@ -59,13 +59,32 @@ Docusaurus site:
 - Dark/light theme toggle (no flash of unstyled theme), responsive nav with a
   mobile menu, keyboard-accessible focus states, reduced-motion support.
 
-### Docs generation (production)
+### Documentation pipeline
 
-On the live site the documentation is generated from the versioned Markdown in
-the [`fastify/fastify`](https://github.com/fastify/fastify) repository. This
-project ships a docs **shell** with representative sample content in
-`src/content/docs/`. To wire up the real pipeline, replace the sample files with
-a build step that fetches the versioned docs (as the current
-[`fastify/website`](https://github.com/fastify/website) `build:website` script
-does) and writes them into the `docs` collection before `astro build`.
+The documentation is **not** stored in this repository — it lives in the
+[`fastify/fastify`](https://github.com/fastify/fastify) repo and is fetched at
+build time by [`scripts/fetch-docs.mjs`](scripts/fetch-docs.mjs), which runs
+automatically via the `prebuild`/`predev` npm hooks.
+
+The script:
+
+1. Lists all release tags with `git ls-remote` (no auth, no rate limit).
+2. Picks the latest release of each major `>= DOCS_MIN_MAJOR` (default `3`).
+3. Downloads each release tarball and extracts only its `docs/` folder.
+4. Transforms every Markdown file — strips the repeated centered title,
+   rewrites relative `.md` links and resource paths to site URLs, and injects
+   `title` / `section` / `order` / `version` frontmatter.
+5. Emits versioned content into `src/content/docs/<version>/…`, copies image
+   resources into `public/docs/<version>/…`, duplicates the newest release as
+   `latest`, and writes `src/data/versions.json`.
+
+The result is browsable, versioned docs (`latest`, `v5.x`, `v4.x`, `v3.x`) with
+a version switcher, exactly like the current website. Fetched content is
+git-ignored so the source of truth stays in `fastify/fastify`.
+
+```bash
+npm run fetch:docs            # fetch/refresh docs (skips already-fetched versions)
+FORCE_FETCH=1 npm run fetch:docs   # force a refresh
+DOCS_MIN_MAJOR=4 npm run fetch:docs # only fetch v4.x and newer
 ```
+

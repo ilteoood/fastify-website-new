@@ -15,7 +15,7 @@ interface Props {
 const { tabs, title, id } = Astro.props;
 ---
 <div class="overflow-hidden rounded-xl border border-[var(--border)] bg-[#0c0f13]" data-codetabs>
-  <div class="flex items-center justify-between border-b border-[var(--border)] bg-[var(--surface-2)] px-2">
+  <div class="flex items-center justify-between border-b border-white/10 bg-white/[0.03] px-2">
     <div class="flex" role="tablist" aria-label={title}>
       {tabs.map((tab, i) => (
         <button
@@ -27,13 +27,13 @@ const { tabs, title, id } = Astro.props;
           data-tab={i}
           class:list={[
             'relative px-4 py-2.5 font-mono text-xs transition-colors',
-            i === 0 ? 'text-amber-ink' : 'text-muted hover:text-fg',
+            i === 0 ? 'text-[#f2a93b]' : 'text-[#8b95a1] hover:text-white',
           ]}
         >
           {tab.label}
           <span
             data-tab-underline
-            class:list={['absolute inset-x-2 -bottom-px h-px', i === 0 ? 'bg-amber' : 'bg-transparent']}
+            class:list={['absolute inset-x-2 -bottom-px h-px', i === 0 ? 'bg-[#f2a93b]' : 'bg-transparent']}
           ></span>
         </button>
       ))}
@@ -41,7 +41,7 @@ const { tabs, title, id } = Astro.props;
     <button
       type="button"
       data-copy
-      class="mr-1 flex items-center gap-1.5 rounded-md px-2.5 py-1.5 font-mono text-xs text-muted transition-colors hover:text-fg"
+      class="mr-1 flex items-center gap-1.5 rounded-md px-2.5 py-1.5 font-mono text-xs text-[#8b95a1] transition-colors hover:text-white"
       aria-label="Copy code"
     >
       <Icon name="copy" size={14} class="data-[copied]:hidden" />
@@ -75,9 +75,9 @@ const { tabs, title, id } = Astro.props;
         tabs.forEach((t, i) => {
           const active = String(i) === idx;
           t.setAttribute('aria-selected', active ? 'true' : 'false');
-          t.classList.toggle('text-amber-ink', active);
-          t.classList.toggle('text-muted', !active);
-          underlines[i]?.classList.toggle('bg-amber', active);
+          t.classList.toggle('text-[#f2a93b]', active);
+          t.classList.toggle('text-[#8b95a1]', !active);
+          underlines[i]?.classList.toggle('bg-[#f2a93b]', active);
           underlines[i]?.classList.toggle('bg-transparent', !active);
         });
         panels.forEach((p, i) => p.classList.toggle('hidden', String(i) !== idx));

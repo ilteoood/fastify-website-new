@@ -310,3 +310,9 @@
   letter-spacing: 0.05em;
 }
 .prose-fastify hr { border: none; border-top: 1px solid var(--border); margin: 2.5rem 0; }
+
+/* Code tabs: let Shiki's <pre> inherit the dark terminal container background
+   so the frame and code area read as one consistent surface in both themes. */
+[data-codetabs] .astro-code {
+  background: transparent !important;
+}

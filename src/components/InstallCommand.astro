@@ -5,17 +5,17 @@ interface Props {
 }
 const { command = 'npm install fastify' } = Astro.props;
 ---
-<div class="inline-flex items-center gap-3 rounded-lg border border-[var(--border)] bg-[#0c0f13] px-4 py-3 font-mono text-sm" data-install>
-  <span class="select-none text-teal">$</span>
-  <code class="text-fg-soft" data-install-cmd>{command}</code>
+<div class="inline-flex items-center gap-3 rounded-lg border border-white/10 bg-[#0c0f13] px-4 py-3 font-mono text-sm shadow-sm" data-install>
+  <span class="select-none text-[#2dd4bf]">$</span>
+  <code class="text-[#c7cdd4]" data-install-cmd>{command}</code>
   <button
     type="button"
     data-install-copy
-    class="ml-2 rounded-md border border-[var(--border)] p-1.5 text-muted transition-colors hover:text-fg"
+    class="ml-2 rounded-md border border-white/10 p-1.5 text-[#8b95a1] transition-colors hover:text-white"
     aria-label="Copy install command"
   >
     <span data-install-idle><Icon name="copy" size={14} /></span>
-    <span data-install-done class="hidden text-teal"><Icon name="check" size={14} /></span>
+    <span data-install-done class="hidden text-[#2dd4bf]"><Icon name="check" size={14} /></span>
   </button>
 </div>
 

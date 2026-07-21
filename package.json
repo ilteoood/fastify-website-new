@@ -4,8 +4,11 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
+    "fetch:docs": "node scripts/fetch-docs.mjs",
+    "predev": "node scripts/fetch-docs.mjs",
     "dev": "astro dev",
     "start": "astro dev",
+    "prebuild": "node scripts/fetch-docs.mjs",
     "build": "astro build && pagefind --site dist",
     "preview": "astro preview",
     "astro": "astro"

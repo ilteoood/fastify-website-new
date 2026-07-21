@@ -1,44 +1,79 @@
 ---
 import { getCollection } from 'astro:content';
 import Icon from './Icon.astro';
+import versionsData from '../data/versions.json';
 
 interface Props {
   current: string;
-  title?: string;
-  description?: string;
+  version: string;
   prose?: boolean;
 }
-const { current, prose = true } = Astro.props;
+const { current, version, prose = true } = Astro.props;
 
-const SECTION_ORDER = ['Overview', 'Guides', 'Reference'];
+const SECTION_ORDER: Record<string, number> = { Overview: 0, Guides: 1, Reference: 2 };
+
+const routeFor = (id: string) => {
+  const slug = id.replace(/\/(index|Index)$/, '');
+  return `/docs/${slug}/`;
+};
+
 const all = await getCollection('docs');
-const sorted = all.sort((a, b) => (a.data.order ?? 0) - (b.data.order ?? 0));
+const versionDocs = all
+  .filter((d) => d.id.split('/')[0] === version)
+  .sort((a, b) => {
+    const sa = SECTION_ORDER[a.data.section] ?? 9;
+    const sb = SECTION_ORDER[b.data.section] ?? 9;
+    if (sa !== sb) return sa - sb;
+    if (a.data.order !== b.data.order) return a.data.order - b.data.order;
+    return a.data.title.localeCompare(b.data.title);
+  });
 
-const sections = SECTION_ORDER.map((name) => ({
+const sectionNames = [...new Set(versionDocs.map((d) => d.data.section))].sort(
+  (a, b) => (SECTION_ORDER[a] ?? 9) - (SECTION_ORDER[b] ?? 9),
+);
+const sections = sectionNames.map((name) => ({
   name,
-  items: sorted.filter((d) => d.data.section === name),
-})).filter((s) => s.items.length > 0);
+  items: versionDocs.filter((d) => d.data.section === name),
+}));
 
-const flat = sections.flatMap((s) => s.items);
-const idx = flat.findIndex((d) => d.id === current);
-const prev = idx > 0 ? flat[idx - 1] : null;
-const next = idx >= 0 && idx < flat.length - 1 ? flat[idx + 1] : null;
+const idx = versionDocs.findIndex((d) => d.id === current);
+const prev = idx > 0 ? versionDocs[idx - 1] : null;
+const next = idx >= 0 && idx < versionDocs.length - 1 ? versionDocs[idx + 1] : null;
 
-const hrefFor = (id: string) => `/docs/${id}/`;
+const breadcrumb = current.split('/').slice(1).filter((s) => !/^index$/i.test(s));
 ---
 <div class="mx-auto max-w-7xl px-4 sm:px-6">
   <div class="lg:grid lg:grid-cols-[16rem_1fr] lg:gap-10">
     <!-- Sidebar -->
     <aside class="hidden lg:block">
-      <div class="sticky top-16 max-h-[calc(100vh-4rem)] overflow-y-auto py-10 pr-4">
+      <div class="sticky top-16 max-h-[calc(100vh-4rem)] overflow-y-auto py-8 pr-4">
+        <label class="mb-3 block">
+          <span class="mb-1.5 block font-mono text-[0.62rem] uppercase tracking-[0.16em] text-muted">version</span>
+          <div class="relative">
+            <select
+              data-version-switch
+              class="w-full appearance-none rounded-md border border-[var(--border)] bg-[var(--surface-2)] px-3 py-2 pr-8 text-sm font-medium text-fg focus:border-[var(--amber)] focus:outline-none"
+              aria-label="Select documentation version"
+            >
+              {versionsData.versions.map((v) => (
+                <option value={v.name} selected={v.name === version}>{v.label}</option>
+              ))}
+            </select>
+            <span class="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-muted">
+              <Icon name="arrow" size={14} class="rotate-90" />
+            </span>
+          </div>
+        </label>
+
         <button
           type="button"
           data-search-open
-          class="mb-6 flex w-full items-center gap-2 rounded-md border border-[var(--border)] bg-[var(--surface)] px-3 py-2 text-sm text-muted transition-colors hover:text-fg"
+          class="mb-5 flex w-full items-center gap-2 rounded-md border border-[var(--border)] bg-[var(--surface)] px-3 py-2 text-sm text-muted transition-colors hover:text-fg"
         >
           <Icon name="search" size={16} /> Search
           <kbd class="ml-auto rounded border border-[var(--border)] px-1.5 font-mono text-[0.65rem]">⌘K</kbd>
         </button>
+
         <nav aria-label="Documentation">
           {sections.map((section) => (
             <div class="mb-6">
@@ -49,7 +84,7 @@ const hrefFor = (id: string) => `/docs/${id}/`;
                   return (
                     <li>
                       <a
-                        href={hrefFor(item.id)}
+                        href={routeFor(item.id)}
                         class:list={[
                           '-ml-px block border-l-2 py-1.5 pl-4 text-sm transition-colors',
                           active
@@ -72,9 +107,12 @@ const hrefFor = (id: string) => `/docs/${id}/`;
 
     <!-- Content -->
     <div class="min-w-0 py-10">
-      <nav class="mb-6 flex items-center gap-2 font-mono text-xs text-muted" aria-label="Breadcrumb">
-        <a href="/docs/" class="hover:text-fg">docs</a>
-        {current && <><span>/</span><span class="text-fg-soft">{current}</span></>}
+      <nav class="mb-6 flex flex-wrap items-center gap-2 font-mono text-xs text-muted" aria-label="Breadcrumb">
+        <a href="/docs/latest/" class="hover:text-fg">docs</a>
+        <span class="rounded border border-[var(--border)] px-1.5 py-0.5 text-amber-ink">{version}</span>
+        {breadcrumb.map((seg) => (
+          <><span>/</span><span class="text-fg-soft">{seg}</span></>
+        ))}
       </nav>
 
       <article class:list={[prose && 'prose-fastify']} data-pagefind-body>
@@ -83,18 +121,31 @@ const hrefFor = (id: string) => `/docs/${id}/`;
 
       <nav class="mt-14 grid gap-3 border-t border-[var(--border)] pt-8 sm:grid-cols-2" aria-label="Pagination">
         {prev ? (
-          <a href={hrefFor(prev.id)} class="card group p-4 transition-colors hover:border-[var(--border-strong)]">
+          <a href={routeFor(prev.id)} class="card group p-4 transition-colors hover:border-[var(--border-strong)]">
             <span class="font-mono text-xs text-muted">← Previous</span>
             <div class="mt-1 font-medium text-fg group-hover:text-amber-ink">{prev.data.title}</div>
           </a>
         ) : <span></span>}
         {next && (
-          <a href={hrefFor(next.id)} class="card group p-4 text-right transition-colors hover:border-[var(--border-strong)] sm:col-start-2">
+          <a href={routeFor(next.id)} class="card group p-4 text-right transition-colors hover:border-[var(--border-strong)] sm:col-start-2">
             <span class="font-mono text-xs text-muted">Next →</span>
             <div class="mt-1 font-medium text-fg group-hover:text-amber-ink">{next.data.title}</div>
           </a>
         )}
       </nav>
+
+      <p class="mt-8 font-mono text-xs text-muted">
+        Generated from the
+        <a href="https://github.com/fastify/fastify/tree/main/docs" class="text-amber-ink hover:underline" target="_blank" rel="noopener noreferrer">fastify/fastify</a>
+        repository.
+      </p>
     </div>
   </div>
 </div>
+
+<script>
+  const sel = document.querySelector<HTMLSelectElement>('[data-version-switch]');
+  sel?.addEventListener('change', () => {
+    window.location.href = `/docs/${sel.value}/`;
+  });
+</script>

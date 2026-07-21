@@ -5,17 +5,18 @@ import DocsShell from '../../components/DocsShell.astro';
 
 export async function getStaticPaths() {
   const docs = await getCollection('docs');
-  return docs.map((doc) => ({
-    params: { slug: doc.id },
-    props: { doc },
-  }));
+  return docs.map((doc) => {
+    const slug = doc.id.replace(/\/(index|Index)$/, '');
+    return { params: { slug }, props: { doc } };
+  });
 }
 
 const { doc } = Astro.props;
 const { Content } = await render(doc);
+const version = doc.id.split('/')[0];
 ---
-<BaseLayout title={`${doc.data.title} — Fastify docs`} description={doc.data.description}>
-  <DocsShell current={doc.id}>
+<BaseLayout title={`${doc.data.title} — Fastify ${version}`} description={doc.data.description}>
+  <DocsShell current={doc.id} version={version}>
     <Content />
   </DocsShell>
 </BaseLayout>
