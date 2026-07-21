@@ -1,8 +1,19 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Icon from '../components/Icon.astro';
-import { PLUGINS, PLUGIN_CATEGORIES, SITE } from '../data/site';
+import { SITE } from '../data/site';
 import { withBase } from '../lib/href';
+import pluginsData from '../data/plugins.json';
+
+type PluginEntry = {
+  name: string;
+  url: string;
+  description: string;
+  official?: boolean;
+};
+
+const plugins = pluginsData as { corePlugins: PluginEntry[]; communityPlugins: PluginEntry[] };
+const all: PluginEntry[] = [...plugins.corePlugins, ...plugins.communityPlugins];
 ---
 <BaseLayout title="Ecosystem — Fastify plugins" description="Browse the Fastify plugin ecosystem: auth, databases, validation, utilities and more.">
   <section class="relative overflow-hidden border-b border-border bg-telemetry">
@@ -19,47 +30,25 @@ import { withBase } from '../lib/href';
   </section>
 
   <section class="mx-auto max-w-7xl px-4 py-12 sm:px-6">
-    <!-- controls -->
-    <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-      <div class="relative max-w-md flex-1">
-        <span class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted"><Icon name="search" size={18} /></span>
-        <input
-          type="search"
-          data-plugin-search
-          placeholder="Search plugins…"
-          class="w-full rounded-lg border border-border bg-surface py-2.5 pl-10 pr-4 text-sm text-fg placeholder:text-muted focus:border-amber focus:outline-none"
-          aria-label="Search plugins"
-        />
-      </div>
-      <div class="flex flex-wrap gap-2" role="tablist" aria-label="Filter by category">
-        {PLUGIN_CATEGORIES.map((cat, i) => (
-          <button
-            type="button"
-            data-cat={cat}
-            aria-pressed={i === 0 ? 'true' : 'false'}
-            class:list={[
-              'rounded-full border px-3.5 py-1.5 font-mono text-xs transition-colors',
-              i === 0
-                ? 'border-amber bg-amber/10 text-amber-ink'
-                : 'border-border text-muted hover:border-border-strong hover:text-fg',
-            ]}
-          >
-            {cat}
-          </button>
-        ))}
-      </div>
+    <div class="relative max-w-md">
+      <span class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted"><Icon name="search" size={18} /></span>
+      <input
+        type="search"
+        data-plugin-search
+        placeholder="Search plugins…"
+        class="w-full rounded-lg border border-border bg-surface py-2.5 pl-10 pr-4 text-sm text-fg placeholder:text-muted focus:border-amber focus:outline-none"
+        aria-label="Search plugins"
+      />
     </div>
 
-    <!-- grid -->
     <div data-plugin-grid class="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-      {PLUGINS.map((p) => (
+      {all.map((p) => (
         <a
           href={p.url}
           target="_blank" rel="noopener noreferrer"
           data-plugin
           data-name={p.name.toLowerCase()}
           data-desc={p.description.toLowerCase()}
-          data-category={p.category}
           class="card group flex flex-col p-5 transition-colors hover:border-border-strong"
         >
           <div class="flex items-center justify-between">
@@ -71,7 +60,6 @@ import { withBase } from '../lib/href';
             <Icon name="external" size={12} class="text-muted opacity-0 transition-opacity group-hover:opacity-100" />
           </div>
           <p class="mt-1.5 text-sm leading-relaxed text-fg-soft">{p.description}</p>
-          <span class="mt-4 font-mono text-[0.65rem] uppercase tracking-wider text-muted">{p.category}</span>
         </a>
       ))}
     </div>
@@ -81,38 +69,19 @@ import { withBase } from '../lib/href';
   <script>
     const search = document.querySelector<HTMLInputElement>('[data-plugin-search]');
     const cards = Array.from(document.querySelectorAll<HTMLElement>('[data-plugin]'));
-    const catButtons = Array.from(document.querySelectorAll<HTMLButtonElement>('[data-cat]'));
     const empty = document.querySelector('[data-plugin-empty]');
-    let activeCat = 'All';
 
     function apply() {
       const q = (search?.value || '').toLowerCase().trim();
       let visible = 0;
       cards.forEach((card) => {
-        const matchesCat = activeCat === 'All' || card.dataset.category === activeCat;
         const matchesQ = !q || card.dataset.name!.includes(q) || card.dataset.desc!.includes(q);
-        const show = matchesCat && matchesQ;
-        card.classList.toggle('hidden', !show);
-        if (show) visible++;
+        card.classList.toggle('hidden', !matchesQ);
+        if (matchesQ) visible++;
       });
       empty?.classList.toggle('hidden', visible > 0);
     }
 
     search?.addEventListener('input', apply);
-    catButtons.forEach((btn) => {
-      btn.addEventListener('click', () => {
-        activeCat = btn.dataset.cat!;
-        catButtons.forEach((b) => {
-          const on = b === btn;
-          b.setAttribute('aria-pressed', on ? 'true' : 'false');
-          b.classList.toggle('border-amber', on);
-          b.classList.toggle('bg-amber/10', on);
-          b.classList.toggle('text-amber-ink', on);
-          b.classList.toggle('border-border', !on);
-          b.classList.toggle('text-muted', !on);
-        });
-        apply();
-      });
-    });
   </script>
 </BaseLayout>

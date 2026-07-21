@@ -4,9 +4,12 @@ import CodeTabs from '../components/CodeTabs.astro';
 import Icon from '../components/Icon.astro';
 import InstallCommand from '../components/InstallCommand.astro';
 import VelocityMeter from '../components/VelocityMeter.astro';
-import { FEATURES, LEADS, PLUGINS, SITE, SPONSORS } from '../data/site';
+import { FEATURES, LEADS, SITE, SPONSORS } from '../data/site';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { withBase } from '../lib/href';
+import pluginsData from '../data/plugins.json';
+
+const PLUGINS = [...pluginsData.corePlugins, ...pluginsData.communityPlugins];
 
 const esmCode = `// Import the framework and instantiate it
 import Fastify from 'fastify'
