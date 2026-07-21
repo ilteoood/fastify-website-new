@@ -1,0 +1,100 @@
+---
+import { getCollection } from 'astro:content';
+import Icon from './Icon.astro';
+
+interface Props {
+  current: string;
+  title?: string;
+  description?: string;
+  prose?: boolean;
+}
+const { current, prose = true } = Astro.props;
+
+const SECTION_ORDER = ['Overview', 'Guides', 'Reference'];
+const all = await getCollection('docs');
+const sorted = all.sort((a, b) => (a.data.order ?? 0) - (b.data.order ?? 0));
+
+const sections = SECTION_ORDER.map((name) => ({
+  name,
+  items: sorted.filter((d) => d.data.section === name),
+})).filter((s) => s.items.length > 0);
+
+const flat = sections.flatMap((s) => s.items);
+const idx = flat.findIndex((d) => d.id === current);
+const prev = idx > 0 ? flat[idx - 1] : null;
+const next = idx >= 0 && idx < flat.length - 1 ? flat[idx + 1] : null;
+
+const hrefFor = (id: string) => `/docs/${id}/`;
+---
+<div class="mx-auto max-w-7xl px-4 sm:px-6">
+  <div class="lg:grid lg:grid-cols-[16rem_1fr] lg:gap-10">
+    <!-- Sidebar -->
+    <aside class="hidden lg:block">
+      <div class="sticky top-16 max-h-[calc(100vh-4rem)] overflow-y-auto py-10 pr-4">
+        <button
+          type="button"
+          data-search-open
+          class="mb-6 flex w-full items-center gap-2 rounded-md border border-[var(--border)] bg-[var(--surface)] px-3 py-2 text-sm text-muted transition-colors hover:text-fg"
+        >
+          <Icon name="search" size={16} /> Search
+          <kbd class="ml-auto rounded border border-[var(--border)] px-1.5 font-mono text-[0.65rem]">⌘K</kbd>
+        </button>
+        <nav aria-label="Documentation">
+          {sections.map((section) => (
+            <div class="mb-6">
+              <p class="mb-2 font-mono text-[0.65rem] uppercase tracking-[0.16em] text-muted">{section.name}</p>
+              <ul class="space-y-0.5 border-l border-[var(--border)]">
+                {section.items.map((item) => {
+                  const active = item.id === current;
+                  return (
+                    <li>
+                      <a
+                        href={hrefFor(item.id)}
+                        class:list={[
+                          '-ml-px block border-l-2 py-1.5 pl-4 text-sm transition-colors',
+                          active
+                            ? 'border-[var(--amber)] font-medium text-amber-ink'
+                            : 'border-transparent text-fg-soft hover:border-[var(--border-strong)] hover:text-fg',
+                        ]}
+                        aria-current={active ? 'page' : undefined}
+                      >
+                        {item.data.title}
+                      </a>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+          ))}
+        </nav>
+      </div>
+    </aside>
+
+    <!-- Content -->
+    <div class="min-w-0 py-10">
+      <nav class="mb-6 flex items-center gap-2 font-mono text-xs text-muted" aria-label="Breadcrumb">
+        <a href="/docs/" class="hover:text-fg">docs</a>
+        {current && <><span>/</span><span class="text-fg-soft">{current}</span></>}
+      </nav>
+
+      <article class:list={[prose && 'prose-fastify']} data-pagefind-body>
+        <slot />
+      </article>
+
+      <nav class="mt-14 grid gap-3 border-t border-[var(--border)] pt-8 sm:grid-cols-2" aria-label="Pagination">
+        {prev ? (
+          <a href={hrefFor(prev.id)} class="card group p-4 transition-colors hover:border-[var(--border-strong)]">
+            <span class="font-mono text-xs text-muted">← Previous</span>
+            <div class="mt-1 font-medium text-fg group-hover:text-amber-ink">{prev.data.title}</div>
+          </a>
+        ) : <span></span>}
+        {next && (
+          <a href={hrefFor(next.id)} class="card group p-4 text-right transition-colors hover:border-[var(--border-strong)] sm:col-start-2">
+            <span class="font-mono text-xs text-muted">Next →</span>
+            <div class="mt-1 font-medium text-fg group-hover:text-amber-ink">{next.data.title}</div>
+          </a>
+        )}
+      </nav>
+    </div>
+  </div>
+</div>

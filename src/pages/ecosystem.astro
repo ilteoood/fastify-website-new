@@ -1,0 +1,117 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Icon from '../components/Icon.astro';
+import { PLUGINS, PLUGIN_CATEGORIES, SITE } from '../data/site';
+---
+<BaseLayout title="Ecosystem — Fastify plugins" description="Browse the Fastify plugin ecosystem: auth, databases, validation, utilities and more.">
+  <section class="relative overflow-hidden border-b border-[var(--border)] bg-telemetry">
+    <div class="pointer-events-none absolute inset-x-0 top-0 h-72 glow-amber opacity-60"></div>
+    <div class="relative mx-auto max-w-7xl px-4 py-16 sm:px-6">
+      <p class="eyebrow">// ecosystem</p>
+      <h1 class="mt-4 font-display text-4xl font-semibold tracking-tight sm:text-5xl">Ecosystem</h1>
+      <p class="mt-4 max-w-2xl text-lg text-fg-soft">
+        Fastify has an ever-growing ecosystem of {SITE.plugins} plugins. Core plugins are
+        maintained by the Fastify team; community plugins extend it even further.
+        Can't find what you need? <a href="/docs/reference/plugins/" class="text-amber-ink underline decoration-[var(--border-strong)] underline-offset-2">Writing one is easy.</a>
+      </p>
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-7xl px-4 py-12 sm:px-6">
+    <!-- controls -->
+    <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+      <div class="relative max-w-md flex-1">
+        <span class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted"><Icon name="search" size={18} /></span>
+        <input
+          type="search"
+          data-plugin-search
+          placeholder="Search plugins…"
+          class="w-full rounded-lg border border-[var(--border)] bg-[var(--surface)] py-2.5 pl-10 pr-4 text-sm text-fg placeholder:text-muted focus:border-[var(--amber)] focus:outline-none"
+          aria-label="Search plugins"
+        />
+      </div>
+      <div class="flex flex-wrap gap-2" role="tablist" aria-label="Filter by category">
+        {PLUGIN_CATEGORIES.map((cat, i) => (
+          <button
+            type="button"
+            data-cat={cat}
+            aria-pressed={i === 0 ? 'true' : 'false'}
+            class:list={[
+              'rounded-full border px-3.5 py-1.5 font-mono text-xs transition-colors',
+              i === 0
+                ? 'border-[var(--amber)] bg-[var(--amber)]/10 text-amber-ink'
+                : 'border-[var(--border)] text-muted hover:border-[var(--border-strong)] hover:text-fg',
+            ]}
+          >
+            {cat}
+          </button>
+        ))}
+      </div>
+    </div>
+
+    <!-- grid -->
+    <div data-plugin-grid class="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+      {PLUGINS.map((p) => (
+        <a
+          href={p.url}
+          target="_blank" rel="noopener noreferrer"
+          data-plugin
+          data-name={p.name.toLowerCase()}
+          data-desc={p.description.toLowerCase()}
+          data-category={p.category}
+          class="card group flex flex-col p-5 transition-colors hover:border-[var(--border-strong)]"
+        >
+          <div class="flex items-center justify-between">
+            <span class="grid size-9 place-items-center rounded-md border border-[var(--border)] bg-[var(--surface-2)] font-mono text-xs text-amber-ink">fp</span>
+            {p.official && <span class="rounded-full border border-[var(--border)] px-2 py-0.5 font-mono text-[0.6rem] uppercase tracking-wider text-teal">official</span>}
+          </div>
+          <div class="mt-4 flex items-center gap-1.5">
+            <h3 class="font-mono text-sm font-medium text-fg">{p.name}</h3>
+            <Icon name="external" size={12} class="text-muted opacity-0 transition-opacity group-hover:opacity-100" />
+          </div>
+          <p class="mt-1.5 text-sm leading-relaxed text-fg-soft">{p.description}</p>
+          <span class="mt-4 font-mono text-[0.65rem] uppercase tracking-wider text-muted">{p.category}</span>
+        </a>
+      ))}
+    </div>
+    <p data-plugin-empty class="hidden py-16 text-center text-muted">No plugins match your search.</p>
+  </section>
+
+  <script>
+    const search = document.querySelector<HTMLInputElement>('[data-plugin-search]');
+    const cards = Array.from(document.querySelectorAll<HTMLElement>('[data-plugin]'));
+    const catButtons = Array.from(document.querySelectorAll<HTMLButtonElement>('[data-cat]'));
+    const empty = document.querySelector('[data-plugin-empty]');
+    let activeCat = 'All';
+
+    function apply() {
+      const q = (search?.value || '').toLowerCase().trim();
+      let visible = 0;
+      cards.forEach((card) => {
+        const matchesCat = activeCat === 'All' || card.dataset.category === activeCat;
+        const matchesQ = !q || card.dataset.name!.includes(q) || card.dataset.desc!.includes(q);
+        const show = matchesCat && matchesQ;
+        card.classList.toggle('hidden', !show);
+        if (show) visible++;
+      });
+      empty?.classList.toggle('hidden', visible > 0);
+    }
+
+    search?.addEventListener('input', apply);
+    catButtons.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        activeCat = btn.dataset.cat!;
+        catButtons.forEach((b) => {
+          const on = b === btn;
+          b.setAttribute('aria-pressed', on ? 'true' : 'false');
+          b.classList.toggle('border-[var(--amber)]', on);
+          b.classList.toggle('bg-[var(--amber)]/10', on);
+          b.classList.toggle('text-amber-ink', on);
+          b.classList.toggle('border-[var(--border)]', !on);
+          b.classList.toggle('text-muted', !on);
+        });
+        apply();
+      });
+    });
+  </script>
+</BaseLayout>

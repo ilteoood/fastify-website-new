@@ -1,0 +1,89 @@
+---
+// Search modal powered by Pagefind (index generated at build time).
+---
+<dialog
+  data-search-dialog
+  class="m-0 hidden w-full max-w-2xl rounded-xl border border-[var(--border-strong)] bg-[var(--surface)] p-0 text-fg backdrop:bg-black/60 backdrop:backdrop-blur-sm open:block"
+  style="top: 12vh; margin-inline: auto;"
+  aria-label="Search"
+>
+  <div class="flex items-center justify-between border-b border-[var(--border)] px-4 py-3">
+    <span class="font-mono text-xs uppercase tracking-[0.18em] text-muted">Search docs</span>
+    <button type="button" data-search-close class="rounded-md border border-[var(--border)] px-2 py-1 font-mono text-xs text-muted hover:text-fg">Esc</button>
+  </div>
+  <div class="p-4">
+    <div data-pagefind-ui-root></div>
+    <p data-search-fallback class="hidden py-8 text-center text-sm text-muted">
+      Search index is generated at build time. Run <code class="font-mono text-amber-ink">npm run build</code> to enable full-text search.
+    </p>
+  </div>
+</dialog>
+
+<link
+  rel="stylesheet"
+  href="/pagefind/pagefind-ui.css"
+  onerror="this.dataset.failed='1'"
+/>
+
+<script>
+  const dialog = document.querySelector<HTMLDialogElement>('[data-search-dialog]');
+  const root = document.querySelector('[data-pagefind-ui-root]');
+  const fallback = document.querySelector('[data-search-fallback]');
+  let loaded = false;
+
+  async function ensureLoaded() {
+    if (loaded || !root) return;
+    loaded = true;
+    try {
+      await new Promise<void>((resolve, reject) => {
+        if ((window as any).PagefindUI) return resolve();
+        const s = document.createElement('script');
+        s.src = '/pagefind/pagefind-ui.js';
+        s.onload = () => resolve();
+        s.onerror = () => reject(new Error('pagefind not available'));
+        document.head.appendChild(s);
+      });
+      const PagefindUI = (window as any).PagefindUI;
+      if (!PagefindUI) throw new Error('PagefindUI missing');
+      new PagefindUI({ element: root, showSubResults: true, showImages: false });
+    } catch (e) {
+      loaded = false;
+      fallback?.classList.remove('hidden');
+    }
+  }
+
+  function open() {
+    ensureLoaded();
+    dialog?.showModal();
+    setTimeout(() => dialog?.querySelector('input')?.focus(), 50);
+  }
+  function close() {
+    dialog?.close();
+  }
+
+  document.querySelectorAll('[data-search-open]').forEach((b) => b.addEventListener('click', open));
+  document.querySelector('[data-search-close]')?.addEventListener('click', close);
+  dialog?.addEventListener('click', (e) => {
+    if (e.target === dialog) close();
+  });
+
+  window.addEventListener('keydown', (e) => {
+    if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+      e.preventDefault();
+      dialog?.open ? close() : open();
+    }
+  });
+</script>
+
+<style is:global>
+  :root {
+    --pagefind-ui-primary: var(--amber);
+    --pagefind-ui-text: var(--fg);
+    --pagefind-ui-background: var(--surface);
+    --pagefind-ui-border: var(--border);
+    --pagefind-ui-tag: var(--surface-2);
+    --pagefind-ui-border-width: 1px;
+    --pagefind-ui-border-radius: 10px;
+    --pagefind-ui-font: var(--font-sans);
+  }
+</style>

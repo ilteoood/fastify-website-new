@@ -1,0 +1,40 @@
+---
+import Icon from './Icon.astro';
+interface Props {
+  command?: string;
+}
+const { command = 'npm install fastify' } = Astro.props;
+---
+<div class="inline-flex items-center gap-3 rounded-lg border border-[var(--border)] bg-[#0c0f13] px-4 py-3 font-mono text-sm" data-install>
+  <span class="select-none text-teal">$</span>
+  <code class="text-fg-soft" data-install-cmd>{command}</code>
+  <button
+    type="button"
+    data-install-copy
+    class="ml-2 rounded-md border border-[var(--border)] p-1.5 text-muted transition-colors hover:text-fg"
+    aria-label="Copy install command"
+  >
+    <span data-install-idle><Icon name="copy" size={14} /></span>
+    <span data-install-done class="hidden text-teal"><Icon name="check" size={14} /></span>
+  </button>
+</div>
+
+<script>
+  document.querySelectorAll('[data-install]').forEach((root) => {
+    const btn = root.querySelector('[data-install-copy]');
+    const cmd = root.querySelector('[data-install-cmd]')?.textContent ?? '';
+    const idle = root.querySelector('[data-install-idle]');
+    const done = root.querySelector('[data-install-done]');
+    btn?.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(cmd);
+        idle?.classList.add('hidden');
+        done?.classList.remove('hidden');
+        setTimeout(() => {
+          idle?.classList.remove('hidden');
+          done?.classList.add('hidden');
+        }, 1600);
+      } catch (e) {}
+    });
+  });
+</script>

@@ -1,0 +1,21 @@
+---
+interface Props {
+  class?: string;
+  showWordmark?: boolean;
+}
+const { class: className = '', showWordmark = true } = Astro.props;
+---
+<a href="/" class={`group inline-flex items-center gap-2.5 ${className}`} aria-label="Fastify home">
+  <span class="relative grid place-items-center size-8 rounded-[9px] bg-[var(--surface-2)] border border-[var(--border-strong)] overflow-hidden">
+    <span class="absolute inset-0 glow-amber opacity-60"></span>
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" class="relative">
+      <path d="M4 6.5 11 12l-7 5.5" stroke="var(--amber)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M12 6.5 19 12l-7 5.5" stroke="var(--teal)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" opacity="0.9"/>
+    </svg>
+  </span>
+  {showWordmark && (
+    <span class="font-display text-[1.15rem] font-semibold tracking-tight text-fg">
+      fastify
+    </span>
+  )}
+</a>

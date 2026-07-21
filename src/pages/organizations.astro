@@ -1,0 +1,81 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Icon from '../components/Icon.astro';
+import { SPONSORS, LEADS, COLLABORATORS, SITE } from '../data/site';
+
+const orgs = SPONSORS.filter((s) => s.tier === 'org');
+const sponsors = SPONSORS.filter((s) => s.tier === 'sponsor');
+---
+<BaseLayout title="Organizations & Team — Fastify" description="Organizations using Fastify, sponsors, and the maintainer team.">
+  <section class="relative overflow-hidden border-b border-[var(--border)] bg-telemetry">
+    <div class="pointer-events-none absolute inset-x-0 top-0 h-72 glow-amber opacity-60"></div>
+    <div class="relative mx-auto max-w-7xl px-4 py-16 sm:px-6">
+      <p class="eyebrow">// who is using fastify</p>
+      <h1 class="mt-4 font-display text-4xl font-semibold tracking-tight sm:text-5xl">Organizations & team</h1>
+      <p class="mt-4 max-w-2xl text-lg text-fg-soft">
+        Fastify proudly powers a large ecosystem of organizations and products, with over
+        {SITE.downloads} downloads per month.
+      </p>
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-7xl px-4 py-14 sm:px-6">
+    <p class="eyebrow">// in production</p>
+    <h2 class="mt-3 font-display text-2xl font-semibold">Trusted in production</h2>
+    <div class="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+      {orgs.map((o) => (
+        <a href={o.url} target="_blank" rel="noopener noreferrer" class="card group flex items-center justify-between p-5 transition-colors hover:border-[var(--border-strong)]">
+          <span class="font-display text-lg font-medium text-fg-soft group-hover:text-fg">{o.name}</span>
+          <Icon name="external" size={16} class="text-muted opacity-0 transition-opacity group-hover:opacity-100" />
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-7xl px-4 pb-6 sm:px-6">
+    <div class="card flex flex-col items-start gap-6 p-8 sm:flex-row sm:items-center sm:justify-between">
+      <div>
+        <p class="eyebrow">// sponsors</p>
+        <h2 class="mt-3 font-display text-2xl font-semibold">Kindly sponsored by</h2>
+        <div class="mt-3 flex flex-wrap gap-x-6 gap-y-2">
+          {sponsors.map((s) => (
+            <a href={s.url} target="_blank" rel="noopener noreferrer" class="font-display text-lg text-fg-soft hover:text-amber-ink">{s.name}</a>
+          ))}
+        </div>
+      </div>
+      <div class="flex flex-wrap gap-3">
+        <a href="https://github.com/sponsors/fastify" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 rounded-lg bg-amber px-5 py-3 font-medium text-[#0a0b0d] transition-transform hover:-translate-y-0.5">
+          <Icon name="github" size={18} /> Sponsor
+        </a>
+        <a href="https://opencollective.com/fastify" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 rounded-lg border border-[var(--border)] bg-[var(--surface)] px-5 py-3 font-medium text-fg transition-colors hover:border-[var(--border-strong)]">
+          Open Collective
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-7xl px-4 py-14 sm:px-6">
+    <p class="eyebrow">// lead maintainers</p>
+    <h2 class="mt-3 font-display text-2xl font-semibold">The team</h2>
+    <div class="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
+      {LEADS.map((p) => (
+        <a href={`https://github.com/${p.github}`} target="_blank" rel="noopener noreferrer" class="card group flex flex-col items-center gap-3 p-6 transition-colors hover:border-[var(--border-strong)]">
+          <img src={`https://avatars.githubusercontent.com/${p.github}?s=120`} alt={p.name} width="72" height="72" loading="lazy" class="size-18 rounded-full border-2 border-[var(--border)] grayscale transition-all group-hover:border-[var(--amber)] group-hover:grayscale-0" />
+          <span class="text-center text-sm font-medium text-fg-soft group-hover:text-fg">{p.name}</span>
+          <span class="font-mono text-xs text-muted">@{p.github}</span>
+        </a>
+      ))}
+    </div>
+
+    <p class="eyebrow mt-14">// collaborators</p>
+    <h3 class="mt-3 font-display text-xl font-semibold">Collaborators</h3>
+    <div class="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
+      {COLLABORATORS.map((p) => (
+        <a href={`https://github.com/${p.github}`} target="_blank" rel="noopener noreferrer" class="group flex items-center gap-3 rounded-lg border border-[var(--border)] bg-[var(--surface)]/40 p-3 transition-colors hover:border-[var(--border-strong)]">
+          <img src={`https://avatars.githubusercontent.com/${p.github}?s=80`} alt={p.name} width="40" height="40" loading="lazy" class="size-10 rounded-full grayscale transition-all group-hover:grayscale-0" />
+          <span class="min-w-0 truncate text-sm text-fg-soft group-hover:text-fg">{p.name}</span>
+        </a>
+      ))}
+    </div>
+  </section>
+</BaseLayout>

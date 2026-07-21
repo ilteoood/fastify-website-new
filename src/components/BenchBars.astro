@@ -1,0 +1,44 @@
+---
+import { BENCHMARKS } from '../data/site';
+const max = Math.max(...BENCHMARKS.map((b) => b.reqs));
+---
+<div class="space-y-3.5" data-bench>
+  {BENCHMARKS.map((b) => (
+    <div class="grid grid-cols-[5.5rem_1fr_auto] items-center gap-3">
+      <span class:list={['font-mono text-sm', b.self ? 'font-semibold text-amber-ink' : 'text-fg-soft']}>{b.name}</span>
+      <div class="h-7 overflow-hidden rounded-md bg-[var(--surface-2)]">
+        <div
+          data-bar
+          data-width={((b.reqs / max) * 100).toFixed(1)}
+          class:list={[
+            'h-full w-0 rounded-md',
+            b.self ? 'bg-gradient-to-r from-teal to-amber' : 'bg-[var(--border-strong)]',
+          ]}
+          style="transition: width 1.4s var(--ease-out-expo);"
+        ></div>
+      </div>
+      <span class="w-16 text-right font-mono text-xs tabular-nums text-muted">{b.reqs.toLocaleString()}</span>
+    </div>
+  ))}
+  <p class="pt-1 font-mono text-[0.65rem] text-muted">req/s · higher is better · illustrative comparison</p>
+</div>
+
+<script>
+  document.querySelectorAll('[data-bench]').forEach((root) => {
+    const bars = root.querySelectorAll<HTMLElement>('[data-bar]');
+    let ran = false;
+    const run = () => {
+      if (ran) return;
+      ran = true;
+      bars.forEach((bar) => { bar.style.width = `${bar.dataset.width}%`; });
+    };
+    const io = new IntersectionObserver((entries) => {
+      if (entries.some((e) => e.isIntersecting)) { run(); io.disconnect(); }
+    }, { threshold: 0.2 });
+    io.observe(root);
+    window.addEventListener('load', () => {
+      const r = root.getBoundingClientRect();
+      if (r.top < window.innerHeight && r.bottom > 0) setTimeout(run, 300);
+    });
+  });
+</script>
