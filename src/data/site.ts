@@ -85,7 +85,7 @@ export const SPONSORS: Sponsor[] = [
   { name: "Mercedes-Benz", url: "https://github.com/mercedes-benz", tier: "org" },
   { name: "Microsoft", url: "https://opensource.microsoft.com/", tier: "org" },
   { name: "Platformatic", url: "https://platformatic.dev/", tier: "sponsor" },
-  { name: "NearForm", url: "https://nearform.com/", tier: "sponsor" },
+  { name: "Nearform", url: "https://nearform.com/", tier: "sponsor" },
   { name: "SerpApi", url: "https://serpapi.com/", tier: "org" },
   { name: "Handsontable", url: "https://handsontable.com/", tier: "org" },
   { name: "Val Town", url: "https://www.val.town/", tier: "org" },
