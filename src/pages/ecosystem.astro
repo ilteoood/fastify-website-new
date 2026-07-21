@@ -12,8 +12,7 @@ type PluginEntry = {
   official?: boolean;
 };
 
-const plugins = pluginsData as { corePlugins: PluginEntry[]; communityPlugins: PluginEntry[] };
-const all: PluginEntry[] = [...plugins.corePlugins, ...plugins.communityPlugins];
+const plugins: PluginEntry[] = pluginsData.plugins;
 ---
 <BaseLayout title="Ecosystem — Fastify plugins" description="Browse the Fastify plugin ecosystem: auth, databases, validation, utilities and more.">
   <section class="relative overflow-hidden border-b border-border bg-telemetry">
@@ -42,7 +41,7 @@ const all: PluginEntry[] = [...plugins.corePlugins, ...plugins.communityPlugins]
     </div>
 
     <div data-plugin-grid class="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-      {all.map((p) => (
+      {plugins.map((p) => (
         <a
           href={p.url}
           target="_blank" rel="noopener noreferrer"

@@ -7,9 +7,9 @@ import VelocityMeter from '../components/VelocityMeter.astro';
 import { FEATURES, LEADS, SITE, SPONSORS } from '../data/site';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { withBase } from '../lib/href';
-import pluginsData from '../data/plugins.json';
+import plugins from '../data/plugins.json';
 
-const PLUGINS = [...pluginsData.corePlugins, ...pluginsData.communityPlugins];
+const PLUGINS = plugins.plugins.slice(0, 6);
 
 const esmCode = `// Import the framework and instantiate it
 import Fastify from 'fastify'

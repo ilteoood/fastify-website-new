@@ -89,15 +89,11 @@ async function main() {
   }
 
   const { core, community } = await readSections(SOURCE);
-  const plugins = {
-    corePlugins: withOfficialFlag(parseEntries(core)),
-    communityPlugins: parseEntries(community),
-  };
+  // Core plugins come first so the "official" entries surface at the top of the rendered list.
+  const plugins = [...withOfficialFlag(parseEntries(core)), ...parseEntries(community)];
 
-  await writeFile(OUTPUT, JSON.stringify(plugins, null, 2) + "\n");
-  log(
-    `Wrote ${plugins.corePlugins.length} core + ${plugins.communityPlugins.length} community plugins to ${path.relative(ROOT, OUTPUT)}`,
-  );
+  await writeFile(OUTPUT, JSON.stringify({ plugins }, null, 2) + "\n");
+  log(`Wrote ${plugins.length} plugins to ${path.relative(ROOT, OUTPUT)}`);
 }
 
 main().catch((err) => {
