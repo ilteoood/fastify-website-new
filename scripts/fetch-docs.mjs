@@ -190,7 +190,7 @@ function rewriteTarget(target, relDir, version) {
       .replace(/\.mdx?$/i, "")
       .replace(/\/(index|Index)$/, "")
       .replace(/^(index|Index)$/, "");
-    const url = `${BASE}/docs/${version}/${joined}/` ;
+    const url = `${BASE}/docs/${version}/${joined}/`;
     return anchor ? `${url}#${anchor}` : url;
   }
   if (joined.includes("resources/")) {
