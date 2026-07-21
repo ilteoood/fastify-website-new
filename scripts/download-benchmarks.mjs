@@ -18,6 +18,7 @@
 import { writeFile } from "node:fs/promises";
 import path from "node:path";
 import frameworks from "./frameworks.json" with { type: "json" };
+import pino from "pino";
 
 const ROOT = path.resolve(import.meta.dirname, "..");
 const OUTPUT = path.join(ROOT, "src/data/benchmarks.json");
@@ -28,17 +29,23 @@ const GITHUB_BASE_URL = "https://api.github.com/repos/fastify/benchmarks";
 const FRAMEWORK_TAGS = frameworks.map(({ tag }) => tag);
 const TIMEOUT_MS = 10_000;
 
-const log = (...a) => console.log("[benchmarks]", ...a);
+const log = pino({
+  level: process.env.LOG_LEVEL || "debug",
+  transport: {
+    target: "pino-pretty",
+    options: { colorize: true },
+  },
+});
 
 main().catch((err) => {
-  console.error("[benchmarks] Failed:", err);
+  log.error(err);
   process.exit(1);
 });
 
 async function main() {
   const data = await downloadBenchmarks(URL_BENCHMARK);
   await writeFile(OUTPUT, JSON.stringify(data, null, 2) + "\n");
-  log(
+  log.info(
     `Wrote ${data.frameworks.length} frameworks (reference ${data.reference}) to ${path.relative(ROOT, OUTPUT)}`,
   );
 }

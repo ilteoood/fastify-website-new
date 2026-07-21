@@ -35,6 +35,8 @@
   "devDependencies": {
     "oxfmt": "^0.59.0",
     "oxlint": "^1.74.0",
-    "pagefind": "^1.5.2"
+    "pagefind": "^1.5.2",
+    "pino": "^10.3.1",
+    "pino-pretty": "^13.1.3"
   }
 }
