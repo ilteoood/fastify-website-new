@@ -115,7 +115,12 @@ const breadcrumb = current.split('/').slice(1).filter((s) => !/^index$/i.test(s)
         ))}
       </nav>
 
-      <article class:list={[prose && 'prose-fastify']} data-pagefind-body>
+      <article
+        class:list={[prose && 'prose-fastify']}
+        data-pagefind-body
+        data-pagefind-filter="version[data-version]"
+        data-version={version}
+      >
         <slot />
       </article>
 

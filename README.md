@@ -69,7 +69,11 @@ automatically via the `prebuild`/`predev` npm hooks.
 The script:
 
 1. Lists all release tags with `git ls-remote` (no auth, no rate limit).
-2. Picks the latest release of each major `>= DOCS_MIN_MAJOR` (default `3`).
+2. Selects releases exactly like the official `fastify/website` build:
+   - the **current (highest) major** → the latest patch of **every minor**
+     (e.g. all `5.x`);
+   - **each older major** down to `DOCS_MIN_MAJOR` (default `3`) → only its
+     **latest** release (e.g. the last `4.x` and the last `3.x`).
 3. Downloads each release tarball and extracts only its `docs/` folder.
 4. Transforms every Markdown file — strips the repeated centered title,
    rewrites relative `.md` links and resource paths to site URLs, and injects
@@ -78,13 +82,35 @@ The script:
    resources into `public/docs/<version>/…`, duplicates the newest release as
    `latest`, and writes `src/data/versions.json`.
 
-The result is browsable, versioned docs (`latest`, `v5.x`, `v4.x`, `v3.x`) with
-a version switcher, exactly like the current website. Fetched content is
-git-ignored so the source of truth stays in `fastify/fastify`.
+The result is browsable, versioned docs (`latest`, `v5.10.x` … `v5.0.x`,
+`v4.29.x`, `v3.29.x`) with a version switcher, exactly like the current website.
+Fetched content is git-ignored so the source of truth stays in `fastify/fastify`.
+
+**Version-scoped search:** the Pagefind index tags every doc page with its
+version. When you search from a docs page, results are filtered to the selected
+version only (searching from a `v5.10.x` page returns `v5.10.x` results, never
+`v5.9.x` or `v4.x`); elsewhere search defaults to `latest`.
 
 ```bash
-npm run fetch:docs            # fetch/refresh docs (skips already-fetched versions)
-FORCE_FETCH=1 npm run fetch:docs   # force a refresh
-DOCS_MIN_MAJOR=4 npm run fetch:docs # only fetch v4.x and newer
+pnpm run fetch:docs             # fetch/refresh docs (skips already-fetched versions)
+FORCE_FETCH=1 pnpm run fetch:docs   # force a refresh
+DOCS_MIN_MAJOR=4 pnpm run fetch:docs # only fetch v4.x and newer
 ```
+
+## Deployment
+
+A GitHub Actions workflow ([`.github/workflows/deploy.yml`](.github/workflows/deploy.yml))
+builds and publishes the site to **GitHub Pages** on every push to `main` (and
+on manual dispatch). It installs dependencies with pnpm, fetches the docs, runs
+`astro build` + Pagefind, and deploys the `dist/` output.
+
+To enable it: in the repository settings, set **Settings → Pages → Build and
+deployment → Source** to **GitHub Actions**.
+
+> The site is configured for a **root** deployment (as used by `fastify.dev` via
+> a custom domain). If you deploy to a project subpath
+> (`https://<user>.github.io/<repo>/`), set Astro's
+> [`base`](https://docs.astro.build/en/reference/configuration-reference/#base)
+> and add a matching custom domain / `CNAME` accordingly.
+
 

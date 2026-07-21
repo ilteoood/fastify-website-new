@@ -46,23 +46,50 @@ function sh(cmd, args) {
   return execFileSync(cmd, args, { encoding: 'utf8', maxBuffer: 1024 * 1024 * 64 });
 }
 
-/** @returns {{ major:number, minor:number, patch:number, tag:string }[]} */
+/**
+ * Replicates the fastify/website release-selection logic (build-website.sh):
+ *   - The current (highest) major -> the latest patch of EVERY minor  (--minor N)
+ *   - Every older major down to MIN_MAJOR -> only its latest release   (--major N)
+ * e.g. all 5.x minors + the last 4.x + the last 3.x.
+ * @returns {{ major:number, minor:number, patch:number, tag:string }[]}
+ */
 function listVersions() {
   const out = sh('git', ['ls-remote', '--tags', '--refs', `https://github.com/${REPO}.git`]);
-  /** @type {Map<number, {major:number,minor:number,patch:number,tag:string}>} */
-  const latestByMajor = new Map();
+  /** @type {{major:number,minor:number,patch:number,tag:string}[]} */
+  const all = [];
   for (const line of out.split('\n')) {
     const m = line.match(/refs\/tags\/v(\d+)\.(\d+)\.(\d+)$/);
     if (!m) continue;
     const [major, minor, patch] = [Number(m[1]), Number(m[2]), Number(m[3])];
     if (major < MIN_MAJOR) continue;
-    const v = { major, minor, patch, tag: `v${major}.${minor}.${patch}` };
-    const cur = latestByMajor.get(major);
-    if (!cur || minor > cur.minor || (minor === cur.minor && patch > cur.patch)) {
-      latestByMajor.set(major, v);
-    }
+    all.push({ major, minor, patch, tag: `v${major}.${minor}.${patch}` });
   }
-  return [...latestByMajor.values()].sort((a, b) => b.major - a.major);
+  if (all.length === 0) return [];
+
+  const higher = (a, b) =>
+    a.minor > b.minor || (a.minor === b.minor && a.patch > b.patch);
+  const highestMajor = Math.max(...all.map((v) => v.major));
+
+  const selected = [];
+
+  // Current major: keep the latest patch of every minor.
+  const latestByMinor = new Map();
+  for (const v of all.filter((v) => v.major === highestMajor)) {
+    const cur = latestByMinor.get(v.minor);
+    if (!cur || higher(v, cur)) latestByMinor.set(v.minor, v);
+  }
+  selected.push(...latestByMinor.values());
+
+  // Older majors: keep only the single latest release of each major.
+  for (let major = MIN_MAJOR; major < highestMajor; major++) {
+    const inMajor = all.filter((v) => v.major === major);
+    if (inMajor.length === 0) continue;
+    selected.push(inMajor.reduce((best, v) => (higher(v, best) ? v : best)));
+  }
+
+  return selected.sort(
+    (a, b) => b.major - a.major || b.minor - a.minor || b.patch - a.patch,
+  );
 }
 
 async function downloadAndExtract(tag) {
@@ -122,7 +149,23 @@ function orderFor(relPath, section) {
 
 /** Rewrite a relative link/asset target into a site URL. */
 function rewriteTarget(target, relDir, version) {
-  if (/^(https?:|mailto:|#|\/)/i.test(target)) return null; // absolute/external/anchor
+  if (/^(https?:|mailto:|tel:|#)/i.test(target)) return null; // external / anchor
+
+  // Absolute in-repo doc links, e.g. "/docs/Reference/TypeScript.md" or
+  // "/Reference/Foo.md" (Docusaurus-style paths that appear in some releases).
+  if (target.startsWith('/')) {
+    if (!/\.mdx?($|#)/i.test(target)) return null; // non-doc absolute link — leave as-is
+    const [p0, anchor] = target.split('#');
+    let p = p0
+      .replace(/^\/(?:docs\/)?/, '')
+      .replace(/^(latest|v\d+(?:\.\d+)?\.x)\//, '')
+      .replace(/\.mdx?$/i, '')
+      .replace(/\/(index|Index)$/, '')
+      .replace(/^(index|Index)$/, '');
+    const url = `/docs/${version}/${p}`.replace(/\/+$/, '') + '/';
+    return anchor ? `${url}#${anchor}` : url;
+  }
+
   const [rawPath, anchor] = target.split('#');
   if (!rawPath) return null;
   let joined = path.posix.normalize(path.posix.join(relDir.replace(/\\/g, '/'), rawPath));
@@ -214,34 +257,32 @@ async function main() {
   if (versions.length === 0) throw new Error('No Fastify versions found');
 
   const newest = versions[0];
-  const manifest = { latest: `v${newest.major}.x`, versions: /** @type {any[]} */ ([]) };
+  const newestVersion = `v${newest.major}.${newest.minor}.x`;
+  const manifest = { latest: newestVersion, versions: /** @type {any[]} */ ([]) };
   manifest.versions.push({
     name: 'latest', label: `latest (${newest.tag})`, tag: newest.tag, isLatest: true,
   });
   for (const v of versions) {
-    manifest.versions.push({ name: `v${v.major}.x`, label: v.tag, tag: v.tag });
+    manifest.versions.push({ name: `v${v.major}.${v.minor}.x`, label: v.tag, tag: v.tag });
   }
 
   await mkdir(CONTENT_DIR, { recursive: true });
   await mkdir(PUBLIC_DIR, { recursive: true });
 
+  const needLatest = FORCE || !(await isNonEmptyDir(path.join(CONTENT_DIR, 'latest')));
+
   for (const v of versions) {
-    const version = `v${v.major}.x`;
-    if (!FORCE && (await isNonEmptyDir(path.join(CONTENT_DIR, version)))) {
+    const version = `v${v.major}.${v.minor}.x`;
+    const isNewest = v === newest;
+    const needVersion = FORCE || !(await isNonEmptyDir(path.join(CONTENT_DIR, version)));
+    const buildLatestNow = isNewest && needLatest;
+    if (!needVersion && !buildLatestNow) {
       log(`Skipping ${version} (already fetched; set FORCE_FETCH=1 to refresh)`);
       continue;
     }
     const docsRoot = await downloadAndExtract(v.tag);
-    await processVersion(docsRoot, version);
-    if (v === newest) {
-      await processVersion(docsRoot, 'latest');
-    }
-  }
-
-  // Ensure `latest` exists even if the newest major was skipped above.
-  if (FORCE || !(await isNonEmptyDir(path.join(CONTENT_DIR, 'latest')))) {
-    const docsRoot = path.join(CACHE, newest.tag, 'docs');
-    if (existsSync(docsRoot)) await processVersion(docsRoot, 'latest');
+    if (needVersion) await processVersion(docsRoot, version);
+    if (buildLatestNow) await processVersion(docsRoot, 'latest');
   }
 
   await writeFile(DATA_FILE, JSON.stringify(manifest, null, 2) + '\n');
