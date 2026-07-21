@@ -12,6 +12,43 @@ type PluginEntry = {
   official?: boolean;
 };
 
+type DescriptionPart =
+  | { type: 'text'; value: string }
+  | { type: 'link'; value: string; href: string; code: boolean };
+
+const markdownLink = /\[([^\]]+)\]\((https?:\/\/[^)\s]+|#[^)\s]+)\)/g;
+
+function parseDescription(description: string): DescriptionPart[] {
+  const parts: DescriptionPart[] = [];
+  let offset = 0;
+
+  for (const match of description.matchAll(markdownLink)) {
+    if (match.index > offset) {
+      parts.push({ type: 'text', value: description.slice(offset, match.index) });
+    }
+
+    const label = match[1];
+    const code = label.startsWith('`') && label.endsWith('`');
+    const href = match[2].startsWith('#')
+      ? `${withBase('/docs/latest/Guides/Ecosystem/')}${match[2]}`
+      : match[2];
+
+    parts.push({
+      type: 'link',
+      value: code ? label.slice(1, -1) : label,
+      href,
+      code,
+    });
+    offset = match.index + match[0].length;
+  }
+
+  if (offset < description.length) {
+    parts.push({ type: 'text', value: description.slice(offset) });
+  }
+
+  return parts;
+}
+
 const plugins: PluginEntry[] = pluginsData.plugins;
 ---
 <BaseLayout title="Ecosystem — Fastify plugins" description="Browse the Fastify plugin ecosystem: auth, databases, validation, utilities and more.">
@@ -42,13 +79,11 @@ const plugins: PluginEntry[] = pluginsData.plugins;
 
     <div data-plugin-grid class="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
       {plugins.map((p) => (
-        <a
-          href={p.url}
-          target="_blank" rel="noopener noreferrer"
+        <article
           data-plugin
           data-name={p.name.toLowerCase()}
           data-desc={p.description.toLowerCase()}
-          class="card group flex flex-col p-5 transition-colors hover:border-border-strong"
+          class="card group relative flex flex-col p-5 transition-colors hover:border-border-strong"
         >
           <div class="flex items-center justify-end">
             <span
@@ -58,12 +93,30 @@ const plugins: PluginEntry[] = pluginsData.plugins;
               ]}
             >{p.official ? "official" : "community"}</span>
           </div>
-          <div class="mt-4 flex items-center gap-1.5">
+          <a
+            href={p.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="mt-4 flex items-center gap-1.5 after:absolute after:inset-0"
+          >
             <h3 class="font-mono text-sm font-medium text-fg">{p.name}</h3>
             <Icon name="external" size={12} class="text-muted opacity-0 transition-opacity group-hover:opacity-100" />
-          </div>
-          <p class="mt-1.5 text-sm leading-relaxed text-fg-soft">{p.description}</p>
-        </a>
+          </a>
+          <p class="mt-1.5 text-sm leading-relaxed text-fg-soft">
+            {parseDescription(p.description).map((part) =>
+              part.type === 'text' ? part.value : (
+                <a
+                  href={part.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="relative z-10 text-amber-ink underline decoration-border-strong underline-offset-2"
+                >
+                  {part.code ? <code>{part.value}</code> : part.value}
+                </a>
+              )
+            )}
+          </p>
+        </article>
       ))}
     </div>
     <p data-plugin-empty class="hidden py-16 text-center text-muted">No plugins match your search.</p>
