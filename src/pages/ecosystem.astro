@@ -1,6 +1,8 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Icon from '../components/Icon.astro';
+import DOMPurify from 'isomorphic-dompurify';
+import { marked } from 'marked';
 import { SITE } from '../data/site';
 import { withBase } from '../lib/href';
 import pluginsData from '../data/plugins.json';
@@ -12,7 +14,10 @@ type PluginEntry = {
   official?: boolean;
 };
 
-const plugins: PluginEntry[] = pluginsData.plugins;
+const plugins = pluginsData.plugins.map((plugin: PluginEntry) => ({
+  ...plugin,
+  descriptionHtml: DOMPurify.sanitize(marked.parseInline(plugin.description)),
+}));
 ---
 <BaseLayout title="Ecosystem — Fastify plugins" description="Browse the Fastify plugin ecosystem: auth, databases, validation, utilities and more.">
   <section class="relative overflow-hidden border-b border-border bg-telemetry">
@@ -42,13 +47,11 @@ const plugins: PluginEntry[] = pluginsData.plugins;
 
     <div data-plugin-grid class="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
       {plugins.map((p) => (
-        <a
-          href={p.url}
-          target="_blank" rel="noopener noreferrer"
+        <article
           data-plugin
           data-name={p.name.toLowerCase()}
           data-desc={p.description.toLowerCase()}
-          class="card group flex flex-col p-5 transition-colors hover:border-border-strong"
+          class="card group relative flex flex-col p-5 transition-colors hover:border-border-strong"
         >
           <div class="flex items-center justify-end">
             <span
@@ -58,12 +61,20 @@ const plugins: PluginEntry[] = pluginsData.plugins;
               ]}
             >{p.official ? "official" : "community"}</span>
           </div>
-          <div class="mt-4 flex items-center gap-1.5">
+          <a
+            href={p.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="mt-4 flex items-center gap-1.5 after:absolute after:inset-0"
+          >
             <h3 class="font-mono text-sm font-medium text-fg">{p.name}</h3>
             <Icon name="external" size={12} class="text-muted opacity-0 transition-opacity group-hover:opacity-100" />
-          </div>
-          <p class="mt-1.5 text-sm leading-relaxed text-fg-soft">{p.description}</p>
-        </a>
+          </a>
+          <p
+            class="mt-1.5 text-sm leading-relaxed text-fg-soft [&_a]:relative [&_a]:z-10 [&_a]:text-amber-ink [&_a]:underline [&_a]:decoration-border-strong [&_a]:underline-offset-2"
+            set:html={p.descriptionHtml}
+          />
+        </article>
       ))}
     </div>
     <p data-plugin-empty class="hidden py-16 text-center text-muted">No plugins match your search.</p>
