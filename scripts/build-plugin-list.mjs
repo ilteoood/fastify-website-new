@@ -12,12 +12,19 @@
 import { existsSync } from "node:fs";
 import { readFile, stat, writeFile } from "node:fs/promises";
 import path from "node:path";
+import pino from "pino";
 
 const ROOT = path.resolve(import.meta.dirname, "..");
 const SOURCE = path.join(ROOT, "src/content/docs/latest/Guides/Ecosystem.md");
 const OUTPUT = path.join(ROOT, "src/data/plugins.json");
 
-const log = (...a) => console.log("[plugins]", ...a);
+const log = pino({
+  level: process.env.LOG_LEVEL || "debug",
+  transport: {
+    target: "pino-pretty",
+    options: { colorize: true },
+  },
+});
 
 const PLUGIN_LINE = /\[`([-a-z\d./@]+)`\]\(([^)]+)\)(\s*(.+))?/i;
 const DESCRIPTION_FALLBACK = "";
@@ -79,7 +86,7 @@ function withOfficialFlag(entries) {
 
 async function main() {
   if (await skipIfGenerated()) {
-    log(`Source missing and ${path.relative(ROOT, OUTPUT)} already exists — skipping.`);
+    log.info(`Source missing and ${path.relative(ROOT, OUTPUT)} already exists — skipping.`);
     return;
   }
   if (!existsSync(SOURCE)) {
@@ -93,10 +100,10 @@ async function main() {
   const plugins = [...withOfficialFlag(parseEntries(core)), ...parseEntries(community)];
 
   await writeFile(OUTPUT, JSON.stringify({ plugins }, null, 2) + "\n");
-  log(`Wrote ${plugins.length} plugins to ${path.relative(ROOT, OUTPUT)}`);
+  log.info(`Wrote ${plugins.length} plugins to ${path.relative(ROOT, OUTPUT)}`);
 }
 
 main().catch((err) => {
-  console.error("[plugins] Failed:", err);
+  log.error(err);
   process.exit(1);
 });
