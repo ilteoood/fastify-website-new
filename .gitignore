@@ -11,3 +11,4 @@ src/content/docs/
 public/docs/
 src/data/versions.json
 src/data/plugins.json
+src/data/benchmarks.json

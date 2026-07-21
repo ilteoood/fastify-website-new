@@ -5,10 +5,10 @@
   "type": "module",
   "scripts": {
     "fetch:docs": "node scripts/fetch-docs.mjs",
-    "predev": "node scripts/fetch-docs.mjs && node scripts/build-plugin-list.mjs",
+    "predev": "node scripts/fetch-docs.mjs && node scripts/build-plugin-list.mjs && node scripts/download-benchmarks.mjs",
     "dev": "astro dev",
     "start": "astro dev",
-    "prebuild": "node scripts/fetch-docs.mjs && node scripts/build-plugin-list.mjs",
+    "prebuild": "node scripts/fetch-docs.mjs && node scripts/build-plugin-list.mjs && node scripts/download-benchmarks.mjs",
     "build": "astro build && pagefind --site dist",
     "preview": "astro preview",
     "astro": "astro",
@@ -35,6 +35,8 @@
   "devDependencies": {
     "oxfmt": "^0.59.0",
     "oxlint": "^1.74.0",
-    "pagefind": "^1.5.2"
+    "pagefind": "^1.5.2",
+    "pino": "^10.3.1",
+    "pino-pretty": "^13.1.3"
   }
 }

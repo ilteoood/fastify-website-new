@@ -1,3 +1,5 @@
+import benchmarksData from "./benchmarks.json" with { type: "json" };
+
 export const SITE = {
   name: "Fastify",
   tagline: "Fast and low overhead web framework, for Node.js",
@@ -70,14 +72,13 @@ export const FEATURES: Feature[] = [
 
 export type Bench = { name: string; reqs: number; self?: boolean };
 
-// Indicative requests/sec — illustrative comparison (higher is better).
-export const BENCHMARKS: Bench[] = [
-  { name: "Fastify", reqs: 30271, self: true },
-  { name: "Koa", reqs: 20800 },
-  { name: "Restify", reqs: 18600 },
-  { name: "Hapi", reqs: 15100 },
-  { name: "Express", reqs: 9200 },
-];
+// Requests/sec from the official fastify/benchmarks suite, refreshed at build
+// time by `scripts/download-benchmarks.mjs` (see `prebuild` / `predev`).
+export const BENCHMARKS: Bench[] = benchmarksData.frameworks.map(({ name, requests }) => ({
+  name,
+  reqs: requests,
+  self: name === "Fastify",
+}));
 
 export type Sponsor = { name: string; url: string; tier: "org" | "sponsor" };
 
