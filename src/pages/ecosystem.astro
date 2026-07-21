@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Icon from '../components/Icon.astro';
+import { marked } from 'marked';
 import { SITE } from '../data/site';
 import { withBase } from '../lib/href';
 import pluginsData from '../data/plugins.json';
@@ -12,44 +13,32 @@ type PluginEntry = {
   official?: boolean;
 };
 
-type DescriptionPart =
-  | { type: 'text'; value: string }
-  | { type: 'link'; value: string; href: string; code: boolean };
+const escapeHtml = (value: string) =>
+  value.replace(/[&<>"']/g, (character) => `&#${character.charCodeAt(0)};`);
 
-const markdownLink = /\[([^\]]+)\]\((https?:\/\/[^)\s]+|#[^)\s]+)\)/g;
+const descriptionRenderer = new marked.Renderer();
+descriptionRenderer.html = ({ text }) => escapeHtml(text);
+descriptionRenderer.link = function ({ href, title, tokens }) {
+  const safeHref = href.startsWith('#')
+    ? `${withBase('/docs/latest/Guides/Ecosystem/')}${href}`
+    : /^https?:\/\//.test(href)
+      ? href
+      : null;
 
-function parseDescription(description: string): DescriptionPart[] {
-  const parts: DescriptionPart[] = [];
-  let offset = 0;
+  if (!safeHref) return this.parser.parseInline(tokens);
 
-  for (const match of description.matchAll(markdownLink)) {
-    if (match.index > offset) {
-      parts.push({ type: 'text', value: description.slice(offset, match.index) });
-    }
+  const titleAttribute = title ? ` title="${escapeHtml(title)}"` : '';
+  const externalAttributes = safeHref.startsWith('http')
+    ? ' target="_blank" rel="noopener noreferrer"'
+    : '';
 
-    const label = match[1];
-    const code = label.startsWith('`') && label.endsWith('`');
-    const href = match[2].startsWith('#')
-      ? `${withBase('/docs/latest/Guides/Ecosystem/')}${match[2]}`
-      : match[2];
+  return `<a href="${escapeHtml(safeHref)}"${titleAttribute}${externalAttributes}>${this.parser.parseInline(tokens)}</a>`;
+};
 
-    parts.push({
-      type: 'link',
-      value: code ? label.slice(1, -1) : label,
-      href,
-      code,
-    });
-    offset = match.index + match[0].length;
-  }
-
-  if (offset < description.length) {
-    parts.push({ type: 'text', value: description.slice(offset) });
-  }
-
-  return parts;
-}
-
-const plugins: PluginEntry[] = pluginsData.plugins;
+const plugins = pluginsData.plugins.map((plugin: PluginEntry) => ({
+  ...plugin,
+  descriptionHtml: marked.parseInline(plugin.description, { renderer: descriptionRenderer }),
+}));
 ---
 <BaseLayout title="Ecosystem — Fastify plugins" description="Browse the Fastify plugin ecosystem: auth, databases, validation, utilities and more.">
   <section class="relative overflow-hidden border-b border-border bg-telemetry">
@@ -102,20 +91,10 @@ const plugins: PluginEntry[] = pluginsData.plugins;
             <h3 class="font-mono text-sm font-medium text-fg">{p.name}</h3>
             <Icon name="external" size={12} class="text-muted opacity-0 transition-opacity group-hover:opacity-100" />
           </a>
-          <p class="mt-1.5 text-sm leading-relaxed text-fg-soft">
-            {parseDescription(p.description).map((part) =>
-              part.type === 'text' ? part.value : (
-                <a
-                  href={part.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="relative z-10 text-amber-ink underline decoration-border-strong underline-offset-2"
-                >
-                  {part.code ? <code>{part.value}</code> : part.value}
-                </a>
-              )
-            )}
-          </p>
+          <p
+            class="mt-1.5 text-sm leading-relaxed text-fg-soft [&_a]:relative [&_a]:z-10 [&_a]:text-amber-ink [&_a]:underline [&_a]:decoration-border-strong [&_a]:underline-offset-2"
+            set:html={p.descriptionHtml}
+          />
         </article>
       ))}
     </div>
