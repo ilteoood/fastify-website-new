@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Icon from '../components/Icon.astro';
+import DOMPurify from 'isomorphic-dompurify';
 import { marked } from 'marked';
 import { SITE } from '../data/site';
 import { withBase } from '../lib/href';
@@ -13,31 +14,9 @@ type PluginEntry = {
   official?: boolean;
 };
 
-const escapeHtml = (value: string) =>
-  value.replace(/[&<>"']/g, (character) => `&#${character.charCodeAt(0)};`);
-
-const descriptionRenderer = new marked.Renderer();
-descriptionRenderer.html = ({ text }) => escapeHtml(text);
-descriptionRenderer.link = function ({ href, title, tokens }) {
-  const safeHref = href.startsWith('#')
-    ? `${withBase('/docs/latest/Guides/Ecosystem/')}${href}`
-    : /^https?:\/\//.test(href)
-      ? href
-      : null;
-
-  if (!safeHref) return this.parser.parseInline(tokens);
-
-  const titleAttribute = title ? ` title="${escapeHtml(title)}"` : '';
-  const externalAttributes = safeHref.startsWith('http')
-    ? ' target="_blank" rel="noopener noreferrer"'
-    : '';
-
-  return `<a href="${escapeHtml(safeHref)}"${titleAttribute}${externalAttributes}>${this.parser.parseInline(tokens)}</a>`;
-};
-
 const plugins = pluginsData.plugins.map((plugin: PluginEntry) => ({
   ...plugin,
-  descriptionHtml: marked.parseInline(plugin.description, { renderer: descriptionRenderer }),
+  descriptionHtml: DOMPurify.sanitize(marked.parseInline(plugin.description)),
 }));
 ---
 <BaseLayout title="Ecosystem — Fastify plugins" description="Browse the Fastify plugin ecosystem: auth, databases, validation, utilities and more.">
