@@ -20,6 +20,7 @@ import { execFileSync } from "node:child_process";
 import { existsSync } from "node:fs";
 import { cp, mkdir, readdir, readFile, rm, stat, writeFile } from "node:fs/promises";
 import path from "node:path";
+import pino from "pino";
 import astroConfig from "../astro.config.mjs";
 
 const ROOT = path.resolve(import.meta.dirname, "..");
@@ -57,7 +58,13 @@ const GUIDE_ORDER = [
   "Style-Guide",
 ];
 
-const log = (...a) => console.log("[docs]", ...a);
+const log = pino({
+  level: process.env.LOG_LEVEL || "debug",
+  transport: {
+    target: "pino-pretty",
+    options: { colorize: true },
+  },
+});
 
 function sh(cmd, args) {
   return execFileSync(cmd, args, { encoding: "utf8", maxBuffer: 1024 * 1024 * 64 });
@@ -113,7 +120,7 @@ async function downloadAndExtract(tag) {
   await rm(rawDir, { recursive: true, force: true });
   await mkdir(rawDir, { recursive: true });
 
-  log(`Downloading ${REPO}@${tag}…`);
+  log.info(`Downloading ${REPO}@${tag}…`);
   const res = await fetch(`https://codeload.github.com/${REPO}/tar.gz/refs/tags/${tag}`);
   if (!res.ok) throw new Error(`Download failed for ${tag}: ${res.status}`);
   await writeFile(tarPath, Buffer.from(await res.arrayBuffer()));
@@ -251,7 +258,7 @@ async function processVersion(docsRoot, version) {
     await mkdir(path.dirname(pubDest), { recursive: true });
     await cp(resources, pubDest, { recursive: true });
   }
-  log(`Wrote ${files.length} pages for ${version}`);
+  log.info(`Wrote ${files.length} pages for ${version}`);
 }
 
 async function isNonEmptyDir(dir) {
@@ -268,7 +275,7 @@ async function main() {
     versions = listVersions();
   } catch (err) {
     if (await isNonEmptyDir(CONTENT_DIR)) {
-      log("Could not reach GitHub — using previously fetched docs.");
+      log.warn("Could not reach GitHub — using previously fetched docs.");
       return;
     }
     throw err;
@@ -299,7 +306,7 @@ async function main() {
     const needVersion = FORCE || !(await isNonEmptyDir(path.join(CONTENT_DIR, version)));
     const buildLatestNow = isNewest && needLatest;
     if (!needVersion && !buildLatestNow) {
-      log(`Skipping ${version} (already fetched; set FORCE_FETCH=1 to refresh)`);
+      log.info(`Skipping ${version} (already fetched; set FORCE_FETCH=1 to refresh)`);
       continue;
     }
     const docsRoot = await downloadAndExtract(v.tag);
@@ -308,12 +315,12 @@ async function main() {
   }
 
   await writeFile(DATA_FILE, JSON.stringify(manifest, null, 2) + "\n");
-  log(`Done. Versions: ${manifest.versions.map((v) => v.name).join(", ")}`);
+  log.info(`Done. Versions: ${manifest.versions.map((v) => v.name).join(", ")}`);
   // Free disk: keep tarballs out of the repo.
   if (!process.env.KEEP_CACHE) await rm(CACHE, { recursive: true, force: true }).catch(() => {});
 }
 
 main().catch((err) => {
-  console.error("[docs] Failed:", err);
+  log.error(err);
   process.exit(1);
 });
