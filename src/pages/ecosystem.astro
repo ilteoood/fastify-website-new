@@ -50,9 +50,13 @@ const plugins: PluginEntry[] = pluginsData.plugins;
           data-desc={p.description.toLowerCase()}
           class="card group flex flex-col p-5 transition-colors hover:border-border-strong"
         >
-          <div class="flex items-center justify-between">
-            <span class="grid size-9 place-items-center rounded-md border border-border bg-surface-2 font-mono text-xs text-amber-ink">fp</span>
-            {p.official && <span class="rounded-full border border-border px-2 py-0.5 font-mono text-[0.6rem] uppercase tracking-wider text-teal">official</span>}
+          <div class="flex items-center justify-end">
+            <span
+              class:list={[
+                "rounded-full border border-border px-2 py-0.5 font-mono text-[0.6rem] uppercase tracking-wider",
+                p.official ? "text-teal" : "text-muted",
+              ]}
+            >{p.official ? "official" : "community"}</span>
           </div>
           <div class="mt-4 flex items-center gap-1.5">
             <h3 class="font-mono text-sm font-medium text-fg">{p.name}</h3>
