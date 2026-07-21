@@ -15,7 +15,7 @@ export const SITE = {
 };
 
 export const NAV = [
-  { label: "Docs", href: "/docs/" },
+  { label: "Docs", href: "/docs/latest" },
   { label: "Ecosystem", href: "/ecosystem/" },
   { label: "Benchmarks", href: "/benchmarks/" },
   { label: "Organizations", href: "/organizations/" },
