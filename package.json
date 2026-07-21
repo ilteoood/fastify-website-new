@@ -5,10 +5,10 @@
   "type": "module",
   "scripts": {
     "fetch:docs": "node scripts/fetch-docs.mjs",
-    "predev": "node scripts/fetch-docs.mjs",
+    "predev": "node scripts/fetch-docs.mjs && node scripts/build-plugin-list.mjs",
     "dev": "astro dev",
     "start": "astro dev",
-    "prebuild": "node scripts/fetch-docs.mjs",
+    "prebuild": "node scripts/fetch-docs.mjs && node scripts/build-plugin-list.mjs",
     "build": "astro build && pagefind --site dist",
     "preview": "astro preview",
     "astro": "astro",
