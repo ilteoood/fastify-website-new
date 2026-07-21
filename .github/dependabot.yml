@@ -8,11 +8,11 @@ updates:
     cooldown:
       default-days: 1
     groups:
-      dev-dependencies:
-        dependency-type: "development"
+      astro:
+        patterns: ["@astrojs/*", "astro"]
         update-types: ["minor", "patch"]
-      production-dependencies:
-        dependency-type: "production"
+      tailwind:
+        patterns: ["@tailwindcss/*", "tailwindcss"]
         update-types: ["minor", "patch"]
     commit-message:
       prefix: "deps"
