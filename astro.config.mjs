@@ -7,6 +7,7 @@ import tailwindcss from '@tailwindcss/vite';
 // https://astro.build/config
 export default defineConfig({
   site: 'https://fastify.dev',
+  base: '/fastify-website-new',
   integrations: [mdx(), sitemap()],
   vite: {
     plugins: [tailwindcss()],
