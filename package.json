@@ -5,7 +5,6 @@
   "type": "module",
   "scripts": {
     "fetch:docs": "node scripts/fetch-docs.mjs",
-    "build:plugins": "node scripts/build-plugin-list.mjs",
     "predev": "node scripts/fetch-docs.mjs && node scripts/build-plugin-list.mjs",
     "dev": "astro dev",
     "start": "astro dev",
