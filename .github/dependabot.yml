@@ -10,10 +10,8 @@ updates:
     groups:
       astro:
         patterns: ["@astrojs/*", "astro"]
-        update-types: ["minor", "patch"]
       tailwind:
         patterns: ["@tailwindcss/*", "tailwindcss"]
-        update-types: ["minor", "patch"]
     commit-message:
       prefix: "deps"
       prefix-development: "deps-dev"
