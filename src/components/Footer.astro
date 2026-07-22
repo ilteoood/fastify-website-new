@@ -2,6 +2,7 @@
 import { withBase } from "../lib/href";
 import Icon from "./Icon.astro";
 import Logo from "./Logo.astro";
+import OpenJSF from "./OpenJSF.astro";
 
 const columns = [
 	{
@@ -49,14 +50,9 @@ const columns = [
       <div>
         <Logo />
         <p class="mt-4 max-w-xs text-sm leading-relaxed text-muted">
-          A fast and low overhead web framework for Node.js. An{" "}
-          <a
-            href="https://openjsf.org/"
-            class="text-fg-soft underline decoration-border-strong underline-offset-2 hover:text-amber-ink"
-          >
-            OpenJS Foundation
-          </a>
-          {" "}At Large project.
+          A fast and low overhead web framework for Node.js. An
+          <OpenJSF />
+          At Large project.
         </p>
         <div class="mt-5 flex gap-2">
           <a
@@ -103,10 +99,9 @@ const columns = [
       class="mt-12 flex flex-col gap-4 border-t border-border pt-6 text-xs text-muted sm:flex-row sm:items-center sm:justify-between"
     >
       <p>
-        Copyright OpenJS Foundation and Fastify contributors. All rights
-        reserved.
+        Copyright <OpenJSF /> and Fastify contributors. All rights
+        reserved. The <OpenJSF /> has registered trademarks and uses trademarks. For a list of trademarks of the <OpenJSF />, please see our Trademark Policy and Trademark List. Trademarks and logos not indicated on the list of <OpenJSF /> trademarks are trademarks™ or registered® trademarks of their respective holders. Use of them does not imply any affiliation with or endorsement by them.
       </p>
-      <p class="font-mono">Licensed MIT · Built with Astro</p>
     </div>
   </div>
 </footer>
