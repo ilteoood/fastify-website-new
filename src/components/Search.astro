@@ -41,6 +41,7 @@
 
 <script>
 import DOMPurify from "node_modules/isomorphic-dompurify/dist";
+import { withBase } from "~/lib/href";
 
   type PagefindSub = { title: string; url: string; excerpt: string };
   type PagefindData = {
@@ -70,7 +71,6 @@ import DOMPurify from "node_modules/isomorphic-dompurify/dist";
 
   let pagefind: any = null;
   let loadFailed = false;
-  const BASE = import.meta.env.BASE_URL.replace(/\/$/, '');
 
   async function ensurePagefind() {
     if (pagefind || loadFailed) return pagefind;
@@ -93,7 +93,7 @@ import DOMPurify from "node_modules/isomorphic-dompurify/dist";
       const title = item.meta?.title || item.url;
       const subs = (item.sub_results || []).slice(0, 4);
       li.innerHTML = `
-        <a href="${BASE}${item.url}" class="block rounded-lg border border-transparent px-3 py-2.5 transition-colors hover:border-border-strong hover:bg-surface-2">
+        <a href="${item.url}" class="block rounded-lg border border-transparent px-3 py-2.5 transition-colors hover:border-border-strong hover:bg-surface-2">
           <span class="block text-sm font-medium text-fg">${DOMPurify.sanitize(title)}</span>
           <span class="mt-0.5 block text-xs leading-relaxed text-muted">${item.excerpt}</span>
         </a>
@@ -101,7 +101,7 @@ import DOMPurify from "node_modules/isomorphic-dompurify/dist";
           subs.length
             ? `<ul class="ml-3 mt-0.5 space-y-0.5 border-l border-border pl-2">${subs
                 .map(
-                  (s) => `<li><a href="${BASE}${s.url}" class="block rounded px-2 py-1 text-xs text-fg-soft transition-colors hover:bg-surface-2 hover:text-amber-ink">${DOMPurify.sanitize(
+                  (s) => `<li><a href="${s.url}" class="block rounded px-2 py-1 text-xs text-fg-soft transition-colors hover:bg-surface-2 hover:text-amber-ink">${DOMPurify.sanitize(
                     s.title,
                   )}</a></li>`,
                 )
