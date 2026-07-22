@@ -12,7 +12,7 @@ requests-per-second velocity gauge in the hero.
 
 - [Astro](https://astro.build) — static site generator
 - [Tailwind CSS v4](https://tailwindcss.com) via `@tailwindcss/vite`
-- MDX + Astro Content Collections for docs & blog
+- MDX + Astro Content Collections for docs
 - [Pagefind](https://pagefind.app) — static, client-side search index
 - Variable fonts: Space Grotesk (display), Inter (body), JetBrains Mono (code)
 
@@ -24,9 +24,9 @@ requests-per-second velocity gauge in the hero.
 | `pnpm run dev`     | Start the dev server at `localhost:4321`                       |
 | `pnpm run build`   | Build to `dist/` and generate the Pagefind search index        |
 | `pnpm run preview` | Preview the production build locally                           |
-| `pnpm run lint`    | Lint with [oxlint](https://oxc.rs)                             |
-| `pnpm run format`  | Format with [oxfmt](https://oxc.rs) (`format:check` to verify) |
-| `pnpm run check`   | Run lint + format check (used by CI on every PR)               |
+| `pnpm run lint`    | Lint with [Biome](https://biomejs.dev)                         |
+| `pnpm run format`  | Format with Biome (`format:check` to verify)                   |
+| `pnpm run check`   | Run Biome lint + format check (used by CI on every PR)         |
 
 > Search only works against a production build (`npm run build`), because the
 > Pagefind index is generated from the built HTML. In `dev` the search modal
@@ -44,10 +44,9 @@ src/
   components/     UI: Nav, Footer, Search, VelocityMeter, CodeTabs, BenchBars…
   content/
     docs/         Documentation pages (md/mdx) — grouped by `section`
-    blog/         Blog posts (md/mdx)
   data/site.ts    Central data: nav, features, sponsors, team, benchmarks, plugins
   layouts/        BaseLayout (chrome, theme, fonts)
-  pages/          Routes: /, /ecosystem, /benchmarks, /organizations, /blog, /docs
+  pages/          Routes: /, /ecosystem, /benchmarks, /organizations, /docs
   styles/         global.css — design tokens + prose styling
 ```
 
@@ -63,7 +62,6 @@ Docusaurus site:
 - **Organizations & team** page (production users, sponsors, maintainers).
 - **Docs** with a sectioned sidebar, prev/next navigation, breadcrumbs, and
   full-text search.
-- **Blog** with a content collection.
 - Dark/light theme toggle (no flash of unstyled theme), responsive nav with a
   mobile menu, keyboard-accessible focus states, reduced-motion support.
 
