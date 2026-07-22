@@ -13,7 +13,6 @@ export const SITE = {
   stars: "0",
   downloads: "10M+",
   reqPerSec: 30_000,
-  plugins: 297,
 };
 
 export const NAV = [

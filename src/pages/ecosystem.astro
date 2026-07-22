@@ -3,7 +3,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Icon from '../components/Icon.astro';
 import DOMPurify from 'isomorphic-dompurify';
 import { marked } from 'marked';
-import { SITE } from '../data/site';
 import { withBase } from '../lib/href';
 import pluginsData from '../data/plugins.json';
 
@@ -14,10 +13,12 @@ type PluginEntry = {
   official?: boolean;
 };
 
-const plugins = pluginsData.plugins.map((plugin: PluginEntry) => ({
-  ...plugin,
-  descriptionHtml: DOMPurify.sanitize(marked.parseInline(plugin.description)),
-}));
+const plugins = await Promise.all(
+  pluginsData.plugins.map(async (plugin: PluginEntry) => ({
+    ...plugin,
+    descriptionHtml: DOMPurify.sanitize(await marked.parseInline(plugin.description)),
+  }))
+);
 ---
 <BaseLayout title="Ecosystem — Fastify plugins" description="Browse the Fastify plugin ecosystem: auth, databases, validation, utilities and more.">
   <section class="relative overflow-hidden border-b border-border bg-telemetry">
@@ -26,7 +27,7 @@ const plugins = pluginsData.plugins.map((plugin: PluginEntry) => ({
       <p class="eyebrow">// ecosystem</p>
       <h1 class="mt-4 font-display text-4xl font-semibold tracking-tight sm:text-5xl">Ecosystem</h1>
       <p class="mt-4 max-w-2xl text-lg text-fg-soft">
-        Fastify has an ever-growing ecosystem of {SITE.plugins} plugins. Core plugins are
+        Fastify has an ever-growing ecosystem of {plugins.length} plugins. Core plugins are
         maintained by the Fastify team; community plugins extend it even further.
         Can't find what you need? <a href={withBase('/docs/latest/Reference/Plugins/')} class="text-amber-ink underline decoration-border-strong underline-offset-2">Writing one is easy.</a>
       </p>
