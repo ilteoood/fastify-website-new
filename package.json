@@ -13,9 +13,8 @@
 		"astro": "astro",
 		"lint": "biome lint",
 		"lint:fix": "biome lint --write",
-		"format": "biome format --write",
-		"format:check": "biome format",
-		"check": "biome check"
+		"format": "biome check --write",
+		"format:check": "biome check"
 	},
 	"dependencies": {
 		"@astrojs/mdx": "^7.0.3",

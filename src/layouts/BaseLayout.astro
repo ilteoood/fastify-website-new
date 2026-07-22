@@ -2,12 +2,12 @@
 import "@fontsource-variable/inter";
 import "@fontsource-variable/space-grotesk";
 import "@fontsource-variable/jetbrains-mono";
-import "../styles/global.css";
-import Footer from "../components/Footer.astro";
-import Nav from "../components/Nav.astro";
-import Search from "../components/Search.astro";
-import { SITE } from "../data/site";
-import { withBase } from "../lib/href";
+import "~/styles/global.css";
+import Footer from "~/components/Footer.astro";
+import Nav from "~/components/Nav.astro";
+import Search from "~/components/Search.astro";
+import { SITE } from "~/data/site";
+import { withBase } from "~/lib/href";
 
 interface Props {
 	title?: string;
@@ -77,7 +77,9 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? SITE.url).href;
       const closeMenu = () => menu?.classList.add('hidden');
       document.querySelector('[data-menu-open]')?.addEventListener('click', openMenu);
       document.querySelector('[data-menu-close]')?.addEventListener('click', closeMenu);
-      menu?.querySelectorAll('a').forEach((a) => a.addEventListener('click', closeMenu));
+      menu?.querySelectorAll('a').forEach((a) => {
+        a.addEventListener('click', closeMenu);
+      });
 
       // Live GitHub star count — fetched client-side when the page loads.
       (async () => {

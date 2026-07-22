@@ -1,4 +1,4 @@
-import benchmarksData from "./benchmarks.json" with { type: "json" };
+import benchmarksData from "~/data/benchmarks.json" with { type: "json" };
 
 export const SITE = {
 	name: "Fastify",

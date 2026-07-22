@@ -8,6 +8,8 @@
 			"!**/.cache",
 			"!src/content/docs",
 			"!public/docs",
+			"!src/data/benchmarks.json",
+			"!src/data/plugins.json",
 			"!src/data/versions.json",
 			"!**/package-lock.json",
 			"!**/pnpm-lock.yaml",
@@ -15,6 +17,13 @@
 			"!skills-lock.json",
 			"!**/.tokensave"
 		]
+	},
+	"assist": {
+		"actions": {
+			"source": {
+				"organizeImports": "on"
+			}
+		}
 	},
 	"css": {
 		"parser": {
@@ -27,11 +36,17 @@
 	"formatter": {
 		"formatWithErrors": true
 	},
+	"html": {
+		"experimentalFullSupportEnabled": true
+	},
 	"overrides": [
 		{
 			"includes": ["**/*.astro"],
 			"linter": {
 				"rules": {
+					"a11y": {
+						"useAnchorContent": "off"
+					},
 					"correctness": {
 						"noUnusedImports": "off",
 						"noUnusedVariables": "off"
