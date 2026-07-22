@@ -47,6 +47,15 @@ const isActive = (href: string) => {
         <kbd class="ml-2 rounded border border-border px-1.5 font-mono text-[0.65rem] text-muted">⌘K</kbd>
       </button>
 
+      <button
+        type="button"
+        data-search-open
+        class="rounded-md border border-border bg-surface p-2 text-muted transition-colors hover:text-fg sm:hidden"
+        aria-label="Search documentation"
+      >
+        <Icon name="search" size={18} />
+      </button>
+
       <a
         href="https://discord.gg/fastify"
         class="hidden rounded-md p-2 text-muted transition-colors hover:text-fg sm:block"

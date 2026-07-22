@@ -135,6 +135,89 @@ const breadcrumb = current
 
     <!-- Content -->
     <div class="min-w-0 py-10">
+      <!-- Mobile docs navigation -->
+      <div class="mb-8 lg:hidden">
+        <div class="flex items-center gap-2">
+          <label class="relative flex-1">
+            <span class="sr-only">Select documentation version</span>
+            <select
+              data-version-switch
+              class="w-full appearance-none rounded-md border border-border bg-surface-2 px-3 py-2 pr-8 text-sm font-medium text-fg focus:border-amber focus:outline-none"
+              aria-label="Select documentation version"
+            >
+              {
+                versionsData.versions.map((v) => (
+                  <option value={v.name} selected={v.name === version}>
+                    {v.label}
+                  </option>
+                ))
+              }
+            </select>
+            <span
+              class="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-muted"
+            >
+              <Icon name="arrow" size={14} class="rotate-90" />
+            </span>
+          </label>
+
+          <button
+            type="button"
+            data-search-open
+            class="flex shrink-0 items-center gap-2 rounded-md border border-border bg-surface px-3 py-2 text-sm text-muted transition-colors hover:text-fg"
+          >
+            <Icon name="search" size={16} /> Search
+          </button>
+        </div>
+
+        <details class="group mt-3 rounded-md border border-border bg-surface">
+          <summary
+            class="flex cursor-pointer list-none items-center justify-between px-3 py-2.5 text-sm font-medium text-fg"
+          >
+            <span>Navigation</span>
+            <Icon
+              name="arrow"
+              size={14}
+              class="rotate-90 transition-transform group-open:-rotate-90"
+            />
+          </summary>
+          <nav
+            aria-label="Documentation"
+            class="max-h-[60vh] overflow-y-auto border-t border-border px-3 py-3"
+          >
+            {
+              sections.map((section) => (
+                <div class="mb-4 last:mb-0">
+                  <p class="mb-2 font-mono text-[0.65rem] uppercase tracking-[0.16em] text-muted">
+                    {section.name}
+                  </p>
+                  <ul class="space-y-0.5 border-l border-border">
+                    {section.items.map((item) => {
+                      const active = item.id === current;
+                      return (
+                        <li>
+                          <a
+                            href={routeFor(item.id)}
+                            class:list={[
+                              "-ml-px block border-l-2 py-1.5 pl-4 text-sm transition-colors",
+                              active
+                                ? "border-amber font-medium text-amber-ink"
+                                : "border-transparent text-fg-soft hover:border-border-strong hover:text-fg",
+                            ]}
+                            aria-current={active ? "page" : undefined}
+                          >
+                            {item.data.title}
+                          </a>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </div>
+              ))
+            }
+          </nav>
+        </details>
+      </div>
+
       <nav
         class="mb-6 flex flex-wrap items-center gap-2 font-mono text-xs text-muted"
         aria-label="Breadcrumb"
@@ -215,10 +298,11 @@ const breadcrumb = current
 <script>
   import { withBase } from "~/lib/href";
 
-  const sel = document.querySelector<HTMLSelectElement>(
-    "[data-version-switch]",
-  );
-  sel?.addEventListener("change", () => {
-    window.location.href = withBase(`/docs/${sel.value}/`);
-  });
+  document
+    .querySelectorAll<HTMLSelectElement>("[data-version-switch]")
+    .forEach((sel) => {
+      sel.addEventListener("change", () => {
+        window.location.href = withBase(`/docs/${sel.value}/`);
+      });
+    });
 </script>
