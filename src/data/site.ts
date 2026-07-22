@@ -79,12 +79,12 @@ export const BENCHMARKS: Bench[] = benchmarksData.frameworks.map(({ name, reques
   self: name === "Fastify",
 }));
 
-export type Sponsor = { name: string; url: string; tier: "org" | "sponsor" };
+export type Sponsor = { name: string; url: string; tier: "collaborator" | "sponsor" };
 
 export const SPONSORS: Sponsor[] = [
-  { name: "HospitalRun", url: "https://hospitalrun.io/", tier: "org" },
-  { name: "Nearform", url: "https://nearform.com", tier: "org" },
-  { name: "Platformatic", url: "https://platformatic.dev", tier: "org" },
+  { name: "HospitalRun", url: "https://hospitalrun.io/", tier: "collaborator" },
+  { name: "Nearform", url: "https://nearform.com", tier: "collaborator" },
+  { name: "Platformatic", url: "https://platformatic.dev", tier: "collaborator" },
   { name: "val town", url: "https://www.val.town/", tier: "sponsor" },
   {
     name: "Handsontable",
@@ -122,6 +122,7 @@ export const COLLABORATORS: Person[] = [
   { name: "Jean Michelet", github: "jean-michelet" },
   { name: "Harry Brundage", github: "airhorns" },
   { name: "Luis Orbaiceta", github: "luisorbaiceta" },
+  { name: "Matteo Pietro Dazzi", github: "ilteoood" },
 ];
 
 export const PAST_COLLABORATORS: Person[] = [
