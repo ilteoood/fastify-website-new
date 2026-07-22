@@ -1,28 +1,42 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
-import Icon from '../components/Icon.astro';
-import BenchBars from '../components/BenchBars.astro';
-import { BENCHMARK_STATS } from '../data/site';
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Icon from "../components/Icon.astro";
+import BenchBars from "../components/BenchBars.astro";
+import { BENCHMARK_STATS } from "../data/site";
 
 const { self: fastify, multiplier } = BENCHMARK_STATS;
 
-const lastUpdated = (Number.isNaN(Date.parse(BENCHMARK_STATS.date))
-  ? new Date()
-  : new Date(BENCHMARK_STATS.date)).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-    });
+const lastUpdated = (
+  Number.isNaN(Date.parse(BENCHMARK_STATS.date))
+    ? new Date()
+    : new Date(BENCHMARK_STATS.date)
+).toLocaleDateString("en-US", {
+  year: "numeric",
+  month: "long",
+  day: "numeric",
+});
 ---
-<BaseLayout title="Benchmarks — Fastify" description="How Fastify compares to other Node.js web frameworks on throughput.">
+
+<BaseLayout
+  title="Benchmarks — Fastify"
+  description="How Fastify compares to other Node.js web frameworks on throughput."
+>
   <section class="relative overflow-hidden border-b border-border bg-telemetry">
-    <div class="pointer-events-none absolute inset-x-0 top-0 h-72 glow-amber opacity-60"></div>
+    <div
+      class="pointer-events-none absolute inset-x-0 top-0 h-72 glow-amber opacity-60"
+    >
+    </div>
     <div class="relative mx-auto max-w-7xl px-4 py-16 sm:px-6">
       <p class="eyebrow">// benchmarks</p>
-      <h1 class="mt-4 font-display text-4xl font-semibold tracking-tight sm:text-5xl">Benchmarks</h1>
+      <h1
+        class="mt-4 font-display text-4xl font-semibold tracking-tight sm:text-5xl"
+      >
+        Benchmarks
+      </h1>
       <p class="mt-4 max-w-2xl text-lg text-fg-soft">
-        Machines matter, but so does the framework overhead. Fastify was engineered from
-        the ground up to add as little as possible on top of Node.js.
+        Machines matter, but so does the framework overhead. Fastify was
+        engineered from the ground up to add as little as possible on top of
+        Node.js.
       </p>
     </div>
   </section>
@@ -30,37 +44,65 @@ const lastUpdated = (Number.isNaN(Date.parse(BENCHMARK_STATS.date))
   <section class="mx-auto max-w-7xl px-4 py-14 sm:px-6">
     <div class="grid gap-4 sm:grid-cols-2">
       <div class="card p-6">
-        <div class="font-display text-4xl font-semibold text-fg tabular-nums">{fastify.reqs.toLocaleString()}</div>
-        <div class="mt-1 font-mono text-xs uppercase tracking-wider text-muted">Fastify req/s</div>
+        <div class="font-display text-4xl font-semibold text-fg tabular-nums">
+          {fastify.reqs.toLocaleString()}
+        </div>
+        <div class="mt-1 font-mono text-xs uppercase tracking-wider text-muted">
+          Fastify req/s
+        </div>
       </div>
       <div class="card p-6">
-        <div class="font-display text-4xl font-semibold text-velocity tabular-nums">{multiplier}×</div>
-        <div class="mt-1 font-mono text-xs uppercase tracking-wider text-muted">faster than Express</div>
+        <div
+          class="font-display text-4xl font-semibold text-velocity tabular-nums"
+        >
+          {multiplier}×
+        </div>
+        <div class="mt-1 font-mono text-xs uppercase tracking-wider text-muted">
+          faster than Express
+        </div>
       </div>
     </div>
 
     <div class="card mt-8 p-6 sm:p-10">
       <div class="mb-8 flex items-center justify-between">
         <h2 class="font-display text-2xl font-semibold">Requests per second</h2>
-        <span class="font-mono text-xs text-muted">Node.js · single instance · updated {lastUpdated}</span>
+        <span class="font-mono text-xs text-muted"
+          >Node.js · single instance · updated {lastUpdated}</span
+        >
       </div>
       <BenchBars />
     </div>
 
-    <div class="mt-8 rounded-xl border border-border bg-surface/40 p-6 text-sm leading-relaxed text-fg-soft">
+    <div
+      class="mt-8 rounded-xl border border-border bg-surface/40 p-6 text-sm leading-relaxed text-fg-soft"
+    >
       <div class="flex items-start gap-3">
-        <span class="mt-0.5 text-amber-ink"><Icon name="schema" size={18} /></span>
+        <span class="mt-0.5 text-amber-ink"
+          ><Icon name="schema" size={18} /></span
+        >
         <p>
-          These figures are <strong class="text-fg">illustrative</strong>. Real-world results depend on your
-          hardware, Node.js version, and workload. Reproduce them yourself with the official
-          <a href="https://github.com/fastify/benchmarks" target="_blank" rel="noopener noreferrer" class="text-amber-ink underline decoration-border-strong underline-offset-2">fastify/benchmarks</a>
-          suite and measure against your own routes.
+          These figures are <strong class="text-fg">illustrative</strong>.
+          Real-world results depend on your hardware, Node.js version, and
+          workload. Reproduce them yourself with the official{" "}
+          <a
+            href="https://github.com/fastify/benchmarks"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-amber-ink underline decoration-border-strong underline-offset-2"
+            >fastify/benchmarks</a
+          >
+          {" "}suite and measure against your own routes.
         </p>
       </div>
     </div>
 
     <div class="mt-8">
-      <a href="https://github.com/fastify/benchmarks" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 rounded-lg bg-amber px-5 py-3 font-medium text-[#0a0b0d] transition-transform hover:-translate-y-0.5">
+      <a
+        href="https://github.com/fastify/benchmarks"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="inline-flex items-center gap-2 rounded-lg bg-amber px-5 py-3 font-medium text-[#0a0b0d] transition-transform hover:-translate-y-0.5"
+      >
         <Icon name="github" size={18} /> Run the benchmark suite
       </a>
     </div>
