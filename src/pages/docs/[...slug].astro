@@ -12,11 +12,11 @@ export async function getStaticPaths() {
 }
 
 const { doc } = Astro.props;
-const { Content } = await render(doc);
+const { Content, headings } = await render(doc);
 const version = doc.id.split("/")[0];
 ---
 <BaseLayout title={`${doc.data.title} — Fastify ${version}`} description={doc.data.description}>
-  <DocsShell current={doc.id} version={version}>
+  <DocsShell current={doc.id} version={version} headings={headings}>
     <Content />
   </DocsShell>
 </BaseLayout>
