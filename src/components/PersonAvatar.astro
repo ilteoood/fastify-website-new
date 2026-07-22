@@ -1,0 +1,88 @@
+---
+import type { Person } from "../data/site";
+
+interface Props {
+	person: Person;
+	variant?: "card" | "compact" | "chip";
+}
+const { person, variant = "card" } = Astro.props;
+
+const config = {
+	card: { avatar: 120, img: 72 },
+	compact: { avatar: 120, img: 64 },
+	chip: { avatar: 80, img: 40 },
+} as const;
+const { avatar, img } = config[variant];
+
+const src = `https://avatars.githubusercontent.com/${person.github}?s=${avatar}`;
+---
+
+{
+  variant === "card" && (
+    <a
+      href={`https://github.com/${person.github}`}
+      target="_blank"
+      rel="noopener noreferrer"
+      class="card group flex flex-col items-center gap-3 p-6 transition-colors hover:border-border-strong"
+    >
+      <img
+        src={src}
+        alt={person.name}
+        width={img}
+        height={img}
+        loading="lazy"
+        class="size-18 rounded-full border-2 border-border grayscale transition-all group-hover:border-amber group-hover:grayscale-0"
+      />
+      <span class="text-center text-sm font-medium text-fg-soft group-hover:text-fg">
+        {person.name}
+      </span>
+      <span class="font-mono text-xs text-muted">@{person.github}</span>
+    </a>
+  )
+}
+
+{
+  variant === "compact" && (
+    <a
+      href={`https://github.com/${person.github}`}
+      target="_blank"
+      rel="noopener noreferrer"
+      class="group flex flex-col items-center gap-2"
+    >
+      <img
+        src={src}
+        alt={person.name}
+        width={img}
+        height={img}
+        loading="lazy"
+        class="size-16 rounded-full border-2 border-border grayscale transition-all group-hover:border-amber group-hover:grayscale-0"
+      />
+      <span class="max-w-20 text-center text-xs text-muted group-hover:text-fg">
+        {person.name}
+      </span>
+    </a>
+  )
+}
+
+{
+  variant === "chip" && (
+    <a
+      href={`https://github.com/${person.github}`}
+      target="_blank"
+      rel="noopener noreferrer"
+      class="group flex items-center gap-3 rounded-lg border border-border bg-surface/40 p-3 transition-colors hover:border-border-strong"
+    >
+      <img
+        src={src}
+        alt={person.name}
+        width={img}
+        height={img}
+        loading="lazy"
+        class="size-10 rounded-full grayscale transition-all group-hover:grayscale-0"
+      />
+      <span class="min-w-0 truncate text-sm text-fg-soft group-hover:text-fg">
+        {person.name}
+      </span>
+    </a>
+  )
+}

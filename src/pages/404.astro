@@ -1,4 +1,5 @@
 ---
+import ButtonLink from "../components/ButtonLink.astro";
 import Icon from "../components/Icon.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { withBase } from "../lib/href";
@@ -15,12 +16,12 @@ import { withBase } from "../lib/href";
         This handler isn't registered. Head back home, or jump straight into the docs.
       </p>
       <div class="mt-8 flex flex-wrap justify-center gap-3">
-        <a href={withBase('/')} class="inline-flex items-center gap-2 rounded-lg bg-amber px-5 py-3 font-medium text-[#0a0b0d] transition-transform hover:-translate-y-0.5">
+        <ButtonLink href={withBase('/')}>
           Back home <Icon name="arrow" size={18} />
-        </a>
-        <a href={withBase('/docs/')} class="inline-flex items-center gap-2 rounded-lg border border-border bg-surface px-5 py-3 font-medium text-fg transition-colors hover:border-border-strong">
+        </ButtonLink>
+        <ButtonLink href={withBase('/docs/')} variant="secondary">
           Read the docs
-        </a>
+        </ButtonLink>
       </div>
     </div>
   </section>

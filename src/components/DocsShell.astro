@@ -1,9 +1,11 @@
 ---
 import { getCollection } from "astro:content";
 import type { MarkdownHeading } from "astro";
-import versionsData from "../data/versions.json";
 import { withBase } from "../lib/href";
+import DocsNav from "./DocsNav.astro";
 import Icon from "./Icon.astro";
+import TableOfContents from "./TableOfContents.astro";
+import VersionSelect from "./VersionSelect.astro";
 
 interface Props {
 	current: string;
@@ -78,26 +80,7 @@ const breadcrumb = current
             class="mb-1.5 block font-mono text-[0.62rem] uppercase tracking-[0.16em] text-muted"
             >version</span
           >
-          <div class="relative">
-            <select
-              data-version-switch
-              class="w-full appearance-none rounded-md border border-border bg-surface-2 px-3 py-2 pr-8 text-sm font-medium text-fg focus:border-amber focus:outline-none"
-              aria-label="Select documentation version"
-            >
-              {
-                versionsData.versions.map((v) => (
-                  <option value={v.name} selected={v.name === version}>
-                    {v.label}
-                  </option>
-                ))
-              }
-            </select>
-            <span
-              class="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-muted"
-            >
-              <Icon name="arrow" size={14} class="rotate-90" />
-            </span>
-          </div>
+          <VersionSelect version={version} />
         </label>
 
         <button
@@ -113,36 +96,7 @@ const breadcrumb = current
         </button>
 
         <nav aria-label="Documentation">
-          {
-            sections.map((section) => (
-              <div class="mb-6">
-                <p class="mb-2 font-mono text-[0.65rem] uppercase tracking-[0.16em] text-muted">
-                  {section.name}
-                </p>
-                <ul class="space-y-0.5 border-l border-border">
-                  {section.items.map((item) => {
-                    const active = item.id === current;
-                    return (
-                      <li>
-                        <a
-                          href={routeFor(item.id)}
-                          class:list={[
-                            "-ml-px block border-l-2 py-1.5 pl-4 text-sm transition-colors",
-                            active
-                              ? "border-amber font-medium text-amber-ink"
-                              : "border-transparent text-fg-soft hover:border-border-strong hover:text-fg",
-                          ]}
-                          aria-current={active ? "page" : undefined}
-                        >
-                          {item.data.title}
-                        </a>
-                      </li>
-                    );
-                  })}
-                </ul>
-              </div>
-            ))
-          }
+          <DocsNav sections={sections} current={current} />
         </nav>
       </div>
     </aside>
@@ -152,26 +106,9 @@ const breadcrumb = current
       <!-- Mobile docs navigation -->
       <div class="mb-8 lg:hidden">
         <div class="flex items-center gap-2">
-          <label class="relative flex-1">
+          <label class="flex-1">
             <span class="sr-only">Select documentation version</span>
-            <select
-              data-version-switch
-              class="w-full appearance-none rounded-md border border-border bg-surface-2 px-3 py-2 pr-8 text-sm font-medium text-fg focus:border-amber focus:outline-none"
-              aria-label="Select documentation version"
-            >
-              {
-                versionsData.versions.map((v) => (
-                  <option value={v.name} selected={v.name === version}>
-                    {v.label}
-                  </option>
-                ))
-              }
-            </select>
-            <span
-              class="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-muted"
-            >
-              <Icon name="arrow" size={14} class="rotate-90" />
-            </span>
+            <VersionSelect version={version} />
           </label>
 
           <button
@@ -198,36 +135,11 @@ const breadcrumb = current
             aria-label="Documentation"
             class="max-h-[60vh] overflow-y-auto border-t border-border px-3 py-3"
           >
-            {
-              sections.map((section) => (
-                <div class="mb-4 last:mb-0">
-                  <p class="mb-2 font-mono text-[0.65rem] uppercase tracking-[0.16em] text-muted">
-                    {section.name}
-                  </p>
-                  <ul class="space-y-0.5 border-l border-border">
-                    {section.items.map((item) => {
-                      const active = item.id === current;
-                      return (
-                        <li>
-                          <a
-                            href={routeFor(item.id)}
-                            class:list={[
-                              "-ml-px block border-l-2 py-1.5 pl-4 text-sm transition-colors",
-                              active
-                                ? "border-amber font-medium text-amber-ink"
-                                : "border-transparent text-fg-soft hover:border-border-strong hover:text-fg",
-                            ]}
-                            aria-current={active ? "page" : undefined}
-                          >
-                            {item.data.title}
-                          </a>
-                        </li>
-                      );
-                    })}
-                  </ul>
-                </div>
-              ))
-            }
+            <DocsNav
+              sections={sections}
+              current={current}
+              groupClass="mb-4 last:mb-0"
+            />
           </nav>
         </details>
       </div>
@@ -247,21 +159,7 @@ const breadcrumb = current
               aria-label="Table of contents"
               class="max-h-[60vh] overflow-y-auto border-t border-border px-3 py-3"
             >
-              <ul class="space-y-0.5 border-l border-border">
-                {toc.map((h) => (
-                  <li>
-                    <a
-                      href={`#${h.slug}`}
-                      class:list={[
-                        "-ml-px block border-l-2 border-transparent py-1.5 text-sm text-fg-soft transition-colors hover:border-border-strong hover:text-fg",
-                        h.depth === 3 ? "pl-8" : "pl-4",
-                      ]}
-                    >
-                      {h.text}
-                    </a>
-                  </li>
-                ))}
-              </ul>
+              <TableOfContents toc={toc} />
             </nav>
           </details>
         )
@@ -351,21 +249,7 @@ const breadcrumb = current
               On this page
             </p>
             <nav aria-label="Table of contents">
-              <ul class="space-y-0.5 border-l border-border">
-                {toc.map((h) => (
-                  <li>
-                    <a
-                      href={`#${h.slug}`}
-                      class:list={[
-                        "-ml-px block border-l-2 border-transparent py-1.5 text-sm text-fg-soft transition-colors hover:border-border-strong hover:text-fg",
-                        h.depth === 3 ? "pl-8" : "pl-4",
-                      ]}
-                    >
-                      {h.text}
-                    </a>
-                  </li>
-                ))}
-              </ul>
+              <TableOfContents toc={toc} />
             </nav>
           </div>
         </aside>

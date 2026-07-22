@@ -1,9 +1,11 @@
 ---
 import BenchBars from "../components/BenchBars.astro";
+import ButtonLink from "../components/ButtonLink.astro";
 import CodeTabs from "../components/CodeTabs.astro";
 import EcosystemCard from "../components/EcosystemCard.astro";
 import Icon from "../components/Icon.astro";
 import InstallCommand from "../components/InstallCommand.astro";
+import PersonAvatar from "../components/PersonAvatar.astro";
 import VelocityMeter from "../components/VelocityMeter.astro";
 import plugins from "../data/plugins.json";
 import { FEATURES, LEADS, SITE, SPONSORS } from "../data/site";
@@ -110,9 +112,9 @@ const featuredPlugins = PLUGINS.slice(0, 6);
         </p>
 
         <div class="mt-8 flex flex-wrap items-center gap-3">
-          <a
+          <ButtonLink
             href={withBase("/docs/latest/Guides/Getting-Started/")}
-            class="group inline-flex items-center gap-2 rounded-lg bg-amber px-5 py-3 font-medium text-[#0a0b0d] transition-transform hover:-translate-y-0.5"
+            class="group"
           >
             Get started
             <Icon
@@ -120,7 +122,7 @@ const featuredPlugins = PLUGINS.slice(0, 6);
               size={18}
               class="transition-transform group-hover:translate-x-0.5"
             />
-          </a>
+          </ButtonLink>
           <InstallCommand />
         </div>
 
@@ -325,12 +327,13 @@ const featuredPlugins = PLUGINS.slice(0, 6);
           Leveraging deep experience with Node.js performance, Fastify was built
           to be as fast as possible. Compare it against other common frameworks.
         </p>
-        <a
+        <ButtonLink
           href={withBase("/benchmarks/")}
-          class="mt-8 inline-flex items-center gap-2 rounded-lg border border-border bg-surface px-5 py-3 font-medium text-fg transition-colors hover:border-border-strong"
+          variant="secondary"
+          class="mt-8"
         >
           See full benchmarks <Icon name="arrow" size={18} />
-        </a>
+        </ButtonLink>
       </div>
       <div class="card p-6 sm:p-8">
         <BenchBars />
@@ -354,12 +357,9 @@ const featuredPlugins = PLUGINS.slice(0, 6);
           own.
         </p>
       </div>
-      <a
-        href={withBase("/ecosystem/")}
-        class="inline-flex items-center gap-2 rounded-lg bg-amber px-5 py-3 font-medium text-[#0a0b0d] transition-transform hover:-translate-y-0.5"
-      >
+      <ButtonLink href={withBase("/ecosystem/")}>
         Explore {pluginsNumber} plugins <Icon name="arrow" size={18} />
-      </a>
+      </ButtonLink>
     </div>
     <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
       {featuredPlugins.map((plugin) => <EcosystemCard plugin={plugin} />)}
@@ -389,28 +389,7 @@ const featuredPlugins = PLUGINS.slice(0, 6);
           </a>
         </div>
         <div class="flex flex-wrap gap-4">
-          {
-            LEADS.map((p) => (
-              <a
-                href={`https://github.com/${p.github}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                class="group flex flex-col items-center gap-2"
-              >
-                <img
-                  src={`https://avatars.githubusercontent.com/${p.github}?s=120`}
-                  alt={p.name}
-                  width="64"
-                  height="64"
-                  loading="lazy"
-                  class="size-16 rounded-full border-2 border-border grayscale transition-all group-hover:border-amber group-hover:grayscale-0"
-                />
-                <span class="max-w-20 text-center text-xs text-muted group-hover:text-fg">
-                  {p.name}
-                </span>
-              </a>
-            ))
-          }
+          {LEADS.map((p) => <PersonAvatar person={p} variant="compact" />)}
         </div>
       </div>
     </div>
@@ -434,20 +413,15 @@ const featuredPlugins = PLUGINS.slice(0, 6);
           the reference.
         </p>
         <div class="mt-8 flex flex-wrap justify-center gap-3">
-          <a
+          <ButtonLink
             href={withBase("/docs/latest/Guides/Getting-Started/")}
-            class="inline-flex items-center gap-2 rounded-lg bg-amber px-6 py-3 font-medium text-[#0a0b0d] transition-transform hover:-translate-y-0.5"
+            size="lg"
           >
             Get started <Icon name="arrow" size={18} />
-          </a>
-          <a
-            href={SITE.repo}
-            target="_blank"
-            rel="noopener noreferrer"
-            class="inline-flex items-center gap-2 rounded-lg border border-border bg-surface px-6 py-3 font-medium text-fg transition-colors hover:border-border-strong"
-          >
+          </ButtonLink>
+          <ButtonLink href={SITE.repo} variant="secondary" size="lg" external>
             <Icon name="github" size={18} /> Star on GitHub
-          </a>
+          </ButtonLink>
         </div>
       </div>
     </div>

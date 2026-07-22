@@ -1,6 +1,7 @@
 ---
 import EcosystemCard from "../components/EcosystemCard.astro";
 import Icon from "../components/Icon.astro";
+import PageHeader from "../components/PageHeader.astro";
 import pluginsData from "../data/plugins.json";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { withBase } from "../lib/href";
@@ -8,18 +9,11 @@ import { withBase } from "../lib/href";
 const plugins = pluginsData.plugins;
 ---
 <BaseLayout title="Ecosystem — Fastify plugins" description="Browse the Fastify plugin ecosystem: auth, databases, validation, utilities and more.">
-  <section class="relative overflow-hidden border-b border-border bg-telemetry">
-    <div class="pointer-events-none absolute inset-x-0 top-0 h-72 glow-amber opacity-60"></div>
-    <div class="relative mx-auto max-w-7xl px-4 py-16 sm:px-6">
-      <p class="eyebrow">// ecosystem</p>
-      <h1 class="mt-4 font-display text-4xl font-semibold tracking-tight sm:text-5xl">Ecosystem</h1>
-      <p class="mt-4 max-w-2xl text-lg text-fg-soft">
-        Fastify has an ever-growing ecosystem of {plugins.length} plugins. Core plugins are
-        maintained by the Fastify team; community plugins extend it even further.
-        Can't find what you need? <a href={withBase('/docs/latest/Reference/Plugins/')} class="text-amber-ink underline decoration-border-strong underline-offset-2">Writing one is easy.</a>
-      </p>
-    </div>
-  </section>
+  <PageHeader eyebrow="// ecosystem" title="Ecosystem">
+    Fastify has an ever-growing ecosystem of {plugins.length} plugins. Core plugins are
+    maintained by the Fastify team; community plugins extend it even further.
+    Can't find what you need? <a href={withBase('/docs/latest/Reference/Plugins/')} class="text-amber-ink underline decoration-border-strong underline-offset-2">Writing one is easy.</a>
+  </PageHeader>
 
   <section class="mx-auto max-w-7xl px-4 py-12 sm:px-6">
     <div class="relative max-w-md">
