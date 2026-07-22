@@ -55,6 +55,8 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? SITE.url).href;
     <Search />
 
     <script>
+      import { formatSiUnit } from 'format-si-unit';
+
       // Theme toggle
       const applyTheme = (theme: string) => {
         if (theme === 'light') {
@@ -83,8 +85,6 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? SITE.url).href;
       (async () => {
         const els = document.querySelectorAll('[data-github-stars]');
         if (!els.length) return;
-        const format = (n: number) =>
-          n >= 1000 ? `${(n / 1000).toFixed(1).replace(/\.0$/, '')}k` : String(n);
         try {
           let count = Number(sessionStorage.getItem('fastify-stars')) || 0;
           if (!count) {
@@ -94,7 +94,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? SITE.url).href;
             count = data.stargazers_count;
             try { sessionStorage.setItem('fastify-stars', String(count)); } catch (e) {}
           }
-          if (count) els.forEach((el) => { el.textContent = format(count); });
+          if (count) els.forEach((el) => { el.textContent = formatSiUnit(count); });
         } catch (e) {}
       })();
 
@@ -102,12 +102,6 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? SITE.url).href;
       (async () => {
         const els = document.querySelectorAll('[data-npm-downloads]');
         if (!els.length) return;
-        const format = (n: number) =>
-          n >= 1_000_000
-            ? `${(n / 1_000_000).toFixed(1).replace(/\.0$/, '')}M`
-            : n >= 1000
-              ? `${(n / 1000).toFixed(1).replace(/\.0$/, '')}k`
-              : String(n);
         try {
           let count = Number(sessionStorage.getItem('fastify-downloads')) || 0;
           if (!count) {
@@ -117,7 +111,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? SITE.url).href;
             count = data.downloads;
             try { sessionStorage.setItem('fastify-downloads', String(count)); } catch (e) {}
           }
-          if (count) els.forEach((el) => { el.textContent = format(count); });
+          if (count) els.forEach((el) => { el.textContent = formatSiUnit(count); });
         } catch (e) {}
       })();
     </script>
