@@ -20,7 +20,7 @@ export const NAV = [
 	{ label: "Ecosystem", href: "/ecosystem/" },
 	{ label: "Benchmarks", href: "/benchmarks/" },
 	{ label: "Organizations", href: "/organizations/" },
-	{ label: "Blog", href: "/blog/" },
+	{ label: "Support", href: "/docs/latest/Reference/LTS/" },
 ];
 
 export type Feature = {

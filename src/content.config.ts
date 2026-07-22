@@ -20,14 +20,4 @@ const docs = defineCollection({
 	}),
 });
 
-const blog = defineCollection({
-	loader: glob({ pattern: "**/*.{md,mdx}", base: "./src/content/blog" }),
-	schema: z.object({
-		title: z.string(),
-		description: z.string(),
-		date: z.coerce.date(),
-		author: z.string().default("The Fastify Team"),
-	}),
-});
-
-export const collections = { docs, blog };
+export const collections = { docs };
