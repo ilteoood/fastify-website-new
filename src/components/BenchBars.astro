@@ -1,6 +1,6 @@
 ---
-import { BENCHMARKS } from '../data/site';
-const max = Math.max(...BENCHMARKS.map((b) => b.reqs));
+import { BENCHMARKS, BENCHMARK_STATS } from '../data/site';
+const { max } = BENCHMARK_STATS;
 ---
 <div class="space-y-3.5" data-bench>
   {BENCHMARKS.map((b) => (

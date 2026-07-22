@@ -1,11 +1,7 @@
 ---
 // Signature element: a live "requests per second" telemetry gauge.
-import { BENCHMARKS } from '../data/site';
-const self = BENCHMARKS.find((b) => b.self) ?? BENCHMARKS[0];
-const max = Math.max(...BENCHMARKS.map((b) => b.reqs));
-const peers = BENCHMARKS.filter((b) => !b.self);
-const express = BENCHMARKS.find((b) => b.name === 'Express');
-const multiplier = express ? (self.reqs / express.reqs).toFixed(1) : null;
+import { BENCHMARK_STATS } from '../data/site';
+const { self, max, peers, multiplier } = BENCHMARK_STATS;
 // 270° speedometer: starts bottom-left, sweeps clockwise through the top.
 const CX = 130;
 const CY = 132;
@@ -44,7 +40,7 @@ const tickValues = [0, Math.round(max / 2), max];
       </span>
     </div>
 
-    <svg viewBox="0 0 260 200" class="mx-auto mt-2 w-full max-w-sm" role="img" aria-label={`Fastify throughput gauge peaking at ${max.toLocaleString()} requests per second`}>
+    <svg viewBox="0 0 260 200" class="peer-gauge mx-auto mt-2 w-full max-w-sm" role="img" aria-label={`Fastify throughput gauge peaking at ${max.toLocaleString()} requests per second`}>
       <!-- track -->
       <path d={trackPath} fill="none" stroke="var(--surface-3)" stroke-width="13" stroke-linecap="round" />
       <!-- value arc -->
@@ -61,10 +57,16 @@ const tickValues = [0, Math.round(max / 2), max];
         const a = angleFor(p.reqs);
         const o = polar(a, R + 3);
         const inr = polar(a, R - 10);
+        const tp = polar(a, R + 24);
         return (
-          <g>
-            <title>{`${p.name} — ${p.reqs.toLocaleString()} req/s`}</title>
-            <line x1={inr.x} y1={inr.y} x2={o.x} y2={o.y} stroke="var(--muted)" stroke-width="2" opacity="0.7" />
+          <g class="peer">
+            <line x1={inr.x} y1={inr.y} x2={o.x} y2={o.y} stroke="transparent" stroke-width="10" />
+            <line class="peer-marker" x1={inr.x} y1={inr.y} x2={o.x} y2={o.y} stroke="var(--muted)" stroke-width="2" opacity="0.7" />
+            <g class="peer-tooltip">
+              <rect x={tp.x - 40} y={tp.y - 14} width="80" height="28" rx="6" fill="var(--surface)" stroke="var(--border)" stroke-width="1" />
+              <text x={tp.x} y={tp.y - 3} font-size="10" font-family="var(--font-display)" font-weight="600" fill="var(--fg)" text-anchor="middle" dominant-baseline="middle">{p.name}</text>
+              <text x={tp.x} y={tp.y + 9} font-size="8" font-family="var(--font-mono)" fill="var(--muted)" text-anchor="middle" dominant-baseline="middle">{p.reqs.toLocaleString()} req/s</text>
+            </g>
           </g>
         );
       })}
@@ -123,6 +125,13 @@ const tickValues = [0, Math.round(max / 2), max];
     </div>
   </div>
 </div>
+
+<style>
+  .peer-gauge { overflow: visible; }
+  .peer-tooltip { opacity: 0; transition: opacity 0.15s ease-out; pointer-events: none; }
+  .peer:hover .peer-tooltip { opacity: 1; }
+  .peer:hover .peer-marker { stroke: var(--teal); opacity: 1; }
+</style>
 
 <script>
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
