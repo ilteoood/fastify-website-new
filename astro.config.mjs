@@ -13,7 +13,7 @@ export default defineConfig({
 		mdx(),
 		sitemap(),
 		astroInference({
-			exclude: ["blog/**", "resources/**", "benchmarks/**", "organizations/**"],
+			exclude: ["resources/**", "benchmarks/**", "organizations/**"],
 		}),
 	],
 	vite: {
