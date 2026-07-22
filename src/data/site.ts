@@ -73,6 +73,8 @@ export type Bench = { name: string; reqs: number; self?: boolean };
 
 // Requests/sec from the official fastify/benchmarks suite, refreshed at build
 // time by `scripts/download-benchmarks.mjs` (see `prebuild` / `predev`).
+export const BENCHMARK_DATE = benchmarksData.date;
+
 export const BENCHMARKS: Bench[] = benchmarksData.frameworks.map(({ name, requests }) => ({
   name,
   reqs: requests,
