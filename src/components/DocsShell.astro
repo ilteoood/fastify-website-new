@@ -1,11 +1,11 @@
 ---
 import { getCollection } from "astro:content";
 import type { MarkdownHeading } from "astro";
-import { withBase } from "../lib/href";
-import DocsNav from "./DocsNav.astro";
-import Icon from "./Icon.astro";
-import TableOfContents from "./TableOfContents.astro";
-import VersionSelect from "./VersionSelect.astro";
+import DocsNav from "~/components/DocsNav.astro";
+import Icon from "~/components/Icon.astro";
+import TableOfContents from "~/components/TableOfContents.astro";
+import VersionSelect from "~/components/VersionSelect.astro";
+import { withBase } from "~/lib/href";
 
 interface Props {
 	current: string;
@@ -74,13 +74,13 @@ const breadcrumb = current
       <div
         class="sticky top-16 max-h-[calc(100vh-4rem)] overflow-y-auto py-8 pr-4"
       >
-        <label class="mb-3 block">
+        <div class="mb-3 block">
           <span
             class="mb-1.5 block font-mono text-[0.62rem] uppercase tracking-[0.16em] text-muted"
             >version</span
           >
           <VersionSelect version={version} />
-        </label>
+        </div>
 
         <button
           type="button"
@@ -105,10 +105,10 @@ const breadcrumb = current
       <!-- Mobile docs navigation -->
       <div class="mb-8 lg:hidden">
         <div class="flex items-center gap-2">
-          <label class="flex-1">
+          <div class="flex-1">
             <span class="sr-only">Select documentation version</span>
             <VersionSelect version={version} />
-          </label>
+          </div>
 
           <button
             type="button"
@@ -175,10 +175,8 @@ const breadcrumb = current
         {
           breadcrumb.map((seg) => (
             <>
-              <>
-                <span>/</span>
-                <span class="text-fg-soft">{seg}</span>
-              </>
+              <span>/</span>
+              <span class="text-fg-soft">{seg}</span>
             </>
           ))
         }

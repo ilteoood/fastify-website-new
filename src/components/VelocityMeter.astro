@@ -1,6 +1,6 @@
 ---
 // Signature element: a live "requests per second" telemetry gauge.
-import { BENCHMARK_STATS } from "../data/site";
+import { BENCHMARK_STATS } from "~/data/site";
 
 const { self, max, peers, multiplier } = BENCHMARK_STATS;
 // 270° speedometer: starts bottom-left, sweeps clockwise through the top.
@@ -266,7 +266,7 @@ const tickValues = [0, Math.round(max / 2), max];
       const start = performance.now();
       const step = (now: number) => {
         const p = Math.min((now - start) / dur, 1);
-        const eased = 1 - Math.pow(1 - p, 3);
+        const eased = 1 - (1 - p) ** 3;
         el.textContent = Math.round(target * eased).toLocaleString();
         if (p < 1) requestAnimationFrame(step);
       };

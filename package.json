@@ -13,8 +13,8 @@
 		"astro": "astro",
 		"lint": "biome lint",
 		"lint:fix": "biome lint --write",
-		"format": "biome format --write",
-		"format:check": "biome format",
+		"format": "biome check --write",
+		"format:check": "biome check",
 		"check": "biome check"
 	},
 	"dependencies": {

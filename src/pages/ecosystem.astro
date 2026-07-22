@@ -1,10 +1,10 @@
 ---
-import EcosystemCard from "../components/EcosystemCard.astro";
-import Icon from "../components/Icon.astro";
-import PageHeader from "../components/PageHeader.astro";
-import pluginsData from "../data/plugins.json";
-import BaseLayout from "../layouts/BaseLayout.astro";
-import { withBase } from "../lib/href";
+import EcosystemCard from "~/components/EcosystemCard.astro";
+import Icon from "~/components/Icon.astro";
+import PageHeader from "~/components/PageHeader.astro";
+import pluginsData from "~/data/plugins.json";
+import BaseLayout from "~/layouts/BaseLayout.astro";
+import { withBase } from "~/lib/href";
 
 const plugins = pluginsData.plugins;
 ---
@@ -42,7 +42,10 @@ const plugins = pluginsData.plugins;
       const q = (search?.value || '').toLowerCase().trim();
       let visible = 0;
       cards.forEach((card) => {
-        const matchesQ = !q || card.dataset.name!.includes(q) || card.dataset.desc!.includes(q);
+        const matchesQ =
+          !q ||
+          card.dataset.name?.includes(q) === true ||
+          card.dataset.desc?.includes(q) === true;
         card.classList.toggle('hidden', !matchesQ);
         if (matchesQ) visible++;
       });

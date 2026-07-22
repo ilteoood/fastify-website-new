@@ -1,6 +1,6 @@
 ---
 import { Code } from "astro:components";
-import Icon from "./Icon.astro";
+import Icon from "~/components/Icon.astro";
 
 interface Tab {
 	label: string;
@@ -80,7 +80,9 @@ const { tabs, title, id } = Astro.props;
           underlines[i]?.classList.toggle('bg-[#f2a93b]', active);
           underlines[i]?.classList.toggle('bg-transparent', !active);
         });
-        panels.forEach((p, i) => p.classList.toggle('hidden', String(i) !== idx));
+        panels.forEach((p, i) => {
+          p.classList.toggle('hidden', String(i) !== idx);
+        });
       });
     });
 

@@ -1,18 +1,18 @@
 ---
+import FastifyLogo from "~/assets/fastify-full.svg";
+import BenchBars from "~/components/BenchBars.astro";
+import ButtonLink from "~/components/ButtonLink.astro";
+import CodeTabs from "~/components/CodeTabs.astro";
+import EcosystemCard from "~/components/EcosystemCard.astro";
+import Icon from "~/components/Icon.astro";
+import InstallCommand from "~/components/InstallCommand.astro";
 import OpenJSF from "~/components/OpenJSF.astro";
-import BenchBars from "../components/BenchBars.astro";
-import ButtonLink from "../components/ButtonLink.astro";
-import CodeTabs from "../components/CodeTabs.astro";
-import EcosystemCard from "../components/EcosystemCard.astro";
-import Icon from "../components/Icon.astro";
-import InstallCommand from "../components/InstallCommand.astro";
-import PersonAvatar from "../components/PersonAvatar.astro";
-import VelocityMeter from "../components/VelocityMeter.astro";
-import plugins from "../data/plugins.json";
-import { FEATURES, LEADS, SITE, SPONSORS } from "../data/site";
-import FastifyLogo from "../assets/fastify-full.svg";
-import BaseLayout from "../layouts/BaseLayout.astro";
-import { withBase } from "../lib/href";
+import PersonAvatar from "~/components/PersonAvatar.astro";
+import VelocityMeter from "~/components/VelocityMeter.astro";
+import plugins from "~/data/plugins.json";
+import { FEATURES, LEADS, SITE, SPONSORS } from "~/data/site";
+import BaseLayout from "~/layouts/BaseLayout.astro";
+import { withBase } from "~/lib/href";
 
 const PLUGINS = plugins.plugins.slice(0, 6);
 const pluginsNumber = plugins.plugins.length;
