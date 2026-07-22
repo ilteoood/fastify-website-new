@@ -54,23 +54,23 @@ const plugins = await Promise.all(
           data-desc={p.description.toLowerCase()}
           class="card group relative flex flex-col p-5 transition-colors hover:border-border-strong"
         >
-          <div class="flex items-center justify-end">
+          <div class="flex items-center justify-between gap-3">
+            <a
+              href={p.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="flex min-w-0 flex-1 items-center gap-1.5 after:absolute after:inset-0"
+            >
+              <h3 class="font-mono text-sm font-medium text-fg">{p.name}</h3>
+              <Icon name="external" size={12} class="text-muted opacity-0 transition-opacity group-hover:opacity-100" />
+            </a>
             <span
               class:list={[
-                "rounded-full border border-border px-2 py-0.5 font-mono text-[0.6rem] uppercase tracking-wider",
+                "shrink-0 rounded-full border border-border px-2 py-0.5 font-mono text-[0.6rem] uppercase tracking-wider",
                 p.official ? "text-teal" : "text-muted",
               ]}
             >{p.official ? "official" : "community"}</span>
           </div>
-          <a
-            href={p.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            class="mt-4 flex items-center gap-1.5 after:absolute after:inset-0"
-          >
-            <h3 class="font-mono text-sm font-medium text-fg">{p.name}</h3>
-            <Icon name="external" size={12} class="text-muted opacity-0 transition-opacity group-hover:opacity-100" />
-          </a>
           <p
             class="mt-1.5 text-sm leading-relaxed text-fg-soft [&_a]:relative [&_a]:z-10 [&_a]:text-amber-ink [&_a]:underline [&_a]:decoration-border-strong [&_a]:underline-offset-2"
             set:html={p.descriptionHtml}
