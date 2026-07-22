@@ -10,6 +10,7 @@ import PersonAvatar from "../components/PersonAvatar.astro";
 import VelocityMeter from "../components/VelocityMeter.astro";
 import plugins from "../data/plugins.json";
 import { FEATURES, LEADS, SITE, SPONSORS } from "../data/site";
+import FastifyLogo from "../assets/fastify-full.svg";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { withBase } from "../lib/href";
 
@@ -90,8 +91,10 @@ const featuredPlugins = PLUGINS.slice(0, 6);
       class="relative mx-auto grid max-w-7xl gap-14 px-4 pb-16 pt-16 sm:px-6 lg:grid-cols-[1.05fr_0.95fr] lg:items-center lg:pt-24"
     >
       <div>
+        <FastifyLogo />
+
         <div
-          class="inline-flex items-center gap-2 rounded-full border border-border bg-surface/60 px-3 py-1.5"
+          class="mt-6 inline-flex items-center gap-2 rounded-full border border-border bg-surface/60 px-3 py-1.5"
         >
           <span class="size-1.5 rounded-full bg-teal"></span>
           <span class="font-mono text-xs text-fg-soft"
