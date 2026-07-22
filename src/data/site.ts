@@ -9,9 +9,9 @@ export const SITE = {
 	repo: "https://github.com/fastify/fastify",
 	version: "v5.x",
 	// Fallback shown on first paint; the live count is fetched client-side
-	// (see the GitHub stars script in BaseLayout) and replaces this value.
+	// (see the stats scripts in BaseLayout) and replaces these values.
 	stars: "0",
-	downloads: "10M+",
+	downloads: "0",
 	reqPerSec: 30_000,
 };
 
