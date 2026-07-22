@@ -1,19 +1,19 @@
 ---
-import BaseLayout from "../layouts/BaseLayout.astro";
-import Icon from "../components/Icon.astro";
 import BenchBars from "../components/BenchBars.astro";
+import Icon from "../components/Icon.astro";
 import { BENCHMARK_STATS } from "../data/site";
+import BaseLayout from "../layouts/BaseLayout.astro";
 
 const { self: fastify, multiplier } = BENCHMARK_STATS;
 
 const lastUpdated = (
-  Number.isNaN(Date.parse(BENCHMARK_STATS.date))
-    ? new Date()
-    : new Date(BENCHMARK_STATS.date)
+	Number.isNaN(Date.parse(BENCHMARK_STATS.date))
+		? new Date()
+		: new Date(BENCHMARK_STATS.date)
 ).toLocaleDateString("en-US", {
-  year: "numeric",
-  month: "long",
-  day: "numeric",
+	year: "numeric",
+	month: "long",
+	day: "numeric",
 });
 ---
 

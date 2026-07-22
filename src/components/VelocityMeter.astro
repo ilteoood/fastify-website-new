@@ -1,6 +1,7 @@
 ---
 // Signature element: a live "requests per second" telemetry gauge.
-import { BENCHMARK_STATS } from '../data/site';
+import { BENCHMARK_STATS } from "../data/site";
+
 const { self, max, peers, multiplier } = BENCHMARK_STATS;
 // 270° speedometer: starts bottom-left, sweeps clockwise through the top.
 const CX = 130;
@@ -9,8 +10,8 @@ const START = 135;
 const SWEEP = 270;
 const angleFor = (v: number) => START + (v / max) * SWEEP;
 const polar = (deg: number, r: number) => {
-  const rad = (deg * Math.PI) / 180;
-  return { x: CX + r * Math.cos(rad), y: CY + r * Math.sin(rad) };
+	const rad = (deg * Math.PI) / 180;
+	return { x: CX + r * Math.cos(rad), y: CY + r * Math.sin(rad) };
 };
 const R = 100;
 const arcStart = polar(START, R);

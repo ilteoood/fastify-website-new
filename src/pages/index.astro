@@ -5,10 +5,10 @@ import EcosystemCard from "../components/EcosystemCard.astro";
 import Icon from "../components/Icon.astro";
 import InstallCommand from "../components/InstallCommand.astro";
 import VelocityMeter from "../components/VelocityMeter.astro";
+import plugins from "../data/plugins.json";
 import { FEATURES, LEADS, SITE, SPONSORS } from "../data/site";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { withBase } from "../lib/href";
-import plugins from "../data/plugins.json";
 
 const PLUGINS = plugins.plugins.slice(0, 6);
 const pluginsNumber = plugins.plugins.length;

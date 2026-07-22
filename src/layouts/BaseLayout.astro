@@ -1,23 +1,23 @@
 ---
-import '@fontsource-variable/inter';
-import '@fontsource-variable/space-grotesk';
-import '@fontsource-variable/jetbrains-mono';
-import '../styles/global.css';
-import Nav from '../components/Nav.astro';
-import Footer from '../components/Footer.astro';
-import Search from '../components/Search.astro';
-import { SITE } from '../data/site';
-import { withBase } from '../lib/href';
+import "@fontsource-variable/inter";
+import "@fontsource-variable/space-grotesk";
+import "@fontsource-variable/jetbrains-mono";
+import "../styles/global.css";
+import Footer from "../components/Footer.astro";
+import Nav from "../components/Nav.astro";
+import Search from "../components/Search.astro";
+import { SITE } from "../data/site";
+import { withBase } from "../lib/href";
 
 interface Props {
-  title?: string;
-  description?: string;
-  hideChrome?: boolean;
+	title?: string;
+	description?: string;
+	hideChrome?: boolean;
 }
 const {
-  title = `${SITE.name} — ${SITE.tagline}`,
-  description = SITE.description,
-  hideChrome = false,
+	title = `${SITE.name} — ${SITE.tagline}`,
+	description = SITE.description,
+	hideChrome = false,
 } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site ?? SITE.url).href;
 ---

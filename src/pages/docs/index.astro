@@ -1,6 +1,7 @@
 ---
-import { withBase } from '../../lib/href';
-const target = withBase('/docs/latest/');
+import { withBase } from "../../lib/href";
+
+const target = withBase("/docs/latest/");
 return Astro.redirect(target);
 ---
 <meta http-equiv="refresh" content={`0; url=${target}`} />

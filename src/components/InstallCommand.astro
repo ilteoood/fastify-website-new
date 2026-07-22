@@ -1,9 +1,10 @@
 ---
-import Icon from './Icon.astro';
+import Icon from "./Icon.astro";
+
 interface Props {
-  command?: string;
+	command?: string;
 }
-const { command = 'npm install fastify' } = Astro.props;
+const { command = "npm install fastify" } = Astro.props;
 ---
 <div class="inline-flex items-center gap-3 rounded-lg border border-white/10 bg-[#0c0f13] px-4 py-3 font-mono text-sm shadow-sm" data-install>
   <span class="select-none text-[#2dd4bf]">$</span>

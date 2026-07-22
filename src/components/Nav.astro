@@ -1,13 +1,13 @@
 ---
-import Logo from './Logo.astro';
-import Icon from './Icon.astro';
-import { NAV, SITE } from '../data/site';
-import { withBase } from '../lib/href';
+import { NAV, SITE } from "../data/site";
+import { withBase } from "../lib/href";
+import Icon from "./Icon.astro";
+import Logo from "./Logo.astro";
 
 const path = Astro.url.pathname;
 const isActive = (href: string) => {
-  const target = withBase(href);
-  return href === '/' ? path === target : path.startsWith(target);
+	const target = withBase(href);
+	return href === "/" ? path === target : path.startsWith(target);
 };
 ---
 <header class="sticky top-0 z-50">

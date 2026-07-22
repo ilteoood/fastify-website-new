@@ -1,16 +1,16 @@
 ---
-import { Code } from 'astro:components';
-import Icon from './Icon.astro';
+import { Code } from "astro:components";
+import Icon from "./Icon.astro";
 
 interface Tab {
-  label: string;
-  lang: string;
-  code: string;
+	label: string;
+	lang: string;
+	code: string;
 }
 interface Props {
-  tabs: Tab[];
-  title?: string;
-  id: string;
+	tabs: Tab[];
+	title?: string;
+	id: string;
 }
 const { tabs, title, id } = Astro.props;
 ---

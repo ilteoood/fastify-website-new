@@ -1,11 +1,11 @@
 ---
-import { withBase } from '../lib/href';
+import { withBase } from "../lib/href";
 
 interface Props {
-  class?: string;
-  showWordmark?: boolean;
+	class?: string;
+	showWordmark?: boolean;
 }
-const { class: className = '', showWordmark = true } = Astro.props;
+const { class: className = "", showWordmark = true } = Astro.props;
 ---
 <a href={withBase('/')} class={`group inline-flex items-center gap-2.5 ${className}`} aria-label="Fastify home">
   <span class="relative grid size-9 place-items-center overflow-hidden rounded-[10px] border border-border-strong bg-surface-2 text-fg transition-colors group-hover:border-amber">
