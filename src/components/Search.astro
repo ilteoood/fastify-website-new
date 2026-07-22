@@ -40,6 +40,8 @@
 </dialog>
 
 <script>
+import DOMPurify from "node_modules/isomorphic-dompurify/dist";
+
   type PagefindSub = { title: string; url: string; excerpt: string };
   type PagefindData = {
     url: string;
@@ -70,15 +72,10 @@
   let loadFailed = false;
   const BASE = import.meta.env.BASE_URL.replace(/\/$/, '');
 
-  // Load Pagefind's ESM entry at runtime. `new Function` hides the dynamic
-  // import from Vite's static analysis so it isn't bundled/pre-loaded — the
-  // file only exists after `pagefind` runs against the built site.
-  const runtimeImport = new Function('u', 'return import(u)') as (u: string) => Promise<any>;
-
   async function ensurePagefind() {
     if (pagefind || loadFailed) return pagefind;
     try {
-      pagefind = await runtimeImport(`${import.meta.env.BASE_URL}/pagefind/pagefind.js`);
+      pagefind = await import(/* @vite-ignore */ `${import.meta.env.BASE_URL}/pagefind/pagefind.js`);
       await pagefind.init?.();
     } catch (e) {
       loadFailed = true;
@@ -86,12 +83,6 @@
       fallback?.classList.remove('hidden');
     }
     return pagefind;
-  }
-
-  function escapeHtml(s: string) {
-    const d = document.createElement('div');
-    d.textContent = s;
-    return d.innerHTML;
   }
 
   function render(items: PagefindData[]) {
@@ -103,14 +94,14 @@
       const subs = (item.sub_results || []).slice(0, 4);
       li.innerHTML = `
         <a href="${BASE}${item.url}" class="block rounded-lg border border-transparent px-3 py-2.5 transition-colors hover:border-border-strong hover:bg-surface-2">
-          <span class="block text-sm font-medium text-fg">${escapeHtml(title)}</span>
+          <span class="block text-sm font-medium text-fg">${DOMPurify.sanitize(title)}</span>
           <span class="mt-0.5 block text-xs leading-relaxed text-muted">${item.excerpt}</span>
         </a>
         ${
           subs.length
             ? `<ul class="ml-3 mt-0.5 space-y-0.5 border-l border-border pl-2">${subs
                 .map(
-                  (s) => `<li><a href="${BASE}${s.url}" class="block rounded px-2 py-1 text-xs text-fg-soft transition-colors hover:bg-surface-2 hover:text-amber-ink">${escapeHtml(
+                  (s) => `<li><a href="${BASE}${s.url}" class="block rounded px-2 py-1 text-xs text-fg-soft transition-colors hover:bg-surface-2 hover:text-amber-ink">${DOMPurify.sanitize(
                     s.title,
                   )}</a></li>`,
                 )
