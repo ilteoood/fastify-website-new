@@ -2,11 +2,19 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Icon from '../components/Icon.astro';
 import BenchBars from '../components/BenchBars.astro';
-import { BENCHMARKS } from '../data/site';
+import { BENCHMARKS, BENCHMARK_DATE } from '../data/site';
 
 const fastify = BENCHMARKS.find((b) => b.self)!;
 const express = BENCHMARKS.find((b) => b.name === 'Express')!;
 const multiplier = (fastify.reqs / express.reqs).toFixed(1);
+
+const lastUpdated = (Number.isNaN(Date.parse(BENCHMARK_DATE))
+  ? new Date()
+  : new Date(BENCHMARK_DATE)).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    });
 ---
 <BaseLayout title="Benchmarks — Fastify" description="How Fastify compares to other Node.js web frameworks on throughput.">
   <section class="relative overflow-hidden border-b border-border bg-telemetry">
@@ -40,7 +48,7 @@ const multiplier = (fastify.reqs / express.reqs).toFixed(1);
     <div class="card mt-8 p-6 sm:p-10">
       <div class="mb-8 flex items-center justify-between">
         <h2 class="font-display text-2xl font-semibold">Requests per second</h2>
-        <span class="font-mono text-xs text-muted">Node.js · single instance</span>
+        <span class="font-mono text-xs text-muted">Node.js · single instance · updated {lastUpdated}</span>
       </div>
       <BenchBars />
     </div>
