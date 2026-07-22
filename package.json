@@ -14,8 +14,7 @@
 		"lint": "biome lint",
 		"lint:fix": "biome lint --write",
 		"format": "biome check --write",
-		"format:check": "biome check",
-		"check": "biome check"
+		"format:check": "biome check"
 	},
 	"dependencies": {
 		"@astrojs/mdx": "^7.0.3",
