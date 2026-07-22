@@ -61,7 +61,12 @@ const tickValues = [0, Math.round(max / 2), max];
         const a = angleFor(p.reqs);
         const o = polar(a, R + 3);
         const inr = polar(a, R - 10);
-        return <line x1={inr.x} y1={inr.y} x2={o.x} y2={o.y} stroke="var(--muted)" stroke-width="2" opacity="0.7" />;
+        return (
+          <g>
+            <title>{`${p.name} — ${p.reqs.toLocaleString()} req/s`}</title>
+            <line x1={inr.x} y1={inr.y} x2={o.x} y2={o.y} stroke="var(--muted)" stroke-width="2" opacity="0.7" />
+          </g>
+        );
       })}
       <!-- ticks -->
       {tickValues.map((t) => {
@@ -73,6 +78,30 @@ const tickValues = [0, Math.round(max / 2), max];
           </text>
         );
       })}
+      <!-- center value -->
+      <text
+        x={CX}
+        y={CY - 6}
+        fill="var(--fg)"
+        font-size="28"
+        font-family="var(--font-display)"
+        font-weight="600"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        class="tabular-nums"
+        data-counter
+        data-target={self.reqs}
+      >0</text>
+      <text
+        x={CX}
+        y={CY + 16}
+        fill="var(--muted)"
+        font-size="9"
+        font-family="var(--font-mono)"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        letter-spacing="1.5"
+      >REQUESTS / SECOND</text>
       <defs>
         <linearGradient id="velo" x1="0" y1="1" x2="1" y2="0">
           <stop offset="0" stop-color="var(--teal)" />
@@ -81,13 +110,6 @@ const tickValues = [0, Math.round(max / 2), max];
         </linearGradient>
       </defs>
     </svg>
-
-    <div class="-mt-14 text-center">
-      <div class="font-display text-5xl font-semibold tabular-nums text-fg">
-        <span data-counter data-target={self.reqs}>0</span>
-      </div>
-      <div class="mt-1 font-mono text-xs uppercase tracking-[0.2em] text-muted">requests / second</div>
-    </div>
 
     <div class="mt-5 grid grid-cols-2 gap-2 border-t border-border pt-4">
       <div>
@@ -116,7 +138,7 @@ const tickValues = [0, Math.round(max / 2), max];
       void arc.getBoundingClientRect();
       arc.style.strokeDashoffset = String(Math.round(1000 - ratio * 1000));
     }
-    document.querySelectorAll<HTMLElement>('[data-counter]').forEach((el) => {
+    document.querySelectorAll<Element>('[data-counter]').forEach((el) => {
       const target = Number(el.dataset.target || '0');
       if (reduce) { el.textContent = target.toLocaleString(); return; }
       const dur = 1800;
