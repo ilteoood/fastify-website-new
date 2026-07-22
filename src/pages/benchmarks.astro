@@ -30,7 +30,7 @@ const lastUpdated = (Number.isNaN(Date.parse(BENCHMARK_DATE))
   </section>
 
   <section class="mx-auto max-w-7xl px-4 py-14 sm:px-6">
-    <div class="grid gap-4 sm:grid-cols-3">
+    <div class="grid gap-4 sm:grid-cols-2">
       <div class="card p-6">
         <div class="font-display text-4xl font-semibold text-fg tabular-nums">{fastify.reqs.toLocaleString()}</div>
         <div class="mt-1 font-mono text-xs uppercase tracking-wider text-muted">Fastify req/s</div>
@@ -38,10 +38,6 @@ const lastUpdated = (Number.isNaN(Date.parse(BENCHMARK_DATE))
       <div class="card p-6">
         <div class="font-display text-4xl font-semibold text-velocity tabular-nums">{multiplier}×</div>
         <div class="mt-1 font-mono text-xs uppercase tracking-wider text-muted">faster than Express</div>
-      </div>
-      <div class="card p-6">
-        <div class="font-display text-4xl font-semibold text-fg tabular-nums">~0.9ms</div>
-        <div class="mt-1 font-mono text-xs uppercase tracking-wider text-muted">p99 latency</div>
       </div>
     </div>
 
