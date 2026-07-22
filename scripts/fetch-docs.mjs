@@ -29,7 +29,7 @@ import {
 } from "node:fs/promises";
 import path from "node:path";
 import pino from "pino";
-import astroConfig from "../astro.config.mjs";
+import astroConfig from "../astro.base.config.mjs";
 
 const ROOT = path.resolve(import.meta.dirname, "..");
 const CONTENT_DIR = path.join(ROOT, "src/content/docs");
