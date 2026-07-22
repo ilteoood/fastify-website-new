@@ -1,15 +1,16 @@
 ---
-import BenchBars from '../components/BenchBars.astro';
-import CodeTabs from '../components/CodeTabs.astro';
-import Icon from '../components/Icon.astro';
-import InstallCommand from '../components/InstallCommand.astro';
-import VelocityMeter from '../components/VelocityMeter.astro';
-import { FEATURES, LEADS, SITE, SPONSORS } from '../data/site';
-import BaseLayout from '../layouts/BaseLayout.astro';
-import { withBase } from '../lib/href';
-import plugins from '../data/plugins.json';
+import BenchBars from "../components/BenchBars.astro";
+import CodeTabs from "../components/CodeTabs.astro";
+import Icon from "../components/Icon.astro";
+import InstallCommand from "../components/InstallCommand.astro";
+import VelocityMeter from "../components/VelocityMeter.astro";
+import { FEATURES, LEADS, SITE, SPONSORS } from "../data/site";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { withBase } from "../lib/href";
+import plugins from "../data/plugins.json";
 
 const PLUGINS = plugins.plugins.slice(0, 6);
+const pluginsNumber = plugins.plugins.length;
 
 const esmCode = `// Import the framework and instantiate it
 import Fastify from 'fastify'
@@ -73,51 +74,90 @@ const schemaCode = `fastify.route({
 const marquee = [...SPONSORS, ...SPONSORS];
 const featuredPlugins = PLUGINS.slice(0, 6);
 ---
+
 <BaseLayout>
   <!-- ============ HERO ============ -->
   <section class="relative overflow-hidden bg-telemetry">
-    <div class="pointer-events-none absolute inset-x-0 top-0 h-130 glow-amber opacity-70"></div>
-    <div class="relative mx-auto grid max-w-7xl gap-14 px-4 pb-16 pt-16 sm:px-6 lg:grid-cols-[1.05fr_0.95fr] lg:items-center lg:pt-24">
+    <div
+      class="pointer-events-none absolute inset-x-0 top-0 h-130 glow-amber opacity-70"
+    >
+    </div>
+    <div
+      class="relative mx-auto grid max-w-7xl gap-14 px-4 pb-16 pt-16 sm:px-6 lg:grid-cols-[1.05fr_0.95fr] lg:items-center lg:pt-24"
+    >
       <div>
-        <div class="inline-flex items-center gap-2 rounded-full border border-border bg-surface/60 px-3 py-1.5">
+        <div
+          class="inline-flex items-center gap-2 rounded-full border border-border bg-surface/60 px-3 py-1.5"
+        >
           <span class="size-1.5 rounded-full bg-teal"></span>
-          <span class="font-mono text-xs text-fg-soft">Fastify {SITE.version} · Node.js 20+</span>
+          <span class="font-mono text-xs text-fg-soft"
+            >Fastify {SITE.version} · Node.js 20+</span
+          >
         </div>
 
-        <h1 class="mt-6 font-display text-5xl font-semibold leading-[1.04] tracking-tight sm:text-6xl lg:text-7xl">
+        <h1
+          class="mt-6 font-display text-5xl font-semibold leading-[1.04] tracking-tight sm:text-6xl lg:text-7xl"
+        >
           Serve more.<br />
           <span class="text-velocity">Spend less.</span>
         </h1>
 
         <p class="mt-6 max-w-xl text-lg leading-relaxed text-fg-soft">
-          Fastify is a web framework focused on the best developer experience with the
-          least overhead. A powerful plugin architecture, schema-based speed, and one of
-          the fastest cores in Node.js.
+          Fastify is a web framework focused on the best developer experience
+          with the least overhead. A powerful plugin architecture, schema-based
+          speed, and one of the fastest cores in Node.js.
         </p>
 
         <div class="mt-8 flex flex-wrap items-center gap-3">
           <a
-            href={withBase('/docs/latest/Guides/Getting-Started/')}
+            href={withBase("/docs/latest/Guides/Getting-Started/")}
             class="group inline-flex items-center gap-2 rounded-lg bg-amber px-5 py-3 font-medium text-[#0a0b0d] transition-transform hover:-translate-y-0.5"
           >
             Get started
-            <Icon name="arrow" size={18} class="transition-transform group-hover:translate-x-0.5" />
+            <Icon
+              name="arrow"
+              size={18}
+              class="transition-transform group-hover:translate-x-0.5"
+            />
           </a>
           <InstallCommand />
         </div>
 
-        <dl class="mt-12 grid max-w-lg grid-cols-3 gap-6 border-t border-border pt-6">
+        <dl
+          class="mt-12 grid max-w-lg grid-cols-3 gap-6 border-t border-border pt-6"
+        >
           <div>
-            <dt class="font-mono text-[0.65rem] uppercase tracking-[0.16em] text-muted">downloads / mo</dt>
-            <dd class="mt-1 font-display text-2xl font-semibold text-fg">{SITE.downloads}</dd>
+            <dt
+              class="font-mono text-[0.65rem] uppercase tracking-[0.16em] text-muted"
+            >
+              downloads / mo
+            </dt>
+            <dd class="mt-1 font-display text-2xl font-semibold text-fg">
+              {SITE.downloads}
+            </dd>
           </div>
           <div>
-            <dt class="font-mono text-[0.65rem] uppercase tracking-[0.16em] text-muted">github stars</dt>
-            <dd class="mt-1 font-display text-2xl font-semibold text-fg" data-github-stars>{SITE.stars}</dd>
+            <dt
+              class="font-mono text-[0.65rem] uppercase tracking-[0.16em] text-muted"
+            >
+              github stars
+            </dt>
+            <dd
+              class="mt-1 font-display text-2xl font-semibold text-fg"
+              data-github-stars
+            >
+              {SITE.stars}
+            </dd>
           </div>
           <div>
-            <dt class="font-mono text-[0.65rem] uppercase tracking-[0.16em] text-muted">plugins</dt>
-            <dd class="mt-1 font-display text-2xl font-semibold text-fg">{SITE.plugins}</dd>
+            <dt
+              class="font-mono text-[0.65rem] uppercase tracking-[0.16em] text-muted"
+            >
+              plugins
+            </dt>
+            <dd class="mt-1 font-display text-2xl font-semibold text-fg">
+              {pluginsNumber}
+            </dd>
           </div>
         </dl>
       </div>
@@ -128,14 +168,26 @@ const featuredPlugins = PLUGINS.slice(0, 6);
     <!-- sponsor marquee -->
     <div class="relative border-y border-border bg-surface/30 py-5">
       <div class="mx-auto flex max-w-7xl items-center gap-6 px-4 sm:px-6">
-        <span class="hidden shrink-0 font-mono text-[0.65rem] uppercase tracking-[0.16em] text-muted sm:block">trusted by</span>
-        <div class="relative flex-1 overflow-hidden mask-[linear-gradient(90deg,transparent,#000_8%,#000_92%,transparent)]">
+        <span
+          class="hidden shrink-0 font-mono text-[0.65rem] uppercase tracking-[0.16em] text-muted sm:block"
+          >trusted by</span
+        >
+        <div
+          class="relative flex-1 overflow-hidden mask-[linear-gradient(90deg,transparent,#000_8%,#000_92%,transparent)]"
+        >
           <div class="flex w-max animate-ticker gap-10">
-            {marquee.map((s) => (
-              <a href={s.url} target="_blank" rel="noopener noreferrer" class="shrink-0 font-display text-lg font-medium text-muted transition-colors hover:text-fg">
-                {s.name}
-              </a>
-            ))}
+            {
+              marquee.map((s) => (
+                <a
+                  href={s.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="shrink-0 font-display text-lg font-medium text-muted transition-colors hover:text-fg"
+                >
+                  {s.name}
+                </a>
+              ))
+            }
           </div>
         </div>
       </div>
@@ -147,16 +199,18 @@ const featuredPlugins = PLUGINS.slice(0, 6);
     <div class="grid gap-12 lg:grid-cols-[0.8fr_1.2fr] lg:items-start">
       <div>
         <p class="eyebrow">// why fastify</p>
-        <h2 class="mt-4 font-display text-3xl font-semibold tracking-tight sm:text-4xl">
+        <h2
+          class="mt-4 font-display text-3xl font-semibold tracking-tight sm:text-4xl"
+        >
           Efficiency is a feature
         </h2>
       </div>
       <p class="text-lg leading-relaxed text-fg-soft">
-        An efficient server means lower infrastructure cost, better responsiveness under
-        load, and happier users. Fastify lets you handle the highest number of requests
-        possible — without sacrificing security validation or developer ergonomics.
-        It's inspired by Hapi and Express, and as far as we know, one of the fastest
-        web frameworks in town.
+        An efficient server means lower infrastructure cost, better
+        responsiveness under load, and happier users. Fastify lets you handle
+        the highest number of requests possible — without sacrificing security
+        validation or developer ergonomics. It's inspired by Hapi and Express,
+        and as far as we know, one of the fastest web frameworks in town.
       </p>
     </div>
   </section>
@@ -166,24 +220,28 @@ const featuredPlugins = PLUGINS.slice(0, 6);
     <div class="mb-10 flex items-end justify-between gap-4">
       <div>
         <p class="eyebrow">// core features</p>
-        <h2 class="mt-4 font-display text-3xl font-semibold tracking-tight sm:text-4xl">
+        <h2
+          class="mt-4 font-display text-3xl font-semibold tracking-tight sm:text-4xl"
+        >
           Built on solid principles
         </h2>
       </div>
     </div>
     <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-      {FEATURES.map((f) => (
-        <article class="card group relative flex flex-col p-6 transition-colors hover:border-border-strong">
-          <div class="flex items-center justify-between">
-            <span class="grid size-11 place-items-center rounded-lg border border-border bg-surface-2 text-amber-ink transition-colors group-hover:border-amber">
-              <Icon name={f.icon} size={20} />
-            </span>
-            <span class="font-mono text-xs text-muted">{f.metric}</span>
-          </div>
-          <h3 class="mt-5 font-display text-xl font-semibold">{f.title}</h3>
-          <p class="mt-2 text-sm leading-relaxed text-fg-soft">{f.body}</p>
-        </article>
-      ))}
+      {
+        FEATURES.map((f) => (
+          <article class="card group relative flex flex-col p-6 transition-colors hover:border-border-strong">
+            <div class="flex items-center justify-between">
+              <span class="grid size-11 place-items-center rounded-lg border border-border bg-surface-2 text-amber-ink transition-colors group-hover:border-amber">
+                <Icon name={f.icon} size={20} />
+              </span>
+              <span class="font-mono text-xs text-muted">{f.metric}</span>
+            </div>
+            <h3 class="mt-5 font-display text-xl font-semibold">{f.title}</h3>
+            <p class="mt-2 text-sm leading-relaxed text-fg-soft">{f.body}</p>
+          </article>
+        ))
+      }
     </div>
   </section>
 
@@ -192,20 +250,33 @@ const featuredPlugins = PLUGINS.slice(0, 6);
     <div class="grid gap-10 lg:grid-cols-2 lg:items-start">
       <div class="lg:sticky lg:top-24">
         <p class="eyebrow">// quick start</p>
-        <h2 class="mt-4 font-display text-3xl font-semibold tracking-tight sm:text-4xl">
+        <h2
+          class="mt-4 font-display text-3xl font-semibold tracking-tight sm:text-4xl"
+        >
           A server in eight lines
         </h2>
         <p class="mt-4 text-lg leading-relaxed text-fg-soft">
-          Install Fastify, create <code class="rounded bg-surface-2 px-1.5 py-0.5 font-mono text-sm text-amber-ink">server.js</code>,
-          and launch with <code class="rounded bg-surface-2 px-1.5 py-0.5 font-mono text-sm text-amber-ink">node server</code>.
-          Prefer scaffolding? Reach for <a href="https://github.com/fastify/fastify-cli" class="text-amber-ink underline decoration-border-strong underline-offset-2">fastify-cli</a>.
+          Install Fastify, create <code
+            class="rounded bg-surface-2 px-1.5 py-0.5 font-mono text-sm text-amber-ink"
+            >server.js</code
+          >, and launch with <code
+            class="rounded bg-surface-2 px-1.5 py-0.5 font-mono text-sm text-amber-ink"
+            >node server</code
+          >. Prefer scaffolding? Reach for <a
+            href="https://github.com/fastify/fastify-cli"
+            class="text-amber-ink underline decoration-border-strong underline-offset-2"
+            >fastify-cli</a
+          >.
         </p>
         <div class="mt-6 space-y-3">
           <InstallCommand command="npm install fastify" />
           <div class="text-sm text-muted">or scaffold a project:</div>
           <InstallCommand command="npm init fastify" />
         </div>
-        <a href={withBase('/docs/')} class="mt-8 inline-flex items-center gap-2 text-sm font-medium text-amber-ink hover:underline">
+        <a
+          href={withBase("/docs/")}
+          class="mt-8 inline-flex items-center gap-2 text-sm font-medium text-amber-ink hover:underline"
+        >
           Explore the full documentation <Icon name="arrow" size={16} />
         </a>
       </div>
@@ -215,16 +286,20 @@ const featuredPlugins = PLUGINS.slice(0, 6);
           id="hello"
           title="Hello world server"
           tabs={[
-            { label: 'server.mjs', lang: 'js', code: esmCode },
-            { label: 'server.cjs', lang: 'js', code: cjsCode },
+            { label: "server.mjs", lang: "js", code: esmCode },
+            { label: "server.cjs", lang: "js", code: cjsCode },
           ]}
         />
         <div>
-          <p class="mb-2 font-mono text-xs uppercase tracking-[0.16em] text-muted">// validation + hooks</p>
+          <p
+            class="mb-2 font-mono text-xs uppercase tracking-[0.16em] text-muted"
+          >
+            // validation + hooks
+          </p>
           <CodeTabs
             id="schema"
             title="Schema based validation"
-            tabs={[{ label: 'routes.js', lang: 'js', code: schemaCode }]}
+            tabs={[{ label: "routes.js", lang: "js", code: schemaCode }]}
           />
         </div>
       </div>
@@ -232,19 +307,25 @@ const featuredPlugins = PLUGINS.slice(0, 6);
   </section>
 
   <!-- ============ BENCHMARKS ============ -->
-  <section class="relative overflow-hidden border-y border-border bg-surface/30">
-    <div class="mx-auto grid max-w-7xl gap-12 px-4 py-20 sm:px-6 lg:grid-cols-2 lg:items-center">
+  <section
+    class="relative overflow-hidden border-y border-border bg-surface/30"
+  >
+    <div
+      class="mx-auto grid max-w-7xl gap-12 px-4 py-20 sm:px-6 lg:grid-cols-2 lg:items-center"
+    >
       <div>
         <p class="eyebrow">// benchmarks</p>
-        <h2 class="mt-4 font-display text-3xl font-semibold tracking-tight sm:text-4xl">
+        <h2
+          class="mt-4 font-display text-3xl font-semibold tracking-tight sm:text-4xl"
+        >
           Fast, from the ground up
         </h2>
         <p class="mt-4 max-w-md text-lg leading-relaxed text-fg-soft">
-          Leveraging deep experience with Node.js performance, Fastify was built to be as
-          fast as possible. Compare it against other common frameworks.
+          Leveraging deep experience with Node.js performance, Fastify was built
+          to be as fast as possible. Compare it against other common frameworks.
         </p>
         <a
-          href={withBase('/benchmarks/')}
+          href={withBase("/benchmarks/")}
           class="mt-8 inline-flex items-center gap-2 rounded-lg border border-border bg-surface px-5 py-3 font-medium text-fg transition-colors hover:border-border-strong"
         >
           See full benchmarks <Icon name="arrow" size={18} />
@@ -261,61 +342,98 @@ const featuredPlugins = PLUGINS.slice(0, 6);
     <div class="mb-10 flex flex-wrap items-end justify-between gap-4">
       <div>
         <p class="eyebrow">// ecosystem</p>
-        <h2 class="mt-4 font-display text-3xl font-semibold tracking-tight sm:text-4xl">
+        <h2
+          class="mt-4 font-display text-3xl font-semibold tracking-tight sm:text-4xl"
+        >
           A plugin for everything
         </h2>
         <p class="mt-4 max-w-lg text-lg leading-relaxed text-fg-soft">
-          An ever-growing ecosystem of {SITE.plugins} plugins. There's probably already
-          one for your database or template engine — and it's very easy to write your own.
+          An ever-growing ecosystem of {pluginsNumber} plugins. There's probably already
+          one for your database or template engine — and it's very easy to write your
+          own.
         </p>
       </div>
-      <a href={withBase('/ecosystem/')} class="inline-flex items-center gap-2 rounded-lg bg-amber px-5 py-3 font-medium text-[#0a0b0d] transition-transform hover:-translate-y-0.5">
-        Explore {SITE.plugins} plugins <Icon name="arrow" size={18} />
+      <a
+        href={withBase("/ecosystem/")}
+        class="inline-flex items-center gap-2 rounded-lg bg-amber px-5 py-3 font-medium text-[#0a0b0d] transition-transform hover:-translate-y-0.5"
+      >
+        Explore {pluginsNumber} plugins <Icon name="arrow" size={18} />
       </a>
     </div>
     <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-      {featuredPlugins.map((p) => (
-        <a href={p.url} target="_blank" rel="noopener noreferrer" class="card group flex items-start gap-3 p-4 transition-colors hover:border-border-strong">
-          <span class="mt-0.5 grid size-8 shrink-0 place-items-center rounded-md border border-border bg-surface-2 font-mono text-xs text-amber-ink">fp</span>
-          <div class="min-w-0">
-            <div class="flex items-center gap-1.5 font-mono text-sm font-medium text-fg">
-              {p.name}
-              <Icon name="external" size={12} class="text-muted opacity-0 transition-opacity group-hover:opacity-100" />
+      {
+        featuredPlugins.map((p) => (
+          <a
+            href={p.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="card group flex items-start gap-3 p-4 transition-colors hover:border-border-strong"
+          >
+            <span class="mt-0.5 grid size-8 shrink-0 place-items-center rounded-md border border-border bg-surface-2 font-mono text-xs text-amber-ink">
+              fp
+            </span>
+            <div class="min-w-0">
+              <div class="flex items-center gap-1.5 font-mono text-sm font-medium text-fg">
+                {p.name}
+                <Icon
+                  name="external"
+                  size={12}
+                  class="text-muted opacity-0 transition-opacity group-hover:opacity-100"
+                />
+              </div>
+              <p class="mt-1 truncate text-xs text-muted">{p.description}</p>
             </div>
-            <p class="mt-1 truncate text-xs text-muted">{p.description}</p>
-          </div>
-        </a>
-      ))}
+          </a>
+        ))
+      }
     </div>
   </section>
 
   <!-- ============ TEAM ============ -->
   <section class="mx-auto max-w-7xl px-4 pb-20 sm:px-6">
     <div class="card overflow-hidden">
-      <div class="grid gap-10 p-8 sm:p-12 lg:grid-cols-[1fr_1.4fr] lg:items-center">
+      <div
+        class="grid gap-10 p-8 sm:p-12 lg:grid-cols-[1fr_1.4fr] lg:items-center"
+      >
         <div>
           <p class="eyebrow">// maintainers</p>
-          <h2 class="mt-4 font-display text-3xl font-semibold tracking-tight">Built by the community</h2>
+          <h2 class="mt-4 font-display text-3xl font-semibold tracking-tight">
+            Built by the community
+          </h2>
           <p class="mt-4 text-fg-soft">
-            Fastify is an OpenJS Foundation project maintained by a global team of lead
-            maintainers and collaborators.
+            Fastify is an OpenJS Foundation project maintained by a global team
+            of lead maintainers and collaborators.
           </p>
-          <a href={withBase('/organizations/')} class="mt-6 inline-flex items-center gap-2 text-sm font-medium text-amber-ink hover:underline">
+          <a
+            href={withBase("/organizations/")}
+            class="mt-6 inline-flex items-center gap-2 text-sm font-medium text-amber-ink hover:underline"
+          >
             Meet the whole team <Icon name="arrow" size={16} />
           </a>
         </div>
         <div class="flex flex-wrap gap-4">
-          {LEADS.map((p) => (
-            <a href={`https://github.com/${p.github}`} target="_blank" rel="noopener noreferrer" class="group flex flex-col items-center gap-2">
-              <img
-                src={`https://avatars.githubusercontent.com/${p.github}?s=120`}
-                alt={p.name}
-                width="64" height="64" loading="lazy"
-                class="size-16 rounded-full border-2 border-border grayscale transition-all group-hover:border-amber group-hover:grayscale-0"
-              />
-              <span class="max-w-20 text-center text-xs text-muted group-hover:text-fg">{p.name}</span>
-            </a>
-          ))}
+          {
+            LEADS.map((p) => (
+              <a
+                href={`https://github.com/${p.github}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="group flex flex-col items-center gap-2"
+              >
+                <img
+                  src={`https://avatars.githubusercontent.com/${p.github}?s=120`}
+                  alt={p.name}
+                  width="64"
+                  height="64"
+                  loading="lazy"
+                  class="size-16 rounded-full border-2 border-border grayscale transition-all group-hover:border-amber group-hover:grayscale-0"
+                />
+                <span class="max-w-20 text-center text-xs text-muted group-hover:text-fg">
+                  {p.name}
+                </span>
+              </a>
+            ))
+          }
         </div>
       </div>
     </div>
@@ -323,20 +441,34 @@ const featuredPlugins = PLUGINS.slice(0, 6);
 
   <!-- ============ CTA ============ -->
   <section class="mx-auto max-w-7xl px-4 pb-24 sm:px-6">
-    <div class="relative overflow-hidden rounded-2xl border border-border bg-telemetry px-6 py-16 text-center sm:px-12">
-      <div class="pointer-events-none absolute inset-x-0 top-0 h-64 glow-amber"></div>
+    <div
+      class="relative overflow-hidden rounded-2xl border border-border bg-telemetry px-6 py-16 text-center sm:px-12"
+    >
+      <div class="pointer-events-none absolute inset-x-0 top-0 h-64 glow-amber">
+      </div>
       <div class="relative">
-        <h2 class="mx-auto max-w-2xl font-display text-3xl font-semibold tracking-tight sm:text-5xl">
+        <h2
+          class="mx-auto max-w-2xl font-display text-3xl font-semibold tracking-tight sm:text-5xl"
+        >
           Ready to go <span class="text-velocity">fast</span>?
         </h2>
         <p class="mx-auto mt-4 max-w-xl text-lg text-fg-soft">
-          Ship a production-grade API today. Start with the guide, or dive into the reference.
+          Ship a production-grade API today. Start with the guide, or dive into
+          the reference.
         </p>
         <div class="mt-8 flex flex-wrap justify-center gap-3">
-          <a href={withBase('/docs/latest/Guides/Getting-Started/')} class="inline-flex items-center gap-2 rounded-lg bg-amber px-6 py-3 font-medium text-[#0a0b0d] transition-transform hover:-translate-y-0.5">
+          <a
+            href={withBase("/docs/latest/Guides/Getting-Started/")}
+            class="inline-flex items-center gap-2 rounded-lg bg-amber px-6 py-3 font-medium text-[#0a0b0d] transition-transform hover:-translate-y-0.5"
+          >
             Get started <Icon name="arrow" size={18} />
           </a>
-          <a href={SITE.repo} target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 rounded-lg border border-border bg-surface px-6 py-3 font-medium text-fg transition-colors hover:border-border-strong">
+          <a
+            href={SITE.repo}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center gap-2 rounded-lg border border-border bg-surface px-6 py-3 font-medium text-fg transition-colors hover:border-border-strong"
+          >
             <Icon name="github" size={18} /> Star on GitHub
           </a>
         </div>
