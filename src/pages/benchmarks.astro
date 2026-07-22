@@ -8,9 +8,9 @@ const fastify = BENCHMARKS.find((b) => b.self)!;
 const express = BENCHMARKS.find((b) => b.name === 'Express')!;
 const multiplier = (fastify.reqs / express.reqs).toFixed(1);
 
-const lastUpdated = Number.isNaN(Date.parse(BENCHMARK_DATE))
-  ? BENCHMARK_DATE
-  : new Date(BENCHMARK_DATE).toLocaleDateString('en-US', {
+const lastUpdated = (Number.isNaN(Date.parse(BENCHMARK_DATE))
+  ? new Date()
+  : new Date(BENCHMARK_DATE)).toLocaleDateString('en-US', {
       year: 'numeric',
       month: 'long',
       day: 'numeric',
