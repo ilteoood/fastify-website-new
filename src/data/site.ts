@@ -82,15 +82,20 @@ export const BENCHMARKS: Bench[] = benchmarksData.frameworks.map(({ name, reques
 export type Sponsor = { name: string; url: string; tier: "org" | "sponsor" };
 
 export const SPONSORS: Sponsor[] = [
-  { name: "Mercedes-Benz", url: "https://github.com/mercedes-benz", tier: "org" },
-  { name: "Microsoft", url: "https://opensource.microsoft.com/", tier: "org" },
-  { name: "Platformatic", url: "https://platformatic.dev/", tier: "sponsor" },
-  { name: "Nearform", url: "https://nearform.com/", tier: "sponsor" },
-  { name: "SerpApi", url: "https://serpapi.com/", tier: "org" },
-  { name: "Handsontable", url: "https://handsontable.com/", tier: "org" },
-  { name: "Val Town", url: "https://www.val.town/", tier: "org" },
-  { name: "N-iX", url: "https://www.n-ix.com/", tier: "org" },
-  { name: "kogiQA", url: "https://kogiqa.com/", tier: "org" },
+  { name: "HospitalRun", url: "https://hospitalrun.io/", tier: "org" },
+  { name: "Nearform", url: "https://nearform.com", tier: "org" },
+  { name: "Platformatic", url: "https://platformatic.dev", tier: "org" },
+  { name: "val town", url: "https://www.val.town/", tier: "sponsor" },
+  {
+    name: "Handsontable",
+    url: "https://handsontable.com/docs/react-data-grid/?utm_source=Fastify_homepage&utm_medium=sponsorship&utm_campaign=library_sponsorship_2024",
+    tier: "sponsor",
+  },
+  { name: "SerpApi", url: "https://serpapi.com/?utm_source=fastify", tier: "sponsor" },
+  { name: "kogiQA", url: "https://kogiqa.com/", tier: "sponsor" },
+  { name: "Lokalise", url: "https://lokalise.com/", tier: "sponsor" },
+  { name: "Photon", url: "https://photon.codes/", tier: "sponsor" },
+  { name: "N-iX", url: "https://www.n-ix.com/", tier: "sponsor" },
 ];
 
 export type Person = { name: string; github: string; role?: string };
@@ -104,14 +109,31 @@ export const LEADS: Person[] = [
 ];
 
 export const COLLABORATORS: Person[] = [
-  { name: "Aras Abbasi", github: "uzlopak" },
-  { name: "Dan Castillo", github: "dancastillo" },
-  { name: "Gürgün Dayıoğlu", github: "gurgunday" },
   { name: "Carlos Fuentes", github: "metcoder95" },
+  { name: "Evan Shortiss", github: "evanshortiss" },
   { name: "Luciano Mammino", github: "lmammino" },
-  { name: "Jean Michelet", github: "jean-michelet" },
-  { name: "Luis Orbaiceta", github: "luisorbaiceta" },
-  { name: "Igor Savin", github: "kibertoad" },
-  { name: "Frazer Smith", github: "Fdawgs" },
   { name: "Maksim Sinik", github: "fox1t" },
+  { name: "Frazer Smith", github: "Fdawgs" },
+  { name: "Igor Savin", github: "kibertoad" },
+  { name: "Vincent Le Goff", github: "zekth" },
+  { name: "Aras Abbasi", github: "uzlopak" },
+  { name: "Gürgün Dayıoğlu", github: "gurgunday" },
+  { name: "Dan Castillo", github: "dancastillo" },
+  { name: "Jean Michelet", github: "jean-michelet" },
+  { name: "Harry Brundage", github: "airhorns" },
+  { name: "Luis Orbaiceta", github: "luisorbaiceta" },
+];
+
+export const PAST_COLLABORATORS: Person[] = [
+  { name: "Ayoub El Khattabi", github: "AyoubElk" },
+  { name: "Dustin Deus", github: "StarpTech" },
+  { name: "Rafael Gonzaga", github: "RafaelGSS" },
+  { name: "David Clements", github: "davidmarkclements" },
+  { name: "Salman Mitha", github: "salmanm" },
+  { name: "Tommaso Allevi", github: "allevo" },
+  { name: "Ethan Arrowood", github: "Ethan-Arrowood" },
+  { name: "Çağatay Çalı", github: "cagataycali" },
+  { name: "Cemre Mengu", github: "cemremengu" },
+  { name: "Nathan Woltman", github: "nwoltman" },
+  { name: "Trivikram Kamat", github: "trivikr" },
 ];

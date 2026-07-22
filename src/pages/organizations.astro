@@ -1,7 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Icon from '../components/Icon.astro';
-import { SPONSORS, LEADS, COLLABORATORS, SITE } from '../data/site';
+import { SPONSORS, LEADS, COLLABORATORS, PAST_COLLABORATORS, SITE } from '../data/site';
 
 const orgs = SPONSORS.filter((s) => s.tier === 'org');
 const sponsors = SPONSORS.filter((s) => s.tier === 'sponsor');
@@ -71,6 +71,17 @@ const sponsors = SPONSORS.filter((s) => s.tier === 'sponsor');
     <h3 class="mt-3 font-display text-xl font-semibold">Collaborators</h3>
     <div class="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
       {COLLABORATORS.map((p) => (
+        <a href={`https://github.com/${p.github}`} target="_blank" rel="noopener noreferrer" class="group flex items-center gap-3 rounded-lg border border-border bg-surface/40 p-3 transition-colors hover:border-border-strong">
+          <img src={`https://avatars.githubusercontent.com/${p.github}?s=80`} alt={p.name} width="40" height="40" loading="lazy" class="size-10 rounded-full grayscale transition-all group-hover:grayscale-0" />
+          <span class="min-w-0 truncate text-sm text-fg-soft group-hover:text-fg">{p.name}</span>
+        </a>
+      ))}
+    </div>
+
+    <p class="eyebrow mt-14">// past collaborators</p>
+    <h3 class="mt-3 font-display text-xl font-semibold">Past collaborators</h3>
+    <div class="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
+      {PAST_COLLABORATORS.map((p) => (
         <a href={`https://github.com/${p.github}`} target="_blank" rel="noopener noreferrer" class="group flex items-center gap-3 rounded-lg border border-border bg-surface/40 p-3 transition-colors hover:border-border-strong">
           <img src={`https://avatars.githubusercontent.com/${p.github}?s=80`} alt={p.name} width="40" height="40" loading="lazy" class="size-10 rounded-full grayscale transition-all group-hover:grayscale-0" />
           <span class="min-w-0 truncate text-sm text-fg-soft group-hover:text-fg">{p.name}</span>
