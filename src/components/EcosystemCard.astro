@@ -4,17 +4,17 @@ import { marked } from "marked";
 import Icon from "./Icon.astro";
 
 interface Props {
-  plugin: {
-    name: string;
-    url: string;
-    description: string;
-    official?: boolean;
-  };
+	plugin: {
+		name: string;
+		url: string;
+		description: string;
+		official?: boolean;
+	};
 }
 
 const { plugin } = Astro.props;
 const descriptionHtml = DOMPurify.sanitize(
-  await marked.parseInline(plugin.description),
+	await marked.parseInline(plugin.description),
 );
 ---
 

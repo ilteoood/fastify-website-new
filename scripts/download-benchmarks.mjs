@@ -17,133 +17,136 @@
  */
 import { writeFile } from "node:fs/promises";
 import path from "node:path";
-import frameworks from "./frameworks.json" with { type: "json" };
 import pino from "pino";
+import frameworks from "./frameworks.json" with { type: "json" };
 
 const ROOT = path.resolve(import.meta.dirname, "..");
 const OUTPUT = path.join(ROOT, "src/data/benchmarks.json");
 
 const URL_BENCHMARK =
-  "https://raw.githubusercontent.com/fastify/benchmarks/main/benchmark-results.json";
+	"https://raw.githubusercontent.com/fastify/benchmarks/main/benchmark-results.json";
 const GITHUB_BASE_URL = "https://api.github.com/repos/fastify/benchmarks";
 const FRAMEWORK_TAGS = frameworks.map(({ tag }) => tag);
 const TIMEOUT_MS = 10_000;
 
 const log = pino({
-  level: process.env.LOG_LEVEL || "debug",
-  transport: {
-    target: "pino-pretty",
-    options: { colorize: true },
-  },
+	level: process.env.LOG_LEVEL || "debug",
+	transport: {
+		target: "pino-pretty",
+		options: { colorize: true },
+	},
 });
 
 main().catch((err) => {
-  log.error(err);
-  process.exit(1);
+	log.error(err);
+	process.exit(1);
 });
 
 async function main() {
-  const data = await downloadBenchmarks(URL_BENCHMARK);
-  await writeFile(OUTPUT, JSON.stringify(data, null, 2) + "\n");
-  log.info(
-    `Wrote ${data.frameworks.length} frameworks (reference ${data.reference}) to ${path.relative(ROOT, OUTPUT)}`,
-  );
+	const data = await downloadBenchmarks(URL_BENCHMARK);
+	await writeFile(OUTPUT, `${JSON.stringify(data, null, 2)}\n`);
+	log.info(
+		`Wrote ${data.frameworks.length} frameworks (reference ${data.reference}) to ${path.relative(ROOT, OUTPUT)}`,
+	);
 }
 
 async function downloadBenchmarks(githubUrl) {
-  const data = await getJSON(githubUrl);
-  if (isValidBenchmark(data)) {
-    const date = await getBenchmarkDate();
-    return buildBenchmarksJSON(data, date);
-  }
+	const data = await getJSON(githubUrl);
+	if (isValidBenchmark(data)) {
+		const date = await getBenchmarkDate();
+		return buildBenchmarksJSON(data, date);
+	}
 
-  log.warn("Fetched file contains `N/A` data. Searching for previous revision");
+	log.warn("Fetched file contains `N/A` data. Searching for previous revision");
 
-  const commits = await getCommits();
-  for (let i = 0; i < commits.length; i++) {
-    log.debug(`Checking commit ${commits[i]}`);
-    const treeUrl = await getTree(commits[i]);
-    const blobUrl = await getUrlFromTree(treeUrl);
-    const data = await getBlob(blobUrl);
-    if (isValidBenchmark(data)) {
-      const date = await getBenchmarkDate(i);
-      return buildBenchmarksJSON(data, date);
-    }
-  }
+	const commits = await getCommits();
+	for (let i = 0; i < commits.length; i++) {
+		log.debug(`Checking commit ${commits[i]}`);
+		const treeUrl = await getTree(commits[i]);
+		const blobUrl = await getUrlFromTree(treeUrl);
+		const data = await getBlob(blobUrl);
+		if (isValidBenchmark(data)) {
+			const date = await getBenchmarkDate(i);
+			return buildBenchmarksJSON(data, date);
+		}
+	}
 
-  throw new Error("Unable to find a valid benchmark result");
+	throw new Error("Unable to find a valid benchmark result");
 }
 
 async function getBenchmarkDate(offset = 0) {
-  const commits = await getJSON(
-    `${GITHUB_BASE_URL}/commits?path=benchmark-results.json&per_page=10`,
-  );
-  return commits[offset]?.commit?.committer?.date ?? "Unknown";
+	const commits = await getJSON(
+		`${GITHUB_BASE_URL}/commits?path=benchmark-results.json&per_page=10`,
+	);
+	return commits[offset]?.commit?.committer?.date ?? "Unknown";
 }
 
 async function getCommits() {
-  const commits = await getJSON(
-    `${GITHUB_BASE_URL}/commits?path=benchmark-results.json&per_page=10`,
-  );
-  return commits.map((commit) => commit.sha);
+	const commits = await getJSON(
+		`${GITHUB_BASE_URL}/commits?path=benchmark-results.json&per_page=10`,
+	);
+	return commits.map((commit) => commit.sha);
 }
 
 async function getTree(commitSha) {
-  const commit = await getJSON(`${GITHUB_BASE_URL}/git/commits/${commitSha}`);
-  return commit.tree.url;
+	const commit = await getJSON(`${GITHUB_BASE_URL}/git/commits/${commitSha}`);
+	return commit.tree.url;
 }
 
 async function getUrlFromTree(treeUrl) {
-  const tree = await getJSON(treeUrl);
-  return tree.tree.find((item) => item.path === "benchmark-results.json").url;
+	const tree = await getJSON(treeUrl);
+	return tree.tree.find((item) => item.path === "benchmark-results.json").url;
 }
 
 async function getBlob(blobUrl) {
-  const blob = await getJSON(blobUrl);
-  return JSON.parse(Buffer.from(blob.content, "base64").toString("utf8"));
+	const blob = await getJSON(blobUrl);
+	return JSON.parse(Buffer.from(blob.content, "base64").toString("utf8"));
 }
 
 function buildBenchmarksJSON(data, date = "Unknown") {
-  const numericRequests = data
-    .filter((item) => FRAMEWORK_TAGS.includes(item.name))
-    .filter(({ requests }) => !Number.isNaN(Number(requests)))
-    .map(({ requests }) => parseInt(requests, 10));
+	const numericRequests = data
+		.filter((item) => FRAMEWORK_TAGS.includes(item.name))
+		.filter(({ requests }) => !Number.isNaN(Number(requests)))
+		.map(({ requests }) => parseInt(requests, 10));
 
-  const reference = numericRequests.length
-    ? numericRequests.reduce((max, req) => (req > max ? req : max), 0)
-    : 0;
+	const reference = numericRequests.length
+		? numericRequests.reduce((max, req) => (req > max ? req : max), 0)
+		: 0;
 
-  return {
-    date,
-    reference,
-    frameworks: frameworks
-      .map((framework) => {
-        const item = data.find(({ name }) => name === framework.tag);
-        const requests = Number.isNaN(Number(item?.requests)) ? 0 : parseInt(item.requests, 10);
-        return { ...framework, requests };
-      })
-      .filter((f) => f.requests > 0)
-      .sort((a, b) => b.requests - a.requests),
-  };
+	return {
+		date,
+		reference,
+		frameworks: frameworks
+			.map((framework) => {
+				const item = data.find(({ name }) => name === framework.tag);
+				const requests = Number.isNaN(Number(item?.requests))
+					? 0
+					: parseInt(item.requests, 10);
+				return { ...framework, requests };
+			})
+			.filter((f) => f.requests > 0)
+			.sort((a, b) => b.requests - a.requests),
+	};
 }
 
 function isValidBenchmark(data) {
-  return data
-    .filter((item) => FRAMEWORK_TAGS.includes(item.name))
-    .some((item) => !Number.isNaN(Number(item.requests)));
+	return data
+		.filter((item) => FRAMEWORK_TAGS.includes(item.name))
+		.some((item) => !Number.isNaN(Number(item.requests)));
 }
 
 async function getJSON(url) {
-  const headers = {
-    "User-Agent": "fastify-website-script",
-    Accept: "application/vnd.github+json",
-  };
-  if (process.env.GH_TOKEN) headers.Authorization = `Bearer ${process.env.GH_TOKEN}`;
+	const headers = {
+		"User-Agent": "fastify-website-script",
+		Accept: "application/vnd.github+json",
+	};
+	if (process.env.GH_TOKEN)
+		headers.Authorization = `Bearer ${process.env.GH_TOKEN}`;
 
-  const res = await fetch(url, {
-    headers,
-    signal: AbortSignal.timeout(TIMEOUT_MS),
-  });
-  if (!res.ok) throw new Error(`GET ${url} -> ${res.status}`);
-  return res.json();
+	const res = await fetch(url, {
+		headers,
+		signal: AbortSignal.timeout(TIMEOUT_MS),
+	});
+	if (!res.ok) throw new Error(`GET ${url} -> ${res.status}`);
+	return res.json();
 }

@@ -1,55 +1,55 @@
 ---
 import { getCollection } from "astro:content";
-import Icon from "./Icon.astro";
 import versionsData from "../data/versions.json";
 import { withBase } from "../lib/href";
+import Icon from "./Icon.astro";
 
 interface Props {
-  current: string;
-  version: string;
-  prose?: boolean;
+	current: string;
+	version: string;
+	prose?: boolean;
 }
 const { current, version, prose = true } = Astro.props;
 
 const SECTION_ORDER: Record<string, number> = {
-  Overview: 0,
-  Guides: 1,
-  Reference: 2,
+	Overview: 0,
+	Guides: 1,
+	Reference: 2,
 };
 
 const routeFor = (id: string) => {
-  const slug = id.replace(/\/(index|Index)$/, "");
-  return withBase(`/docs/${slug}/`);
+	const slug = id.replace(/\/(index|Index)$/, "");
+	return withBase(`/docs/${slug}/`);
 };
 
 const all = await getCollection("docs");
 const versionDocs = all
-  .filter((d) => d.id.split("/")[0] === version)
-  .sort((a, b) => {
-    const sa = SECTION_ORDER[a.data.section] ?? 9;
-    const sb = SECTION_ORDER[b.data.section] ?? 9;
-    if (sa !== sb) return sa - sb;
-    if (a.data.order !== b.data.order) return a.data.order - b.data.order;
-    return a.data.title.localeCompare(b.data.title);
-  });
+	.filter((d) => d.id.split("/")[0] === version)
+	.sort((a, b) => {
+		const sa = SECTION_ORDER[a.data.section] ?? 9;
+		const sb = SECTION_ORDER[b.data.section] ?? 9;
+		if (sa !== sb) return sa - sb;
+		if (a.data.order !== b.data.order) return a.data.order - b.data.order;
+		return a.data.title.localeCompare(b.data.title);
+	});
 
 const sectionNames = [...new Set(versionDocs.map((d) => d.data.section))].sort(
-  (a, b) => (SECTION_ORDER[a] ?? 9) - (SECTION_ORDER[b] ?? 9),
+	(a, b) => (SECTION_ORDER[a] ?? 9) - (SECTION_ORDER[b] ?? 9),
 );
 const sections = sectionNames.map((name) => ({
-  name,
-  items: versionDocs.filter((d) => d.data.section === name),
+	name,
+	items: versionDocs.filter((d) => d.data.section === name),
 }));
 
 const idx = versionDocs.findIndex((d) => d.id === current);
 const prev = idx > 0 ? versionDocs[idx - 1] : null;
 const next =
-  idx >= 0 && idx < versionDocs.length - 1 ? versionDocs[idx + 1] : null;
+	idx >= 0 && idx < versionDocs.length - 1 ? versionDocs[idx + 1] : null;
 
 const breadcrumb = current
-  .split("/")
-  .slice(1)
-  .filter((s) => !/^index$/i.test(s));
+	.split("/")
+	.slice(1)
+	.filter((s) => !/^index$/i.test(s));
 ---
 
 <div class="mx-auto max-w-7xl px-4 sm:px-6">
