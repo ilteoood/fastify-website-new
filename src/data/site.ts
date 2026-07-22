@@ -73,13 +73,25 @@ export type Bench = { name: string; reqs: number; self?: boolean };
 
 // Requests/sec from the official fastify/benchmarks suite, refreshed at build
 // time by `scripts/download-benchmarks.mjs` (see `prebuild` / `predev`).
-export const BENCHMARK_DATE = benchmarksData.date;
-
 export const BENCHMARKS: Bench[] = benchmarksData.frameworks.map(({ name, requests }) => ({
   name,
   reqs: requests,
   self: name === "Fastify",
 }));
+
+// Derived metrics shared by every benchmark surface (gauge, bars, summary
+// tiles). Computed once at module load so callers stay in sync if the data
+// ever changes.
+export const BENCHMARK_STATS = {
+  date: benchmarksData.date,
+  self: BENCHMARKS.find((b) => b.self) ?? BENCHMARKS[0],
+  max: Math.max(...BENCHMARKS.map((b) => b.reqs)),
+  peers: BENCHMARKS.filter((b) => !b.self),
+  express: BENCHMARKS.find((b) => b.name === "Express") ?? null,
+  get multiplier(): string | null {
+    return this.express ? (this.self.reqs / this.express.reqs).toFixed(1) : null;
+  },
+};
 
 export type Sponsor = { name: string; url: string; tier: "collaborator" | "sponsor" };
 
