@@ -10,10 +10,9 @@ import VersionSelect from "./VersionSelect.astro";
 interface Props {
 	current: string;
 	version: string;
-	prose?: boolean;
 	headings?: MarkdownHeading[];
 }
-const { current, version, prose = true, headings = [] } = Astro.props;
+const { current, version, headings = [] } = Astro.props;
 
 // Table of contents: keep the top two heading levels (h2/h3) for a compact,
 // readable outline of the current page.
@@ -186,7 +185,7 @@ const breadcrumb = current
       </nav>
 
       <article
-        class:list={[prose && "prose-fastify"]}
+        class="prose-fastify"
         data-pagefind-body
         data-pagefind-filter="version[data-version]"
         data-version={version}
