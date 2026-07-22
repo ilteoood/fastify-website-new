@@ -12,12 +12,10 @@ import { withBase } from "../lib/href";
 interface Props {
 	title?: string;
 	description?: string;
-	hideChrome?: boolean;
 }
 const {
 	title = `${SITE.name} — ${SITE.tagline}`,
 	description = SITE.description,
-	hideChrome = false,
 } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site ?? SITE.url).href;
 ---
@@ -47,11 +45,11 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? SITE.url).href;
     <a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-100 focus:rounded-md focus:bg-amber focus:px-4 focus:py-2 focus:text-[#0a0b0d]">
       Skip to content
     </a>
-    {!hideChrome && <Nav />}
+    <Nav />
     <main id="main">
       <slot />
     </main>
-    {!hideChrome && <Footer />}
+    <Footer />
     <Search />
 
     <script>
