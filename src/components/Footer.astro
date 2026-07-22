@@ -1,70 +1,111 @@
 ---
-import Logo from './Logo.astro';
-import Icon from './Icon.astro';
-import { withBase } from '../lib/href';
+import Logo from "./Logo.astro";
+import Icon from "./Icon.astro";
+import { withBase } from "../lib/href";
 
 const columns = [
   {
-    title: 'Docs',
+    title: "Docs",
     links: [
-      { label: 'Getting started', href: '/docs/latest/Guides/Getting-Started/' },
-      { label: 'Reference', href: '/docs/latest/Reference/' },
-      { label: 'Ecosystem', href: '/ecosystem/' },
-      { label: 'Benchmarks', href: '/benchmarks/' },
+      {
+        label: "Getting started",
+        href: "/docs/latest/Guides/Getting-Started/",
+      },
+      { label: "Reference", href: "/docs/latest/Reference/" },
+      { label: "Ecosystem", href: "/ecosystem/" },
+      { label: "Benchmarks", href: "/benchmarks/" },
     ],
   },
   {
-    title: 'Community',
+    title: "Community",
     links: [
-      { label: 'GitHub', href: 'https://github.com/fastify/fastify' },
-      { label: 'Discord', href: 'https://discord.gg/fastify' },
-      { label: 'Stack Overflow', href: 'https://stackoverflow.com/questions/tagged/fastify' },
-      { label: 'X / Twitter', href: 'https://x.com/fastifyjs' },
+      { label: "GitHub", href: "https://github.com/fastify/fastify" },
+      { label: "Discord", href: "https://discord.gg/fastify" },
+      {
+        label: "Stack Overflow",
+        href: "https://stackoverflow.com/questions/tagged/fastify",
+      },
+      { label: "X / Twitter", href: "https://x.com/fastifyjs" },
     ],
   },
   {
-    title: 'More',
+    title: "More",
     links: [
-      { label: 'Blog', href: '/blog/' },
-      { label: 'Organizations', href: '/organizations/' },
-      { label: 'Contributing', href: 'https://github.com/fastify/fastify/blob/main/CONTRIBUTING.md' },
-      { label: 'Website repo', href: 'https://github.com/fastify/website' },
+      { label: "Blog", href: "/blog/" },
+      { label: "Organizations", href: "/organizations/" },
+      {
+        label: "Contributing",
+        href: "https://github.com/fastify/fastify/blob/main/CONTRIBUTING.md",
+      },
+      { label: "Website repo", href: "https://github.com/fastify/website" },
     ],
   },
 ];
 ---
+
 <footer class="relative mt-24 border-t border-border bg-surface/40">
   <div class="mx-auto max-w-7xl px-4 py-14 sm:px-6">
     <div class="grid gap-10 md:grid-cols-[1.4fr_1fr_1fr_1fr]">
       <div>
         <Logo />
         <p class="mt-4 max-w-xs text-sm leading-relaxed text-muted">
-          A fast and low overhead web framework for Node.js. An
-          <a href="https://openjsf.org/" class="text-fg-soft underline decoration-border-strong underline-offset-2 hover:text-amber-ink">OpenJS Foundation</a>
-          At Large project.
+          A fast and low overhead web framework for Node.js. An{" "}
+          <a
+            href="https://openjsf.org/"
+            class="text-fg-soft underline decoration-border-strong underline-offset-2 hover:text-amber-ink"
+          >
+            OpenJS Foundation
+          </a>
+          {" "}At Large project.
         </p>
         <div class="mt-5 flex gap-2">
-          <a href="https://github.com/fastify/fastify" class="rounded-md border border-border p-2 text-muted hover:text-fg" aria-label="GitHub" target="_blank" rel="noopener noreferrer"><Icon name="github" size={18} /></a>
-          <a href="https://discord.gg/fastify" class="rounded-md border border-border p-2 text-muted hover:text-fg" aria-label="Discord" target="_blank" rel="noopener noreferrer"><Icon name="discord" size={18} /></a>
+          <a
+            href="https://github.com/fastify/fastify"
+            class="rounded-md border border-border p-2 text-muted hover:text-fg"
+            aria-label="GitHub"
+            target="_blank"
+            rel="noopener noreferrer"><Icon name="github" size={18} /></a
+          >
+          <a
+            href="https://discord.gg/fastify"
+            class="rounded-md border border-border p-2 text-muted hover:text-fg"
+            aria-label="Discord"
+            target="_blank"
+            rel="noopener noreferrer"><Icon name="discord" size={18} /></a
+          >
         </div>
       </div>
 
-      {columns.map((col) => (
-        <div>
-          <h3 class="font-mono text-xs uppercase tracking-[0.18em] text-muted">{col.title}</h3>
-          <ul class="mt-4 space-y-2.5">
-            {col.links.map((link) => (
-              <li>
-                <a href={withBase(link.href)} class="text-sm text-fg-soft transition-colors hover:text-amber-ink">{link.label}</a>
-              </li>
-            ))}
-          </ul>
-        </div>
-      ))}
+      {
+        columns.map((col) => (
+          <div>
+            <h3 class="font-mono text-xs uppercase tracking-[0.18em] text-muted">
+              {col.title}
+            </h3>
+            <ul class="mt-4 space-y-2.5">
+              {col.links.map((link) => (
+                <li>
+                  <a
+                    href={withBase(link.href)}
+                    class="text-sm text-fg-soft transition-colors hover:text-amber-ink"
+                  >
+                    {link.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))
+      }
     </div>
 
-    <div class="mt-12 flex flex-col gap-4 border-t border-border pt-6 text-xs text-muted sm:flex-row sm:items-center sm:justify-between">
-      <p>Copyright OpenJS Foundation and Fastify contributors. All rights reserved.</p>
+    <div
+      class="mt-12 flex flex-col gap-4 border-t border-border pt-6 text-xs text-muted sm:flex-row sm:items-center sm:justify-between"
+    >
+      <p>
+        Copyright OpenJS Foundation and Fastify contributors. All rights
+        reserved.
+      </p>
       <p class="font-mono">Licensed MIT · Built with Astro</p>
     </div>
   </div>
