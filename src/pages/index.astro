@@ -1,6 +1,7 @@
 ---
 import BenchBars from "../components/BenchBars.astro";
 import CodeTabs from "../components/CodeTabs.astro";
+import EcosystemCard from "../components/EcosystemCard.astro";
 import Icon from "../components/Icon.astro";
 import InstallCommand from "../components/InstallCommand.astro";
 import VelocityMeter from "../components/VelocityMeter.astro";
@@ -361,31 +362,7 @@ const featuredPlugins = PLUGINS.slice(0, 6);
       </a>
     </div>
     <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-      {
-        featuredPlugins.map((p) => (
-          <a
-            href={p.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            class="card group flex items-start gap-3 p-4 transition-colors hover:border-border-strong"
-          >
-            <span class="mt-0.5 grid size-8 shrink-0 place-items-center rounded-md border border-border bg-surface-2 font-mono text-xs text-amber-ink">
-              fp
-            </span>
-            <div class="min-w-0">
-              <div class="flex items-center gap-1.5 font-mono text-sm font-medium text-fg">
-                {p.name}
-                <Icon
-                  name="external"
-                  size={12}
-                  class="text-muted opacity-0 transition-opacity group-hover:opacity-100"
-                />
-              </div>
-              <p class="mt-1 truncate text-xs text-muted">{p.description}</p>
-            </div>
-          </a>
-        ))
-      }
+      {featuredPlugins.map((plugin) => <EcosystemCard plugin={plugin} />)}
     </div>
   </section>
 
