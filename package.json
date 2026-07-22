@@ -4,7 +4,6 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "fetch:docs": "node scripts/fetch-docs.mjs",
     "predev": "node scripts/fetch-docs.mjs && node scripts/build-plugin-list.mjs && node scripts/download-benchmarks.mjs",
     "dev": "astro dev",
     "start": "astro dev",

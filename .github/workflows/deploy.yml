@@ -40,13 +40,6 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      # The documentation is fetched from the fastify/fastify repository at build
-      # time (see scripts/fetch-docs.mjs). This needs `git` and network access,
-      # both available on the runner — no GitHub authentication required.
-      - name: Fetch Fastify documentation (all versions)
-        run: pnpm run fetch:docs
-
-      # Runs `astro build` and generates the Pagefind search index.
       - name: Build site
         run: pnpm run build
 
