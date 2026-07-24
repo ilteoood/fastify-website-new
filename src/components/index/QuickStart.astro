@@ -1,0 +1,125 @@
+---
+import CodeTabs from "~/components/CodeTabs.astro";
+import Icon from "~/components/Icon.astro";
+import InstallCommand from "~/components/InstallCommand.astro";
+import { withBase } from "~/lib/href";
+
+const esmCode = `// Import the framework and instantiate it
+import Fastify from 'fastify'
+const fastify = Fastify({ logger: true })
+
+// Declare a route
+fastify.get('/', async (request, reply) => {
+  return { hello: 'world' }
+})
+
+// Run the server!
+try {
+  await fastify.listen({ port: 3000 })
+} catch (err) {
+  fastify.log.error(err)
+  process.exit(1)
+}`;
+
+const cjsCode = `// Import the framework and instantiate it
+const fastify = require('fastify')({ logger: true })
+
+// Declare a route
+fastify.get('/', (request, reply) => {
+  reply.send({ hello: 'world' })
+})
+
+// Run the server!
+fastify.listen({ port: 3000 }, (err) => {
+  if (err) {
+    fastify.log.error(err)
+    process.exit(1)
+  }
+})`;
+
+const schemaCode = `fastify.route({
+  method: 'GET',
+  url: '/',
+  schema: {
+    // validate the querystring
+    querystring: {
+      type: 'object',
+      properties: { name: { type: 'string' } },
+      required: ['name'],
+    },
+    // serialize the response — fast by design
+    response: {
+      200: {
+        type: 'object',
+        properties: { hello: { type: 'string' } },
+      },
+    },
+  },
+  preHandler: async (request, reply) => {
+    // e.g. check authentication
+  },
+  handler: async (request, reply) => {
+    return { hello: 'world' }
+  },
+})`;
+---
+
+<section class="mx-auto max-w-7xl px-4 py-20 sm:px-6">
+  <div class="grid gap-10 lg:grid-cols-2 lg:items-start">
+    <div class="lg:sticky lg:top-24">
+      <p class="eyebrow">// quick start</p>
+      <h2
+        class="mt-4 font-display text-3xl font-semibold tracking-tight sm:text-4xl"
+      >
+        A server in eight lines
+      </h2>
+      <p class="mt-4 text-lg leading-relaxed text-fg-soft">
+        Install Fastify, create <code
+          class="rounded bg-surface-2 px-1.5 py-0.5 font-mono text-sm text-amber-ink"
+          >server.js</code
+        >, and launch with <code
+          class="rounded bg-surface-2 px-1.5 py-0.5 font-mono text-sm text-amber-ink"
+          >node server</code
+        >. Prefer scaffolding? Reach for <a
+          href="https://github.com/fastify/fastify-cli"
+          class="text-amber-ink underline decoration-border-strong underline-offset-2"
+          >fastify-cli</a
+        >.
+      </p>
+      <div class="mt-6 space-y-3">
+        <InstallCommand command="npm install fastify" />
+        <div class="text-sm text-muted">or scaffold a project:</div>
+        <InstallCommand command="npm init fastify" />
+      </div>
+      <a
+        href={withBase("/docs/latest")}
+        class="mt-8 inline-flex items-center gap-2 text-sm font-medium text-amber-ink hover:underline"
+      >
+        Explore the full documentation <Icon name="arrow" size={16} />
+      </a>
+    </div>
+
+    <div class="space-y-6">
+      <CodeTabs
+        id="hello"
+        title="Hello world server"
+        tabs={[
+          { label: "server.mjs", lang: "js", code: esmCode },
+          { label: "server.cjs", lang: "js", code: cjsCode },
+        ]}
+      />
+      <div>
+        <p
+          class="mb-2 font-mono text-xs uppercase tracking-[0.16em] text-muted"
+        >
+          // validation + hooks
+        </p>
+        <CodeTabs
+          id="schema"
+          title="Schema based validation"
+          tabs={[{ label: "routes.js", lang: "js", code: schemaCode }]}
+        />
+      </div>
+    </div>
+  </div>
+</section>
