@@ -3,35 +3,23 @@ import type { Sponsor } from "~/data/site";
 import { withBase } from "~/lib/href";
 
 interface Props {
-  sponsor: Sponsor;
-  /**
-   * `tier` sizes the logo by sponsorship tier (used on the organizations page,
-   * where we "sell pixel size"); `marquee` renders every logo at one size.
-   */
-  variant?: "tier" | "marquee";
-  class?: string;
+	sponsor: Sponsor;
+	/**
+	 * `section` renders the logo at one size suitable for the tier showcase on
+	 * the organizations page; `marquee` shrinks it for the hero ticker.
+	 */
+	variant?: "section" | "marquee";
+	class?: string;
 }
 
-const { sponsor, variant = "tier", class: className } = Astro.props;
+const { sponsor, variant = "section", class: className } = Astro.props;
 
-// Higher tiers earn a bigger footprint. Sizes are bounding boxes so logos of any
-// aspect ratio stay balanced via object-contain.
-const TILE_PADDING: Record<Sponsor["tier"], string> = {
-  tier_4: "px-8 py-7",
-  tier_3: "px-6 py-5",
-  collaborator: "px-6 py-5",
-};
-
-const LOGO_SIZE: Record<Sponsor["tier"], string> = {
-  tier_4: "h-14 max-w-[240px]",
-  tier_3: "h-10 max-w-[190px]",
-  collaborator: "h-10 max-w-[190px]",
-};
-
+// Same footprint on the tier page so each sponsor reads as an equal
+// contribution; size differentiation is done by section treatment instead.
 const padding =
-  variant === "marquee" ? "px-5 py-3" : TILE_PADDING[sponsor.tier];
+	variant === "marquee" ? "px-5 py-3" : "px-6 py-5";
 const logoSize =
-  variant === "marquee" ? "h-7 max-w-[150px]" : LOGO_SIZE[sponsor.tier];
+	variant === "marquee" ? "h-7 max-w-[150px]" : "h-12 max-w-[210px]";
 ---
 
 <a
