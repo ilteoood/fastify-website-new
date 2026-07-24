@@ -8,11 +8,10 @@ import BaseLayout from "~/layouts/BaseLayout.astro";
 
 const collaborator = SPONSORS.filter((s) => s.tier === "collaborator");
 
-// Highest tiers first so the "pixel size we sell" reads big-to-small.
-const tierRank = { tier_4: 0, tier_3: 1, collaborator: 2 } as const;
-const sponsors = SPONSORS.filter((s) => s.tier !== "collaborator").sort(
-	(a, b) => tierRank[a.tier] - tierRank[b.tier],
-);
+// Tier 4 leads the page, tier 3 follows — each in its own section so the
+// hierarchy is read from the framing, not from logo size.
+const tier4 = SPONSORS.filter((s) => s.tier === "tier_4");
+const tier3 = SPONSORS.filter((s) => s.tier === "tier_3");
 ---
 
 <BaseLayout
@@ -34,7 +33,81 @@ const sponsors = SPONSORS.filter((s) => s.tier !== "collaborator").sort(
       Companies backed by Fastify collaborators, running it in production.
     </p>
     <div class="mt-8 flex flex-wrap items-center gap-4">
-      {collaborator.map((c) => <OrganizationLogo sponsor={c} />)}
+      {collaborator.map((c) => <OrganizationLogo sponsor={c} variant="section" />)}
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-7xl px-4 py-14 sm:px-6 2xl:max-w-[100rem]">
+    <div class="flex items-end justify-between gap-4">
+      <div>
+        <div class="flex items-center gap-3">
+          <span
+            class="font-mono text-xs uppercase tracking-[0.18em] text-amber-ink"
+            >[tier 04]</span
+          >
+          <p class="eyebrow">// strategic sponsors</p>
+        </div>
+        <h2 class="mt-3 font-display text-2xl font-semibold">
+          Organizations funding Fastify's core work
+        </h2>
+        <p class="mt-3 max-w-xl text-fg-soft">
+          Lead-tier partners directly underwrite maintenance of the framework,
+          the plugin ecosystem, and the security disclosures pipeline.
+        </p>
+      </div>
+      <span
+        class="hidden font-mono text-[0.65rem] uppercase tracking-[0.16em] text-muted sm:block"
+        >{tier4.length} partner{tier4.length === 1 ? "" : "s"}</span
+      >
+    </div>
+
+    <div
+      class="relative mt-8 overflow-hidden rounded-2xl border border-border bg-telemetry p-6 sm:p-10"
+    >
+      <div
+        class="pointer-events-none absolute inset-x-0 top-0 h-40 glow-amber opacity-60"
+      >
+      </div>
+      <div
+        class="relative flex flex-wrap items-center justify-center gap-4 sm:gap-6"
+      >
+        {tier4.map((s) => <OrganizationLogo sponsor={s} variant="section" />)}
+      </div>
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-7xl px-4 py-14 sm:px-6 2xl:max-w-[100rem]">
+    <div class="flex items-end justify-between gap-4">
+      <div>
+        <div class="flex items-center gap-3">
+          <span
+            class="font-mono text-xs uppercase tracking-[0.18em] text-amber-ink"
+            >[tier 03]</span
+          >
+          <p class="eyebrow">// supporting sponsors</p>
+        </div>
+        <h2 class="mt-3 font-display text-2xl font-semibold">
+          Backers who keep the lights on
+        </h2>
+        <p class="mt-3 max-w-xl text-fg-soft">
+          Tier-3 sponsors help cover infrastructure, contributor stipends, and
+          the cost of running the OpenJS Foundation's compliance work.
+        </p>
+      </div>
+      <span
+        class="hidden font-mono text-[0.65rem] uppercase tracking-[0.16em] text-muted sm:block"
+        >{tier3.length} partner{tier3.length === 1 ? "" : "s"}</span
+      >
+    </div>
+
+    <div
+      class="mt-8 rounded-2xl border border-border bg-surface/40 p-6 sm:p-10"
+    >
+      <div
+        class="flex flex-wrap items-center justify-center gap-4 sm:gap-6"
+      >
+        {tier3.map((s) => <OrganizationLogo sponsor={s} variant="section" />)}
+      </div>
     </div>
   </section>
 
@@ -43,13 +116,13 @@ const sponsors = SPONSORS.filter((s) => s.tier !== "collaborator").sort(
       class="card flex flex-col items-start gap-6 p-8 sm:flex-row sm:items-center sm:justify-between"
     >
       <div>
-        <p class="eyebrow">// sponsors</p>
+        <p class="eyebrow">// sponsor fastify</p>
         <h2 class="mt-3 font-display text-2xl font-semibold">
-          Kindly sponsored by
+          Want to support the framework?
         </h2>
         <p class="mt-3 max-w-md text-fg-soft">
-          Financial supporters keep Fastify fast and free. Logo size scales with
-          the sponsorship tier.
+          Financial supporters keep Fastify fast and free. Every tier unlocks
+          visibility on this page and direct line to the maintainers.
         </p>
       </div>
       <div class="flex flex-wrap gap-3">
@@ -64,10 +137,6 @@ const sponsors = SPONSORS.filter((s) => s.tier !== "collaborator").sort(
           Open Collective
         </ButtonLink>
       </div>
-    </div>
-
-    <div class="mt-8 flex flex-wrap items-center justify-center gap-4">
-      {sponsors.map((s) => <OrganizationLogo sponsor={s} />)}
     </div>
 
     <p class="mt-8 text-center font-mono text-xs text-muted">
