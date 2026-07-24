@@ -145,7 +145,7 @@ export const SPONSORS: Sponsor[] = [
 	{
 		name: "SerpApi",
 		url: "https://serpapi.com/?utm_source=fastify",
-		image: "serpapi.png",
+		image: "serpapi.svg",
 		tier: "tier_4",
 	},
 	{
