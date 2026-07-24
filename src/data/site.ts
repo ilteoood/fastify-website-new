@@ -170,7 +170,7 @@ export const SPONSORS: Sponsor[] = [
 	{
 		name: "N-iX",
 		url: "https://www.n-ix.com/",
-		image: "n-ix.jpg",
+		image: "n-ix.svg",
 		tier: "tier_3",
 	},
 ];
