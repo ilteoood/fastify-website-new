@@ -6,11 +6,10 @@ import CodeTabs from "~/components/CodeTabs.astro";
 import EcosystemCard from "~/components/EcosystemCard.astro";
 import Icon from "~/components/Icon.astro";
 import InstallCommand from "~/components/InstallCommand.astro";
-import OpenJSF from "~/components/OpenJSF.astro";
-import PersonAvatar from "~/components/PersonAvatar.astro";
+import Team from "~/components/Team.astro";
 import VelocityMeter from "~/components/VelocityMeter.astro";
 import plugins from "~/data/plugins.json";
-import { FEATURES, LEADS, SITE, SPONSORS } from "~/data/site";
+import { FEATURES, SITE, SPONSORS } from "~/data/site";
 import BaseLayout from "~/layouts/BaseLayout.astro";
 import { withBase } from "~/lib/href";
 
@@ -371,33 +370,7 @@ const featuredPlugins = PLUGINS.slice(0, 6);
   </section>
 
   <!-- ============ TEAM ============ -->
-  <section class="mx-auto max-w-7xl px-4 pb-20 sm:px-6">
-    <div class="card overflow-hidden">
-      <div
-        class="grid gap-10 p-8 sm:p-12 lg:grid-cols-[1fr_1.4fr] lg:items-center"
-      >
-        <div>
-          <p class="eyebrow">// maintainers</p>
-          <h2 class="mt-4 font-display text-3xl font-semibold tracking-tight">
-            Built by the community
-          </h2>
-          <p class="mt-4 text-fg-soft">
-            Fastify is an <OpenJSF /> project maintained by a global team
-            of lead maintainers and collaborators.
-          </p>
-          <a
-            href={withBase("/organizations/#team")}
-            class="mt-6 inline-flex items-center gap-2 text-sm font-medium text-amber-ink hover:underline"
-          >
-            Meet the whole team <Icon name="arrow" size={16} />
-          </a>
-        </div>
-        <div class="flex flex-wrap gap-4">
-          {LEADS.map((p) => <PersonAvatar person={p} variant="compact" />)}
-        </div>
-      </div>
-    </div>
-  </section>
+  <Team />
 
   <!-- ============ CTA ============ -->
   <section class="mx-auto max-w-7xl px-4 pb-24 sm:px-6">
