@@ -242,7 +242,7 @@
 	color: var(--fg-soft);
 	font-size: 1rem;
 	line-height: 1.75;
-	max-width: 46rem;
+	max-width: none;
 }
 .prose-fastify > :first-child {
 	margin-top: 0;

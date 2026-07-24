@@ -60,12 +60,12 @@ const breadcrumb = current
 	.filter((s) => !/^index$/i.test(s));
 ---
 
-<div class="mx-auto max-w-7xl px-4 sm:px-6">
+<div class="mx-auto max-w-7xl px-4 sm:px-6 2xl:max-w-[100rem]">
   <div
     class:list={[
       "lg:grid lg:gap-10",
       hasToc
-        ? "lg:grid-cols-[16rem_1fr] xl:grid-cols-[16rem_minmax(0,1fr)_14rem]"
+        ? "lg:grid-cols-[16rem_1fr] xl:grid-cols-[16rem_minmax(0,1fr)_15rem]"
         : "lg:grid-cols-[16rem_1fr]",
     ]}
   >
@@ -101,7 +101,7 @@ const breadcrumb = current
     </aside>
 
     <!-- Content -->
-    <div class="min-w-0 py-10">
+    <div class="mx-auto min-w-0 w-full py-10 2xl:max-w-4xl">
       <!-- Mobile docs navigation -->
       <div class="mb-8 lg:hidden">
         <div class="flex items-center gap-2">
