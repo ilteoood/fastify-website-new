@@ -40,7 +40,12 @@ const logoSize =
   rel="noopener noreferrer"
   aria-label={sponsor.name}
   class:list={[
-    "group inline-flex items-center justify-center rounded-lg bg-white shadow-sm ring-1 ring-black/5 transition duration-300 ease-out-expo hover:-translate-y-0.5 hover:ring-black/10 dark:bg-[#f6f4ef]",
+    "group inline-flex items-center justify-center rounded-lg ring-1 transition duration-300 ease-out-expo hover:-translate-y-0.5",
+    // Light: colored logo on a white plate (kept as-is).
+    "bg-white shadow-sm ring-black/5 hover:ring-black/10",
+    // Dark: swap the white bubble for a subtle surface chip so logos read as
+    // part of the portal's card system.
+    "dark:bg-surface dark:shadow-none dark:ring-border dark:hover:bg-surface-2 dark:hover:ring-border-strong",
     padding,
     className,
   ]}
@@ -51,9 +56,13 @@ const logoSize =
     loading="lazy"
     decoding="async"
     class:list={[
-      "w-auto object-contain transition-transform duration-300 ease-out-expo group-hover:scale-[1.04]",
+      "w-auto object-contain transition duration-300 ease-out-expo group-hover:scale-[1.04]",
       logoSize,
-      sponsor.invert && "invert",
+      // Photon ships a white logo; invert it so it reads on the light plate.
+      sponsor.invert && "filter-[invert(1)]",
+      // Dark: normalise every logo to a soft monochrome silhouette so no white
+      // plate is needed behind it.
+      "dark:opacity-80 dark:filter-[brightness(0)_invert(1)] dark:group-hover:opacity-100",
     ]}
   />
 </a>
