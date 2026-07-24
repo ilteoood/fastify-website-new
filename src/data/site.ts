@@ -97,35 +97,82 @@ export const BENCHMARK_STATS = {
 	},
 };
 
+// Financial supporters buy visibility: their logo is rendered larger the higher
+// their tier. `collaborator` covers organizations run by Fastify collaborators.
+export type SponsorTier = "collaborator" | "tier_3" | "tier_4";
+
 export type Sponsor = {
 	name: string;
 	url: string;
-	tier: "collaborator" | "sponsor";
+	/** Logo filename served from `public/organizations/`. */
+	image: string;
+	tier: SponsorTier;
+	/** Set when the logo is light-coloured and must be inverted on light tiles. */
+	invert?: boolean;
 };
 
 export const SPONSORS: Sponsor[] = [
-	{ name: "HospitalRun", url: "https://hospitalrun.io/", tier: "collaborator" },
-	{ name: "Nearform", url: "https://nearform.com", tier: "collaborator" },
+	{
+		name: "HospitalRun",
+		url: "https://hospitalrun.io/",
+		image: "hospitalrun.svg",
+		tier: "collaborator",
+	},
+	{
+		name: "Nearform",
+		url: "https://nearform.com",
+		image: "nearform.svg",
+		tier: "collaborator",
+	},
 	{
 		name: "Platformatic",
 		url: "https://platformatic.dev",
+		image: "platformatic.svg",
 		tier: "collaborator",
 	},
-	{ name: "val town", url: "https://www.val.town/", tier: "sponsor" },
+	{
+		name: "val town",
+		url: "https://www.val.town/",
+		image: "val-town.svg",
+		tier: "tier_3",
+	},
 	{
 		name: "Handsontable",
 		url: "https://handsontable.com/docs/react-data-grid/?utm_source=Fastify_homepage&utm_medium=sponsorship&utm_campaign=library_sponsorship_2024",
-		tier: "sponsor",
+		image: "handsontable.svg",
+		tier: "tier_3",
 	},
 	{
 		name: "SerpApi",
 		url: "https://serpapi.com/?utm_source=fastify",
-		tier: "sponsor",
+		image: "serpapi.png",
+		tier: "tier_4",
 	},
-	{ name: "kogiQA", url: "https://kogiqa.com/", tier: "sponsor" },
-	{ name: "Lokalise", url: "https://lokalise.com/", tier: "sponsor" },
-	{ name: "Photon", url: "https://photon.codes/", tier: "sponsor" },
-	{ name: "N-iX", url: "https://www.n-ix.com/", tier: "sponsor" },
+	{
+		name: "kogiQA",
+		url: "https://kogiqa.com/",
+		image: "kogiQALogo.svg",
+		tier: "tier_3",
+	},
+	{
+		name: "Lokalise",
+		url: "https://lokalise.com/",
+		image: "lokalise.svg",
+		tier: "tier_3",
+	},
+	{
+		name: "Photon",
+		url: "https://photon.codes/",
+		image: "photon.svg",
+		tier: "tier_3",
+		invert: true,
+	},
+	{
+		name: "N-iX",
+		url: "https://www.n-ix.com/",
+		image: "n-ix.jpg",
+		tier: "tier_3",
+	},
 ];
 
 export type Person = { name: string; github: string; role?: string };

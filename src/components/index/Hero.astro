@@ -3,6 +3,7 @@ import FastifyLogo from "~/assets/fastify-full.svg";
 import ButtonLink from "~/components/ButtonLink.astro";
 import Icon from "~/components/Icon.astro";
 import InstallCommand from "~/components/InstallCommand.astro";
+import OrganizationLogo from "~/components/OrganizationLogo.astro";
 import VelocityMeter from "~/components/VelocityMeter.astro";
 import plugins from "~/data/plugins.json";
 import { SITE, SPONSORS } from "~/data/site";
@@ -111,17 +112,12 @@ const marquee = [...SPONSORS, ...SPONSORS];
       <div
         class="relative flex-1 overflow-hidden mask-[linear-gradient(90deg,transparent,#000_8%,#000_92%,transparent)]"
       >
-        <div class="flex w-max animate-ticker gap-10">
+        <div
+          class="flex w-max animate-ticker items-center gap-4 hover:[animation-play-state:paused]"
+        >
           {
             marquee.map((s) => (
-              <a
-                href={s.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                class="shrink-0 font-display text-lg font-medium text-muted transition-colors hover:text-fg"
-              >
-                {s.name}
-              </a>
+              <OrganizationLogo sponsor={s} variant="marquee" class="shrink-0" />
             ))
           }
         </div>
