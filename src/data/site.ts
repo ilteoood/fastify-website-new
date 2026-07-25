@@ -20,6 +20,7 @@ export const NAV = [
 	{ label: "Ecosystem", href: "/ecosystem/" },
 	{ label: "Benchmarks", href: "/benchmarks/" },
 	{ label: "Organizations", href: "/organizations/" },
+	{ label: "Community", href: "/community/" },
 	{ label: "Support", href: "/docs/latest/Reference/LTS/" },
 ];
 
