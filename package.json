@@ -30,6 +30,8 @@
 		"format-si-unit": "^0.0.10",
 		"isomorphic-dompurify": "^3.19.0",
 		"marked": "^18.0.7",
+		"mdast-util-to-string": "^4.0.0",
+		"reading-time": "^1.5.0",
 		"tailwindcss": "^4.3.3"
 	},
 	"devDependencies": {
