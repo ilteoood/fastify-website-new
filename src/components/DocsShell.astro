@@ -61,7 +61,7 @@ const breadcrumb = current
 	.slice(1)
 	.filter((s) => !/^index$/i.test(s));
 
-const editPath = `${current}.md`;
+const editPath = `${current.replace(/^[^/]+(\/|$)/, "") || "index"}.md`;
 const sourceEditUrl = `${SITE.repo}/edit/main/docs/${editPath}`;
 const markdownSlug = current.replace(/\/(index|Index)$/, "");
 const markdownUrl = withBase(`/docs/${markdownSlug}.md`);
