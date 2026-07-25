@@ -250,26 +250,35 @@ const channels = [
         </a>
       </div>
 
-      <div class="mt-10">
+      <div class="mt-12">
         <div class="flex items-center gap-3">
           <span class="font-mono text-xs uppercase tracking-[0.18em] text-amber-ink">[good first issues]</span>
           <p class="eyebrow">// a great place to start</p>
         </div>
         <h3 class="mt-3 font-display text-2xl font-semibold">Open issues across the org</h3>
         <p class="mt-3 max-w-2xl text-fg-soft">
-          Pulled live from GitHub, filtered to issues labelled
-          <span class="font-mono text-amber-ink">good first issue</span> across the
-          <span class="font-mono text-amber-ink">fastify</span> organisation.
+          Pulled live from the fastify ecosystem — issues tagged{" "}
+          <span class="font-mono text-amber-ink">good first issue</span>{" "}
+          across every{" "}
+          <span class="font-mono text-amber-ink">fastify/*</span>{" "}
+          project. Filter by project to find one that fits.
         </p>
 
         <div
           data-good-first-issues
           data-org="fastify"
-          class="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-3"
+          class="mt-8 grid gap-6 lg:grid-cols-[18rem_1fr]"
         >
-          <p data-good-first-issues-empty class="col-span-full py-8 text-center text-muted">
-            Loading issues…
-          </p>
+          <aside class="card self-start p-5">
+            <div data-gfi-sidebar class="flex flex-col gap-1">
+              <p class="py-2 text-sm text-muted">Loading projects…</p>
+            </div>
+          </aside>
+          <div>
+            <ul data-gfi-list class="flex flex-col gap-3"></ul>
+            <p data-gfi-empty class="hidden py-12 text-center text-muted"></p>
+            <p data-gfi-loading class="py-12 text-center text-muted">Loading issues…</p>
+          </div>
         </div>
       </div>
     </div>
@@ -331,66 +340,157 @@ const channels = [
   </section>
 
   <script>
-    type Issue = { title: string; html_url: string; repository_url: string };
+    type Issue = {
+      url: string;
+      title: string;
+      comments: number;
+      state: string;
+      project: { name: string; url: string };
+      labels: string[];
+    };
 
-    const grid = document.querySelector<HTMLElement>('[data-good-first-issues]');
-    if (grid) {
-      const org = grid.dataset.org ?? 'fastify';
+    const root = document.querySelector<HTMLElement>('[data-good-first-issues]');
+    if (root) {
+      const org = root.dataset.org ?? 'fastify';
+      const apiUrl = `https://goodfirstissue.fastify.io/api/find-issues?org=${org}`;
       const cacheKey = `fastify-good-first-issues:${org}`;
-      const cached = sessionStorage.getItem(cacheKey);
 
-      const render = (issues: Issue[]) => {
-        grid.innerHTML = '';
-        if (!issues.length) {
-          const none = document.createElement('p');
-          none.className = 'col-span-full py-8 text-center text-muted';
-          none.textContent = 'No open good first issues right now — check back soon.';
-          grid.appendChild(none);
-          return;
-        }
-        for (const issue of issues) {
-          const repo = issue.repository_url.split('/').slice(-2).join('/');
-          const a = document.createElement('a');
-          a.href = issue.html_url;
-          a.target = '_blank';
-          a.rel = 'noopener noreferrer';
-          a.className =
-            'card group flex h-full flex-col gap-2 p-5 transition-colors hover:border-border-strong';
-          a.innerHTML = `
-            <p class="font-mono text-xs text-muted">${repo}</p>
-            <h4 class="font-display text-base font-semibold leading-snug text-fg">${issue.title}</h4>
-          `;
-          grid.appendChild(a);
-        }
+      const sidebar = root.querySelector<HTMLElement>('[data-gfi-sidebar]');
+      const list = root.querySelector<HTMLElement>('[data-gfi-list]');
+      const empty = root.querySelector<HTMLElement>('[data-gfi-empty]');
+      const loading = root.querySelector<HTMLElement>('[data-gfi-loading]');
+
+      let issues: Issue[] = [];
+      let selected = new Set<string>();
+      let lastError: Error | null = null;
+
+      const escapeHtml = (s: string) =>
+        s.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c] ?? c);
+
+      const projectCounts = () => {
+        const counts = new Map<string, number>();
+        for (const issue of issues) counts.set(issue.project.name, (counts.get(issue.project.name) ?? 0) + 1);
+        return Array.from(counts.entries()).sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
       };
 
+      const renderSidebar = () => {
+        if (!sidebar) return;
+        const allChecked = selected.size === 0;
+        const entries = projectCounts();
+        sidebar.innerHTML = `
+          <p class="eyebrow">// projects</p>
+          <label class="mt-3 flex cursor-pointer items-center gap-3 rounded-md px-2 py-1.5 hover:bg-surface-2">
+            <input type="checkbox" data-gfi-all ${allChecked ? 'checked' : ''} class="size-4 cursor-pointer accent-amber" />
+            <span class="flex-1 font-display text-sm font-semibold">All projects</span>
+            <span class="font-mono text-xs text-muted">${issues.length}</span>
+          </label>
+          <hr class="my-3 border-border" />
+          <div class="flex max-h-80 flex-col gap-0.5 overflow-y-auto pr-1">
+            ${entries
+              .map(
+                ([name, count]) => `
+              <label class="flex cursor-pointer items-center gap-3 rounded-md px-2 py-1.5 hover:bg-surface-2">
+                <input type="checkbox" data-gfi-project="${escapeHtml(name)}" ${allChecked || selected.has(name) ? 'checked' : ''} class="size-4 cursor-pointer accent-amber" />
+                <span class="flex-1 truncate font-mono text-xs text-fg-soft">${escapeHtml(name)}</span>
+                <span class="font-mono text-xs text-muted">${count}</span>
+              </label>
+            `,
+              )
+              .join('')}
+          </div>
+        `;
+        sidebar
+          .querySelector<HTMLInputElement>('[data-gfi-all]')
+          ?.addEventListener('change', (e) => {
+            selected = (e.currentTarget as HTMLInputElement).checked ? new Set() : new Set(entries.map(([n]) => n));
+            renderSidebar();
+            renderList();
+          });
+        sidebar.querySelectorAll<HTMLInputElement>('[data-gfi-project]').forEach((input) => {
+          input.addEventListener('change', (e) => {
+            const target = e.currentTarget as HTMLInputElement;
+            const name = target.dataset.gfiProject ?? '';
+            if (target.checked) selected.add(name);
+            else selected.delete(name);
+            renderSidebar();
+            renderList();
+          });
+        });
+      };
+
+      const renderList = () => {
+        if (!list || !empty || !loading) return;
+        loading.classList.add('hidden');
+        const visible = selected.size === 0 ? issues : issues.filter((i) => selected.has(i.project.name));
+        if (visible.length === 0) {
+          list.innerHTML = '';
+          empty.textContent = selected.size === 0
+            ? 'No open good first issues right now — check back soon.'
+            : 'No issues match the selected projects.';
+          empty.classList.remove('hidden');
+          return;
+        }
+        empty.classList.add('hidden');
+        list.innerHTML = visible
+          .map(
+            (issue) => `
+            <li>
+              <article class="card group relative flex flex-col gap-3 p-5 transition-colors hover:border-border-strong">
+                <div class="flex items-center gap-3">
+                  <a href="${escapeHtml(issue.project.url)}" target="_blank" rel="noopener noreferrer" class="relative z-10 font-mono text-xs text-muted transition-colors hover:text-amber-ink">${escapeHtml(issue.project.name)}</a>
+                  <span class="text-muted">·</span>
+                  <span class="font-mono text-xs text-muted">${issue.comments} comment${issue.comments === 1 ? '' : 's'}</span>
+                </div>
+                <h4 class="font-display text-base font-semibold leading-snug text-fg">
+                  <a href="${escapeHtml(issue.url)}" target="_blank" rel="noopener noreferrer" class="after:absolute after:inset-0 hover:text-amber-ink">${escapeHtml(issue.title)}</a>
+                </h4>
+                ${issue.labels.length
+                  ? `<div class="flex flex-wrap gap-1.5">${issue.labels
+                      .map((label) => `<span class="rounded-full border border-border bg-surface-2 px-2 py-0.5 font-mono text-[0.65rem] uppercase tracking-wider text-muted">${escapeHtml(label)}</span>`)
+                      .join('')}</div>`
+                  : ''}
+              </article>
+            </li>
+          `,
+          )
+          .join('');
+      };
+
+      const renderError = () => {
+        if (!sidebar || !empty || !loading) return;
+        loading.classList.add('hidden');
+        sidebar.innerHTML = `<p class="text-sm text-muted">Unable to load projects.</p>`;
+        empty.innerHTML = 'Unable to load issues right now. <a href="https://github.com/search?q=label%3A%22good%20first%20issue%22+is%3Aopen+is%3Aissue+org%3Afastify&type=issues" target="_blank" rel="noopener noreferrer" class="text-amber-ink underline decoration-border-strong underline-offset-2">Search on GitHub ↗</a>';
+        empty.classList.remove('hidden');
+      };
+
+      const consume = (data: { results?: Issue[] }) => {
+        issues = Array.isArray(data?.results) ? data.results : [];
+        selected = new Set();
+        renderSidebar();
+        renderList();
+      };
+
+      const cached = sessionStorage.getItem(cacheKey);
       if (cached) {
         try {
-          render(JSON.parse(cached));
+          consume(JSON.parse(cached));
         } catch (e) {
+          lastError = e as Error;
           sessionStorage.removeItem(cacheKey);
         }
-      } else {
-        const url = `https://api.github.com/search/issues?q=label:"good%20first%20issue"+is:open+is:issue+org:${org}&sort=created&order=desc&per_page=9`;
-        fetch(url, { headers: { Accept: 'application/vnd.github+json' } })
-          .then((res) => (res.ok ? res.json() : Promise.reject(res.status)))
+      }
+
+      if (issues.length === 0) {
+        fetch(apiUrl)
+          .then((res) => (res.ok ? res.json() : Promise.reject(new Error(`HTTP ${res.status}`))))
           .then((data) => {
-            const issues: Issue[] = Array.isArray(data?.items) ? data.items : [];
-            try { sessionStorage.setItem(cacheKey, JSON.stringify(issues)); } catch (e) {}
-            render(issues);
+            try { sessionStorage.setItem(cacheKey, JSON.stringify(data)); } catch (e) {}
+            consume(data);
           })
-          .catch(() => {
-            const empty = grid.querySelector<HTMLElement>('[data-good-first-issues-empty]');
-            if (!empty) return;
-            empty.textContent = 'Unable to load issues right now. Try GitHub directly.';
-            const link = document.createElement('a');
-            link.href = `https://github.com/search?q=label%3A%22good%20first%20issue%22+is%3Aopen+is%3Aissue+org%3A${org}&type=issues`;
-            link.target = '_blank';
-            link.rel = 'noopener noreferrer';
-            link.className =
-              'ml-2 text-amber-ink underline decoration-border-strong underline-offset-2';
-            link.textContent = 'Open the search on GitHub ↗';
-            empty.appendChild(link);
+          .catch((err) => {
+            lastError = err;
+            renderError();
           });
       }
     }
