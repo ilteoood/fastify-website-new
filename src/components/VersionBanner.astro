@@ -15,8 +15,6 @@ if (!latestEntry) throw new Error("No latest version configured");
 const isLatest = version === latestEntry.name;
 const rest = current.replace(/^[^/]+\//, "").replace(/\/(index|Index)$/, "");
 const latestHref = withBase(`/docs/${latestEntry.name}/${rest}/`);
-const major = parseInt(version.replace(/^v/, "").split(".")[0], 10);
-const isOldMajor = !Number.isNaN(major) && major < 4;
 ---
 
 {
@@ -32,35 +30,18 @@ const isOldMajor = !Number.isNaN(major) && major < 4;
         class="mt-0.5 shrink-0 text-amber-ink"
         aria-hidden="true"
       />
-      <div>
-        <p>
-          You&apos;re reading documentation for{" "}
-          <strong class="font-semibold text-fg">Fastify {version}</strong>. For
-          up-to-date documentation, see the{" "}
-          <a
-            href={latestHref}
-            class="font-semibold text-amber-ink underline decoration-amber/40 underline-offset-2 transition-colors hover:decoration-amber"
-          >
-            latest version
-          </a>{" "}
-          ({latestEntry.label}).
-        </p>
-        {
-          isOldMajor && (
-            <p class="mt-1.5 text-muted">
-              For information about support options for end-of-life versions, see
-              the{" "}
-              <a
-                href={withBase("/docs/latest/Reference/LTS/")}
-                class="text-amber-ink underline decoration-amber/40 underline-offset-2 transition-colors hover:decoration-amber"
-              >
-                Long Term Support
-              </a>{" "}
-              page.
-            </p>
-          )
-        }
-      </div>
+      <p>
+        You&apos;re reading documentation for{" "}
+        <strong class="font-semibold text-fg">Fastify {version}</strong>. For
+        up-to-date documentation, see the{" "}
+        <a
+          href={latestHref}
+          class="font-semibold text-amber-ink underline decoration-amber/40 underline-offset-2 transition-colors hover:decoration-amber"
+        >
+          latest version
+        </a>{" "}
+        ({latestEntry.label}).
+      </p>
     </aside>
   )
 }
