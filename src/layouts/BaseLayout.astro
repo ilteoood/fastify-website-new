@@ -54,8 +54,9 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? SITE.url).href;
 
     <script>
       import { formatSiUnit } from 'format-si-unit';
+      import { getRepoStars } from '~/services/github';
+      import { getMonthlyDownloads } from '~/services/npm';
 
-      // Theme toggle
       const applyTheme = (theme: string) => {
         if (theme === 'light') {
           document.documentElement.setAttribute('data-theme', 'light');
@@ -71,7 +72,6 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? SITE.url).href;
         });
       });
 
-      // Mobile menu
       const menu = document.querySelector('[data-mobile-menu]');
       const openMenu = () => menu?.classList.remove('hidden');
       const closeMenu = () => menu?.classList.add('hidden');
@@ -81,37 +81,21 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? SITE.url).href;
         a.addEventListener('click', closeMenu);
       });
 
-      // Live GitHub star count — fetched client-side when the page loads.
       (async () => {
         const els = document.querySelectorAll('[data-github-stars]');
         if (!els.length) return;
         try {
-          let count = Number(sessionStorage.getItem('fastify-stars')) || 0;
-          if (!count) {
-            const res = await fetch('https://api.github.com/repos/fastify/fastify');
-            if (!res.ok) return;
-            const data = await res.json();
-            count = data.stargazers_count;
-            try { sessionStorage.setItem('fastify-stars', String(count)); } catch (e) {}
-          }
-          if (count) els.forEach((el) => { el.textContent = formatSiUnit(count); });
+          const count = await getRepoStars('fastify', 'fastify');
+          els.forEach((el) => { el.textContent = formatSiUnit(count); });
         } catch (e) {}
       })();
 
-      // Live npm monthly downloads — fetched client-side when the page loads.
       (async () => {
         const els = document.querySelectorAll('[data-npm-downloads]');
         if (!els.length) return;
         try {
-          let count = Number(sessionStorage.getItem('fastify-downloads')) || 0;
-          if (!count) {
-            const res = await fetch('https://api.npmjs.org/downloads/point/last-month/fastify');
-            if (!res.ok) return;
-            const data = await res.json();
-            count = data.downloads;
-            try { sessionStorage.setItem('fastify-downloads', String(count)); } catch (e) {}
-          }
-          if (count) els.forEach((el) => { el.textContent = formatSiUnit(count); });
+          const count = await getMonthlyDownloads('fastify');
+          els.forEach((el) => { el.textContent = formatSiUnit(count); });
         } catch (e) {}
       })();
     </script>
