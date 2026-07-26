@@ -13,8 +13,10 @@ const latestEntry = versionsData.versions.find((v) => v.isLatest);
 if (!latestEntry) throw new Error("No latest version configured");
 
 const isLatest = version === latestEntry.name;
-const rest = afterVersion(current).replace(/\/(index|Index)$/, "");
-const latestHref = withBase(`/docs/${latestEntry.name}/${rest}/`);
+const rest = afterVersion(current).replace(/\/?(index|Index)$/, "");
+const latestHref = withBase(
+	rest ? `/docs/${latestEntry.name}/${rest}/` : `/docs/${latestEntry.name}`,
+);
 ---
 
 {
