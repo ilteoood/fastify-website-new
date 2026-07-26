@@ -4,6 +4,7 @@ import type { MarkdownHeading } from "astro";
 import DocsNav from "~/components/DocsNav.astro";
 import Icon from "~/components/Icon.astro";
 import TableOfContents from "~/components/TableOfContents.astro";
+import VersionBanner from "~/components/VersionBanner.astro";
 import VersionSelect from "~/components/VersionSelect.astro";
 import { SITE } from "~/data/site";
 import { withBase } from "~/lib/href";
@@ -170,6 +171,8 @@ const markdownUrl = withBase(`/docs/${markdownSlug}.md`);
           </details>
         )
       }
+
+      <VersionBanner version={version} current={current} />
 
       <nav
         class="mb-6 flex flex-wrap items-center gap-2 font-mono text-xs text-muted"
