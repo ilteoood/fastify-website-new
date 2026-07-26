@@ -343,19 +343,16 @@ const channels = [
     import type { GoodFirstIssue } from '~/services/gfi';
     import { getGoodFirstIssues } from '~/services/gfi';
 
-    type Issue = GoodFirstIssue;
-
     const root = document.querySelector<HTMLElement>('[data-good-first-issues]');
     if (root) {
       const org = root.dataset.org ?? 'fastify';
-      const cacheKey = `fastify-good-first-issues:${org}`;
 
       const sidebar = root.querySelector<HTMLElement>('[data-gfi-sidebar]');
       const list = root.querySelector<HTMLElement>('[data-gfi-list]');
       const empty = root.querySelector<HTMLElement>('[data-gfi-empty]');
       const loading = root.querySelector<HTMLElement>('[data-gfi-loading]');
 
-      let issues: Issue[] = [];
+      let issues: GoodFirstIssue[] = [];
       const selection = new Map<string, boolean>();
       let lastError: Error | null = null;
 
@@ -468,39 +465,19 @@ const channels = [
         empty.classList.remove('hidden');
       };
 
-      const consume = (results: Issue[]) => {
+      const consume = (results: GoodFirstIssue[]) => {
         issues = results;
         for (const issue of issues) selection.set(issue.project.name, true);
         renderSidebar();
         renderList();
       };
 
-      const cached = sessionStorage.getItem(cacheKey);
-      if (cached) {
-        try {
-          consume(JSON.parse(cached));
-        } catch (e) {
-          lastError = e as Error;
-          sessionStorage.removeItem(cacheKey);
-        }
-      }
-
-      if (issues.length === 0) {
-        getGoodFirstIssues(org)
-          .then((results) => {
-            if (results === null) {
-              lastError = new Error('Failed to load good first issues');
-              renderError();
-              return;
-            }
-            try { sessionStorage.setItem(cacheKey, JSON.stringify(results)); } catch (e) {}
-            consume(results);
-          })
-          .catch((err) => {
-            lastError = err;
-            renderError();
-          });
-      }
+      getGoodFirstIssues(org)
+        .then(consume)
+        .catch((err) => {
+          lastError = err;
+          renderError();
+        });
     }
   </script>
 </BaseLayout>

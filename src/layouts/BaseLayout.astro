@@ -84,27 +84,19 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? SITE.url).href;
       (async () => {
         const els = document.querySelectorAll('[data-github-stars]');
         if (!els.length) return;
-        let count = Number(sessionStorage.getItem('fastify-stars')) || 0;
-        if (!count) {
-          count = (await getRepoStars('fastify', 'fastify')) ?? 0;
-          if (count) {
-            try { sessionStorage.setItem('fastify-stars', String(count)); } catch (e) {}
-          }
-        }
-        if (count) els.forEach((el) => { el.textContent = formatSiUnit(count); });
+        try {
+          const count = await getRepoStars('fastify', 'fastify');
+          els.forEach((el) => { el.textContent = formatSiUnit(count); });
+        } catch (e) {}
       })();
 
       (async () => {
         const els = document.querySelectorAll('[data-npm-downloads]');
         if (!els.length) return;
-        let count = Number(sessionStorage.getItem('fastify-downloads')) || 0;
-        if (!count) {
-          count = (await getMonthlyDownloads('fastify')) ?? 0;
-          if (count) {
-            try { sessionStorage.setItem('fastify-downloads', String(count)); } catch (e) {}
-          }
-        }
-        if (count) els.forEach((el) => { el.textContent = formatSiUnit(count); });
+        try {
+          const count = await getMonthlyDownloads('fastify');
+          els.forEach((el) => { el.textContent = formatSiUnit(count); });
+        } catch (e) {}
       })();
     </script>
   </body>
