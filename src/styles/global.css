@@ -6,6 +6,7 @@
 /* ============================================================
    Fastify — "Telemetry" design system
    Dark-first, speed-instrumentation aesthetic.
+   Palette: cheetah (tawny gold + cream belly + black spots).
    ============================================================ */
 
 @theme {
@@ -35,13 +36,13 @@
 	--fg: #e9ecef;
 	--fg-soft: #c2cad2;
 	--muted: #8b95a1;
-	--amber: #f2a93b;
-	--amber-soft: #ffce7a;
-	--amber-ink: #f2a93b;
-	--teal: #2dd4bf;
+	--amber: #c99a4a;
+	--amber-soft: #e8c078;
+	--amber-ink: #c99a4a;
+	--teal: #e8d9b0;
 	--red: #ff5d5d;
-	--glow-amber: rgba(242, 169, 59, 0.5);
-	--glow-teal: rgba(45, 212, 191, 0.45);
+	--glow-amber: rgba(201, 154, 74, 0.5);
+	--glow-teal: rgba(232, 217, 176, 0.4);
 	color-scheme: dark;
 }
 
@@ -56,13 +57,13 @@
 	--fg: #14181c;
 	--fg-soft: #333c45;
 	--muted: #5c6670;
-	--amber: #f2a93b;
-	--amber-soft: #b26a0a;
-	--amber-ink: #a9640b;
-	--teal: #0f9e8c;
+	--amber: #c99a4a;
+	--amber-soft: #e8c078;
+	--amber-ink: #8c6b2e;
+	--teal: #b8a06e;
 	--red: #d93a3a;
-	--glow-amber: rgba(242, 169, 59, 0.35);
-	--glow-teal: rgba(15, 158, 140, 0.3);
+	--glow-amber: rgba(201, 154, 74, 0.35);
+	--glow-teal: rgba(184, 160, 110, 0.3);
 	color-scheme: light;
 }
 
