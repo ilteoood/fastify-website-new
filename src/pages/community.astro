@@ -340,19 +340,14 @@ const channels = [
   </section>
 
   <script>
-    type Issue = {
-      url: string;
-      title: string;
-      comments: number;
-      state: string;
-      project: { name: string; url: string };
-      labels: string[];
-    };
+    import type { GoodFirstIssue } from '~/services/gfi';
+    import { getGoodFirstIssues } from '~/services/gfi';
+
+    type Issue = GoodFirstIssue;
 
     const root = document.querySelector<HTMLElement>('[data-good-first-issues]');
     if (root) {
       const org = root.dataset.org ?? 'fastify';
-      const apiUrl = `https://goodfirstissue.fastify.io/api/find-issues?org=${org}`;
       const cacheKey = `fastify-good-first-issues:${org}`;
 
       const sidebar = root.querySelector<HTMLElement>('[data-gfi-sidebar]');
@@ -473,8 +468,8 @@ const channels = [
         empty.classList.remove('hidden');
       };
 
-      const consume = (data: { results?: Issue[] }) => {
-        issues = Array.isArray(data?.results) ? data.results : [];
+      const consume = (results: Issue[]) => {
+        issues = results;
         for (const issue of issues) selection.set(issue.project.name, true);
         renderSidebar();
         renderList();
@@ -491,11 +486,15 @@ const channels = [
       }
 
       if (issues.length === 0) {
-        fetch(apiUrl)
-          .then((res) => (res.ok ? res.json() : Promise.reject(new Error(`HTTP ${res.status}`))))
-          .then((data) => {
-            try { sessionStorage.setItem(cacheKey, JSON.stringify(data)); } catch (e) {}
-            consume(data);
+        getGoodFirstIssues(org)
+          .then((results) => {
+            if (results === null) {
+              lastError = new Error('Failed to load good first issues');
+              renderError();
+              return;
+            }
+            try { sessionStorage.setItem(cacheKey, JSON.stringify(results)); } catch (e) {}
+            consume(results);
           })
           .catch((err) => {
             lastError = err;
