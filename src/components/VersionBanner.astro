@@ -1,7 +1,7 @@
 ---
 import Icon from "~/components/Icon.astro";
 import versionsData from "~/data/versions.json";
-import { withBase } from "~/lib/href";
+import { afterVersion, withBase } from "~/lib/href";
 
 interface Props {
 	version: string;
@@ -13,7 +13,7 @@ const latestEntry = versionsData.versions.find((v) => v.isLatest);
 if (!latestEntry) throw new Error("No latest version configured");
 
 const isLatest = version === latestEntry.name;
-const rest = current.replace(/^[^/]+\//, "").replace(/\/(index|Index)$/, "");
+const rest = afterVersion(current).replace(/\/(index|Index)$/, "");
 const latestHref = withBase(`/docs/${latestEntry.name}/${rest}/`);
 ---
 
