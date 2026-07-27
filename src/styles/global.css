@@ -358,6 +358,9 @@
 	padding: 0.6rem 0.9rem;
 	text-align: left;
 }
+.prose-fastify table td a {
+	white-space: nowrap;
+}
 .prose-fastify th {
 	background: var(--surface-2);
 	color: var(--fg);
