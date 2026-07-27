@@ -7,11 +7,12 @@
 export function rehypeWrapTables() {
 	return (tree) => {
 		visit(tree);
+		return tree;
 	};
 }
 
 function visit(node) {
-	if (!node.children) return;
+	if (!node.children) return node;
 
 	for (let i = 0; i < node.children.length; i++) {
 		const child = node.children[i];
@@ -26,4 +27,6 @@ function visit(node) {
 			visit(child);
 		}
 	}
+
+	return node;
 }
