@@ -7,6 +7,7 @@ import { defineConfig } from "astro/config";
 import astroInference from "astro-inference";
 import pagefind from "astro-pagefind";
 import baseConfig from "./astro.base.config.mjs";
+import { rehypeWrapTables } from "./src/lib/rehype-wrap-tables.mjs";
 import { remarkReadingTime } from "./src/lib/remark-reading-time.mjs";
 
 // https://astro.build/config
@@ -16,12 +17,14 @@ export default defineConfig({
 	markdown: {
 		processor: unified({
 			remarkPlugins: [remarkReadingTime],
+			rehypePlugins: [rehypeWrapTables],
 		}),
 	},
 	integrations: [
 		mdx({
 			processor: unified({
 				remarkPlugins: [remarkReadingTime],
+				rehypePlugins: [rehypeWrapTables],
 			}),
 		}),
 		sitemap(),

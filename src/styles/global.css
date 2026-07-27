@@ -346,12 +346,13 @@
 	color: var(--muted);
 	font-style: italic;
 }
-.prose-fastify table {
-	display: block;
-	width: 100%;
+.prose-fastify .table-wrapper {
 	overflow-x: auto;
-	border-collapse: collapse;
 	margin: 1.5rem 0;
+}
+.prose-fastify table {
+	width: 100%;
+	border-collapse: collapse;
 	font-size: 0.9rem;
 }
 .prose-fastify th,
