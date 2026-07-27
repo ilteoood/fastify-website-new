@@ -347,7 +347,9 @@
 	font-style: italic;
 }
 .prose-fastify table {
+	display: block;
 	width: 100%;
+	overflow-x: auto;
 	border-collapse: collapse;
 	margin: 1.5rem 0;
 	font-size: 0.9rem;
