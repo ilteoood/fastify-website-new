@@ -144,3 +144,12 @@
 [data-codetabs] .astro-code {
 	background: transparent;
 }
+
+/* Shiki's `github-dark` comment color (#6a737d on #24292e) is below WCAG AA.
+   Bump it on every rendered code block to a color that clears 4.5:1. */
+.astro-code [style*="color: #6A737D"],
+.astro-code [style*="color: #6a737d"],
+.astro-code [style*="color:#6A737D"],
+.astro-code [style*="color:#6a737d"] {
+	color: #b1b6bd !important;
+}

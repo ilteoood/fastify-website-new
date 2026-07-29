@@ -40,6 +40,17 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? SITE.url).href;
         } catch (e) {}
       })();
     </script>
+    <style is:inline>
+      /* Override the github-dark comment color so it clears WCAG AA contrast
+         before the main stylesheet can load. Keeps the comment legible on
+         the Shiki dark background used by the QuickStart code blocks. */
+      .astro-code span[style*="color: #6A737D"],
+      .astro-code span[style*="color: #6a737d"],
+      .astro-code span[style*="color:#6A737D"],
+      .astro-code span[style*="color:#6a737d"] {
+        color: #b1b6bd !important;
+      }
+    </style>
   </head>
   <body class="min-h-screen bg-bg text-fg antialiased">
     <a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-100 focus:rounded-md focus:bg-amber focus:px-4 focus:py-2 focus:text-[#0a0b0d]">

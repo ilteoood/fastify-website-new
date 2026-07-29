@@ -40,8 +40,7 @@
 </dialog>
 
 <script>
-import DOMPurify from "isomorphic-dompurify";
-import { withBase } from "~/lib/href";
+  import { withBase } from "~/lib/href";
 
   type PagefindSub = { title: string; url: string; excerpt: string };
   type PagefindData = {
@@ -71,6 +70,7 @@ import { withBase } from "~/lib/href";
 
   let pagefind: any = null;
   let loadFailed = false;
+  let dompurifyLoader: Promise<(value: string) => string> | null = null;
 
   async function ensurePagefind() {
     if (pagefind || loadFailed) return pagefind;
@@ -85,31 +85,55 @@ import { withBase } from "~/lib/href";
     return pagefind;
   }
 
-  function render(items: PagefindData[]) {
-    if (!results) return;
-    results.innerHTML = '';
-    for (const item of items) {
-      const li = document.createElement('li');
-      const title = item.meta?.title || item.url;
-      const subs = (item.sub_results || []).slice(0, 4);
-      li.innerHTML = `
-        <a href="${item.url}" class="block rounded-lg border border-transparent px-3 py-2.5 transition-colors hover:border-border-strong hover:bg-surface-2">
-          <span class="block text-sm font-medium text-fg">${DOMPurify.sanitize(title)}</span>
-          <span class="mt-0.5 block text-xs leading-relaxed text-muted">${item.excerpt}</span>
-        </a>
-        ${
-          subs.length
-            ? `<ul class="ml-3 mt-0.5 space-y-0.5 border-l border-border pl-2">${subs
-                .map(
-                  (s) => `<li><a href="${s.url}" class="block rounded px-2 py-1 text-xs text-fg-soft transition-colors hover:bg-surface-2 hover:text-amber-ink">${DOMPurify.sanitize(
-                    s.title,
-                  )}</a></li>`,
-                )
-                .join('')}</ul>`
-            : ''
-        }`;
-      results.appendChild(li);
+  async function ensureSanitize() {
+    if (!dompurifyLoader) {
+      dompurifyLoader = import('isomorphic-dompurify').then(
+        (m) => (value: string) => m.default.sanitize(value) as string,
+      );
     }
+    return dompurifyLoader;
+  }
+
+  function buildResultItem(item: PagefindData, sanitize: (value: string) => string) {
+    const li = document.createElement('li');
+    const title = sanitize(item.meta?.title || item.url);
+    const subs = (item.sub_results || []).slice(0, 4);
+
+    const link = document.createElement('a');
+    link.href = item.url;
+    link.className =
+      'block rounded-lg border border-transparent px-3 py-2.5 transition-colors hover:border-border-strong hover:bg-surface-2';
+    const titleSpan = document.createElement('span');
+    titleSpan.className = 'block text-sm font-medium text-fg';
+    titleSpan.textContent = title;
+    const excerptSpan = document.createElement('span');
+    excerptSpan.className = 'mt-0.5 block text-xs leading-relaxed text-muted';
+    excerptSpan.textContent = item.excerpt;
+    link.append(titleSpan, excerptSpan);
+    li.append(link);
+
+    if (subs.length) {
+      const subList = document.createElement('ul');
+      subList.className = 'ml-3 mt-0.5 space-y-0.5 border-l border-border pl-2';
+      for (const s of subs) {
+        const subLi = document.createElement('li');
+        const subLink = document.createElement('a');
+        subLink.href = s.url;
+        subLink.className =
+          'block rounded px-2 py-1 text-xs text-fg-soft transition-colors hover:bg-surface-2 hover:text-amber-ink';
+        subLink.textContent = sanitize(s.title);
+        subLi.append(subLink);
+        subList.append(subLi);
+      }
+      li.append(subList);
+    }
+    return li;
+  }
+
+  async function render(items: PagefindData[]) {
+    if (!results) return;
+    const sanitize = await ensureSanitize();
+    results.replaceChildren(...items.map((item) => buildResultItem(item, sanitize)));
   }
 
   async function runSearch(term: string) {
@@ -118,7 +142,7 @@ import { withBase } from "~/lib/href";
     hint?.classList.add('hidden');
 
     if (!term.trim()) {
-      if (results) results.innerHTML = '';
+      if (results) results.replaceChildren();
       empty?.classList.add('hidden');
       hint?.classList.remove('hidden');
       return;
@@ -129,7 +153,7 @@ import { withBase } from "~/lib/href";
     if (scroll) scroll.scrollTop = 0;
 
     if (!search.results.length) {
-      if (results) results.innerHTML = '';
+      if (results) results.replaceChildren();
       if (empty) {
         empty.textContent = `No results for “${term}” in ${currentVersion}.`;
         empty.classList.remove('hidden');

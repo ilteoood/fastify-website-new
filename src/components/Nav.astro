@@ -20,7 +20,7 @@ const isActive = (href: string) => {
         <a
           href={withBase(item.href)}
           class:list={[
-            'rounded-md px-3 py-2 text-sm font-medium transition-colors',
+            'flex items-center rounded-md px-4 py-2.5 text-sm font-medium transition-colors min-h-10',
             isActive(item.href)
               ? 'text-fg'
               : 'text-muted hover:text-fg',
@@ -40,11 +40,10 @@ const isActive = (href: string) => {
         type="button"
         data-search-open
         class="hidden items-center gap-2 rounded-md border border-border bg-surface px-3 py-2 text-sm text-muted transition-colors hover:border-border-strong hover:text-fg sm:flex"
-        aria-label="Search documentation"
       >
         <Icon name="search" size={16} />
-        <span>Search</span>
-        <kbd class="ml-2 rounded border border-border px-1.5 font-mono text-[0.65rem] text-muted">⌘K</kbd>
+        <span>Search docs</span>
+        <kbd class="ml-2 hidden rounded border border-border px-1.5 font-mono text-[0.65rem] text-muted sm:inline">⌘K</kbd>
       </button>
 
       <button
@@ -68,10 +67,10 @@ const isActive = (href: string) => {
       <a
         href={SITE.repo}
         class="hidden items-center gap-2 rounded-md border border-border bg-surface px-2.5 py-2 text-sm font-medium text-fg transition-colors hover:border-border-strong sm:flex"
-        aria-label="Star Fastify on GitHub"
         target="_blank" rel="noopener noreferrer"
       >
         <Icon name="github" size={16} />
+        <span>GitHub</span>
         <span class="tabular-nums" data-github-stars>{SITE.stars}</span>
       </a>
 
@@ -108,14 +107,14 @@ const isActive = (href: string) => {
         <Icon name="close" size={18} />
       </button>
     </div>
-    <div class="flex flex-col gap-1 px-4 pt-4 sm:px-6">
+    <div class="flex flex-col gap-2 px-4 pt-4 sm:px-6">
       {NAV.map((item) => (
-        <a href={withBase(item.href)} class="rounded-lg px-4 py-3 text-lg font-medium text-fg hover:bg-surface">
+        <a href={withBase(item.href)} class="flex items-center rounded-lg px-4 py-4 text-lg font-medium text-fg hover:bg-surface min-h-12">
           {item.label}
         </a>
       ))}
       <a href={SITE.repo} class="mt-4 flex items-center gap-2 rounded-lg border border-border px-4 py-3 text-fg" target="_blank" rel="noopener noreferrer">
-        <Icon name="github" size={18} /> GitHub · <span data-github-stars>{SITE.stars}</span>
+        <Icon name="github" size={18} /> GitHub <span data-github-stars>{SITE.stars}</span>
       </a>
     </div>
   </div>

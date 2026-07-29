@@ -5,7 +5,9 @@
  */
 export function withBase(path: string): string {
 	if (typeof path !== "string" || !path.startsWith("/")) return path;
-	return `${import.meta.env.BASE_URL}${path}`;
+	const base = import.meta.env.BASE_URL;
+	if (path === "/") return base;
+	return `${base.replace(/\/$/, "")}${path}`;
 }
 
 /**

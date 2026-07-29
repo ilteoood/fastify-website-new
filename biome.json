@@ -47,12 +47,25 @@
 					"a11y": {
 						"useAnchorContent": "off"
 					},
+					"complexity": {
+						"noImportantStyles": "off"
+					},
 					"correctness": {
 						"noUnusedImports": "off",
 						"noUnusedVariables": "off"
 					},
 					"suspicious": {
 						"noExplicitAny": "off"
+					}
+				}
+			}
+		},
+		{
+			"includes": ["src/styles/prose.css"],
+			"linter": {
+				"rules": {
+					"complexity": {
+						"noImportantStyles": "off"
 					}
 				}
 			}
