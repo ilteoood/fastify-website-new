@@ -256,7 +256,7 @@ const tickValues = [0, Math.round(max / 2), max];
       void arc.getBoundingClientRect();
       arc.style.strokeDashoffset = String(Math.round(1000 - ratio * 1000));
     }
-    document.querySelectorAll<Element>("[data-counter]").forEach((el) => {
+    document.querySelectorAll<HTMLElement>("[data-counter]").forEach((el) => {
       const target = Number(el.dataset.target || "0");
       if (reduce) {
         el.textContent = target.toLocaleString();
