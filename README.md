@@ -26,7 +26,7 @@ requests-per-second velocity gauge in the hero.
 | `pnpm run preview` | Preview the production build locally                           |
 | `pnpm run lint`    | Lint with [Biome](https://biomejs.dev)                         |
 | `pnpm run format`  | Format with Biome (`format:check` to verify)                   |
-| `pnpm run check`   | Run Biome lint + format check (used by CI on every PR)         |
+| `pnpm run check`   | Type-check via [`astro check`](https://docs.astro.build/en/reference/cli-reference/#astro-check) (run by CI on every PR) |
 
 > Search only works against a production build (`npm run build`), because the
 > Pagefind index is generated from the built HTML. In `dev` the search modal

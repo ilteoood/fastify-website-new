@@ -1,11 +1,10 @@
-const STARS_CACHE_KEY = "fastify-stars";
-
 export async function getRepoStars(
 	owner: string,
 	repo: string,
 ): Promise<number> {
-	const cached = Number(sessionStorage.getItem(STARS_CACHE_KEY));
-	if (cached) return cached;
+	const cacheKey = `github-stars:${owner}/${repo}`;
+	const raw = sessionStorage.getItem(cacheKey);
+	if (raw !== null && !Number.isNaN(Number(raw))) return Number(raw);
 
 	const res = await fetch(`https://api.github.com/repos/${owner}/${repo}`);
 	if (!res.ok) throw new Error(`GitHub API returned ${res.status}`);
@@ -14,7 +13,7 @@ export async function getRepoStars(
 		throw new Error("GitHub API response missing stargazers_count");
 	}
 	try {
-		sessionStorage.setItem(STARS_CACHE_KEY, String(data.stargazers_count));
+		sessionStorage.setItem(cacheKey, String(data.stargazers_count));
 	} catch {}
 	return data.stargazers_count;
 }

@@ -1,10 +1,9 @@
-const DOWNLOADS_CACHE_KEY = "fastify-downloads";
-
 export async function getMonthlyDownloads(
 	packageName: string,
 ): Promise<number> {
-	const cached = Number(sessionStorage.getItem(DOWNLOADS_CACHE_KEY));
-	if (cached) return cached;
+	const cacheKey = `npm-downloads:${packageName}`;
+	const raw = sessionStorage.getItem(cacheKey);
+	if (raw !== null && !Number.isNaN(Number(raw))) return Number(raw);
 
 	const res = await fetch(
 		`https://api.npmjs.org/downloads/point/last-month/${packageName}`,
@@ -15,7 +14,7 @@ export async function getMonthlyDownloads(
 		throw new Error("npm API response missing downloads");
 	}
 	try {
-		sessionStorage.setItem(DOWNLOADS_CACHE_KEY, String(data.downloads));
+		sessionStorage.setItem(cacheKey, String(data.downloads));
 	} catch {}
 	return data.downloads;
 }
