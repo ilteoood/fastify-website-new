@@ -4,10 +4,8 @@
 	"private": true,
 	"type": "module",
 	"scripts": {
-		"predev": "node scripts/fetch-docs.mjs && node scripts/build-plugin-list.mjs && node scripts/download-benchmarks.mjs",
 		"dev": "astro dev",
 		"start": "astro dev",
-		"prebuild": "node scripts/fetch-docs.mjs && node scripts/build-plugin-list.mjs && node scripts/download-benchmarks.mjs",
 		"build": "astro build",
 		"preview": "astro preview",
 		"astro": "astro",
@@ -15,8 +13,8 @@
 		"lint:fix": "biome lint --write",
 		"format": "biome check --write",
 		"format:check": "biome check",
-		"precheck": "node scripts/fetch-docs.mjs && node scripts/build-plugin-list.mjs && node scripts/download-benchmarks.mjs",
-		"check": "astro check"
+		"check": "astro check",
+		"postinstall": "node scripts/fetch-docs.mjs && node scripts/build-plugin-list.mjs && node scripts/download-benchmarks.mjs"
 	},
 	"dependencies": {
 		"@astrojs/mdx": "^7.0.3",
