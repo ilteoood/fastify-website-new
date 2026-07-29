@@ -15,6 +15,7 @@
 		"lint:fix": "biome lint --write",
 		"format": "biome check --write",
 		"format:check": "biome check",
+		"precheck": "node scripts/fetch-docs.mjs && node scripts/build-plugin-list.mjs && node scripts/download-benchmarks.mjs",
 		"check": "astro check"
 	},
 	"dependencies": {
