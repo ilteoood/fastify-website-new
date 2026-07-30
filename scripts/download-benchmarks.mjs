@@ -125,7 +125,7 @@ function buildBenchmarksJSON(data, date = "Unknown") {
 				return {
 					...framework,
 					requests,
-					version: item?.version?.replace(/^v/, "") ?? null,
+					version: item?.version ?? "",
 				};
 			})
 			.filter((f) => f.requests > 0)

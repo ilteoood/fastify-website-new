@@ -73,7 +73,7 @@ export const FEATURES: Feature[] = [
 export type Bench = {
 	name: string;
 	reqs: number;
-	version: string | null;
+	version: string;
 	self?: boolean;
 };
 
