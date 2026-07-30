@@ -51,14 +51,34 @@ const lastUpdated = (
       </div>
     </div>
 
-    <div class="card mt-8 p-6 sm:p-10">
-      <div class="mb-8 flex items-center justify-between">
-        <h2 class="font-display text-2xl font-semibold">Requests per second</h2>
-        <span class="font-mono text-xs text-muted"
-          >Node.js · single instance · updated {lastUpdated}</span
-        >
+    <div class="mt-8 space-y-8">
+      <div class="card p-6 sm:p-10">
+        <div class="mb-8 flex items-center justify-between">
+          <h2 class="font-display text-2xl font-semibold">Requests per second</h2>
+          <span class="font-mono text-xs text-muted"
+            >Node.js · single instance · updated {lastUpdated}</span
+          >
+        </div>
+        <BenchBars valueKey="reqs" unit="req/s" betterIs="higher" decimals={0} />
       </div>
-      <BenchBars />
+      <div class="card p-6 sm:p-10">
+        <div class="mb-8 flex items-center justify-between">
+          <h2 class="font-display text-2xl font-semibold">Latency</h2>
+          <span class="font-mono text-xs text-muted"
+            >Node.js · single instance · updated {lastUpdated}</span
+          >
+        </div>
+        <BenchBars valueKey="latency" unit="ms" betterIs="lower" decimals={2} />
+      </div>
+      <div class="card p-6 sm:p-10">
+        <div class="mb-8 flex items-center justify-between">
+          <h2 class="font-display text-2xl font-semibold">Throughput</h2>
+          <span class="font-mono text-xs text-muted"
+            >Node.js · single instance · updated {lastUpdated}</span
+          >
+        </div>
+        <BenchBars valueKey="throughput" unit="MB/s" betterIs="higher" decimals={2} />
+      </div>
     </div>
 
     <div
