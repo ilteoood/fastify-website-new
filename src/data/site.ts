@@ -70,14 +70,20 @@ export const FEATURES: Feature[] = [
 	},
 ];
 
-export type Bench = { name: string; reqs: number; self?: boolean };
+export type Bench = {
+	name: string;
+	reqs: number;
+	version: string | null;
+	self?: boolean;
+};
 
 // Requests/sec from the official fastify/benchmarks suite, refreshed at build
 // time by `scripts/download-benchmarks.mjs` (see `prebuild` / `predev`).
 export const BENCHMARKS: Bench[] = benchmarksData.frameworks.map(
-	({ name, requests }) => ({
+	({ name, requests, version }) => ({
 		name,
 		reqs: requests,
+		version,
 		self: name === "Fastify",
 	}),
 );

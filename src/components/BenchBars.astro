@@ -6,7 +6,12 @@ const { max } = BENCHMARK_STATS;
 <div class="space-y-3.5" data-bench>
   {BENCHMARKS.map((b) => (
     <div class="grid grid-cols-[5.5rem_1fr_auto] items-center gap-3">
-      <span class:list={['font-mono text-sm', b.self ? 'font-semibold text-amber-ink' : 'text-fg-soft']}>{b.name}</span>
+      <div class="flex flex-col leading-tight">
+        <span class:list={['font-mono text-sm', b.self ? 'font-semibold text-amber-ink' : 'text-fg-soft']}>{b.name}</span>
+        {b.version && (
+          <span class="font-mono text-[0.65rem] text-muted">v{b.version}</span>
+        )}
+      </div>
       <div class="h-7 overflow-hidden rounded-md bg-surface-2">
         <div
           data-bar

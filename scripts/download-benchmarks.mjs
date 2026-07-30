@@ -122,7 +122,11 @@ function buildBenchmarksJSON(data, date = "Unknown") {
 				const requests = Number.isNaN(Number(item?.requests))
 					? 0
 					: parseInt(item.requests, 10);
-				return { ...framework, requests };
+				return {
+					...framework,
+					requests,
+					version: item?.version?.replace(/^v/, "") ?? null,
+				};
 			})
 			.filter((f) => f.requests > 0)
 			.sort((a, b) => b.requests - a.requests),
