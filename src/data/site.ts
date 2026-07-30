@@ -108,6 +108,16 @@ export const BENCHMARK_STATS = {
 			? (this.self.reqs / this.express.reqs).toFixed(1)
 			: null;
 	},
+	get latencyMultiplier(): string | null {
+		return this.express && this.self.latency > 0
+			? (this.express.latency / this.self.latency).toFixed(1)
+			: null;
+	},
+	get throughputMultiplier(): string | null {
+		return this.express && this.express.throughput > 0
+			? (this.self.throughput / this.express.throughput).toFixed(1)
+			: null;
+	},
 };
 
 // Financial supporters buy visibility: their logo is rendered larger the higher
