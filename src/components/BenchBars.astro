@@ -1,5 +1,5 @@
 ---
-import { BENCHMARKS } from "~/data/site";
+import { BENCHMARKS, formatMetric } from "~/data/site";
 
 type Metric = "reqs" | "latency" | "throughput";
 
@@ -14,12 +14,6 @@ const { valueKey, unit, betterIs, decimals = 0 } = Astro.props;
 
 const rows = [...BENCHMARKS].sort((a, b) => b[valueKey] - a[valueKey]);
 const max = Math.max(...rows.map((b) => b[valueKey]));
-
-const format = (n: number) =>
-	n.toLocaleString(undefined, {
-		minimumFractionDigits: decimals,
-		maximumFractionDigits: decimals,
-	});
 ---
 
 <div class="space-y-3.5" data-bench>
@@ -42,7 +36,7 @@ const format = (n: number) =>
           style="transition: width 1.4s var(--ease-out-expo);"
         ></div>
       </div>
-      <span class="w-16 text-right font-mono text-xs tabular-nums text-muted">{format(b[valueKey])}</span>
+      <span class="w-16 text-right font-mono text-xs tabular-nums text-muted">{formatMetric(b[valueKey], decimals)}</span>
     </div>
   ))}
   <p class="pt-1 font-mono text-[0.65rem] text-muted">{unit} · {betterIs} is better · illustrative comparison</p>

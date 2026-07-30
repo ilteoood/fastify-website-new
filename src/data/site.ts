@@ -92,6 +92,12 @@ export const BENCHMARKS: Bench[] = benchmarksData.frameworks.map(
 	}),
 );
 
+export const formatMetric = (n: number, decimals = 0) =>
+	n.toLocaleString(undefined, {
+		minimumFractionDigits: decimals,
+		maximumFractionDigits: decimals,
+	});
+
 // Derived metrics shared by every benchmark surface (gauge, bars, summary
 // tiles). Computed once at module load so callers stay in sync if the data
 // ever changes.
@@ -106,6 +112,16 @@ export const BENCHMARK_STATS = {
 	get multiplier(): string | null {
 		return this.express
 			? (this.self.reqs / this.express.reqs).toFixed(1)
+			: null;
+	},
+	get latencyMultiplier(): string | null {
+		return this.express && this.self.latency > 0
+			? (this.express.latency / this.self.latency).toFixed(1)
+			: null;
+	},
+	get throughputMultiplier(): string | null {
+		return this.express && this.express.throughput > 0
+			? (this.self.throughput / this.express.throughput).toFixed(1)
 			: null;
 	},
 };
