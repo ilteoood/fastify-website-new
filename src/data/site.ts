@@ -73,6 +73,8 @@ export const FEATURES: Feature[] = [
 export type Bench = {
 	name: string;
 	reqs: number;
+	latency: number;
+	throughput: number;
 	version: string;
 	self?: boolean;
 };
@@ -80,9 +82,11 @@ export type Bench = {
 // Requests/sec from the official fastify/benchmarks suite, refreshed at build
 // time by `scripts/download-benchmarks.mjs` (see `prebuild` / `predev`).
 export const BENCHMARKS: Bench[] = benchmarksData.frameworks.map(
-	({ name, requests, version }) => ({
+	({ name, requests, version, latency, throughput }) => ({
 		name,
 		reqs: requests,
+		latency,
+		throughput,
 		version,
 		self: name === "Fastify",
 	}),
@@ -95,6 +99,8 @@ export const BENCHMARK_STATS = {
 	date: benchmarksData.date,
 	self: BENCHMARKS.find((b) => b.self) ?? BENCHMARKS[0],
 	max: Math.max(...BENCHMARKS.map((b) => b.reqs)),
+	maxLatency: Math.max(...BENCHMARKS.map((b) => b.latency)),
+	maxThroughput: Math.max(...BENCHMARKS.map((b) => b.throughput)),
 	peers: BENCHMARKS.filter((b) => !b.self),
 	express: BENCHMARKS.find((b) => b.name === "Express") ?? null,
 	get multiplier(): string | null {
