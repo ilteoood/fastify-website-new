@@ -53,7 +53,7 @@ const lastUpdated = (
 
     <div class="mt-8 space-y-8">
       <div class="card p-6 sm:p-10">
-        <div class="mb-8 flex items-center justify-between">
+        <div class="mb-8 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between sm:gap-0">
           <h2 class="font-display text-2xl font-semibold">Requests per second</h2>
           <span class="font-mono text-xs text-muted"
             >Node.js · single instance · updated {lastUpdated}</span
@@ -62,7 +62,7 @@ const lastUpdated = (
         <BenchBars valueKey="reqs" unit="req/s" betterIs="higher" decimals={0} />
       </div>
       <div class="card p-6 sm:p-10">
-        <div class="mb-8 flex items-center justify-between">
+        <div class="mb-8 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between sm:gap-0">
           <h2 class="font-display text-2xl font-semibold">Latency</h2>
           <span class="font-mono text-xs text-muted"
             >Node.js · single instance · updated {lastUpdated}</span
@@ -71,7 +71,7 @@ const lastUpdated = (
         <BenchBars valueKey="latency" unit="ms" betterIs="lower" decimals={2} />
       </div>
       <div class="card p-6 sm:p-10">
-        <div class="mb-8 flex items-center justify-between">
+        <div class="mb-8 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between sm:gap-0">
           <h2 class="font-display text-2xl font-semibold">Throughput</h2>
           <span class="font-mono text-xs text-muted"
             >Node.js · single instance · updated {lastUpdated}</span
