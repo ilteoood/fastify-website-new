@@ -1,9 +1,10 @@
 ---
 import BenchBars from "~/components/BenchBars.astro";
+import BenchStat from "~/components/benchmarks/BenchStat.astro";
 import ButtonLink from "~/components/ButtonLink.astro";
 import Icon from "~/components/Icon.astro";
 import PageHeader from "~/components/PageHeader.astro";
-import { BENCHMARK_STATS, formatMetric } from "~/data/site";
+import { BENCHMARK_STATS } from "~/data/site";
 import BaseLayout from "~/layouts/BaseLayout.astro";
 
 const {
@@ -43,24 +44,7 @@ const lastUpdated = (
             >Node.js · single instance · updated {lastUpdated}</span
           >
         </div>
-        <div class="mb-8 grid gap-4 sm:grid-cols-2">
-          <div>
-            <div class="font-display text-3xl font-semibold text-fg tabular-nums">
-              {formatMetric(fastify.reqs)}
-            </div>
-            <div class="mt-1 font-mono text-xs uppercase tracking-wider text-muted">
-              Fastify req/s
-            </div>
-          </div>
-          <div>
-            <div class="font-display text-3xl font-semibold text-velocity tabular-nums">
-              {multiplier}×
-            </div>
-            <div class="mt-1 font-mono text-xs uppercase tracking-wider text-muted">
-              faster than Express
-            </div>
-          </div>
-        </div>
+        <BenchStat value={fastify.reqs} unit="req/s" multiplier={multiplier} comparison="faster than Express" />
         <BenchBars valueKey="reqs" unit="req/s" betterIs="higher" decimals={0} />
       </div>
       <div class="card p-6 sm:p-10">
@@ -70,24 +54,7 @@ const lastUpdated = (
             >Node.js · single instance · updated {lastUpdated}</span
           >
         </div>
-        <div class="mb-8 grid gap-4 sm:grid-cols-2">
-          <div>
-            <div class="font-display text-3xl font-semibold text-fg tabular-nums">
-              {formatMetric(fastify.latency, 2)}
-            </div>
-            <div class="mt-1 font-mono text-xs uppercase tracking-wider text-muted">
-              Fastify ms
-            </div>
-          </div>
-          <div>
-            <div class="font-display text-3xl font-semibold text-velocity tabular-nums">
-              {latencyMultiplier}×
-            </div>
-            <div class="mt-1 font-mono text-xs uppercase tracking-wider text-muted">
-              lower than Express
-            </div>
-          </div>
-        </div>
+        <BenchStat value={fastify.latency} unit="ms" multiplier={latencyMultiplier} comparison="lower than Express" decimals={2} />
         <BenchBars valueKey="latency" unit="ms" betterIs="lower" decimals={2} />
       </div>
       <div class="card p-6 sm:p-10">
@@ -97,24 +64,7 @@ const lastUpdated = (
             >Node.js · single instance · updated {lastUpdated}</span
           >
         </div>
-        <div class="mb-8 grid gap-4 sm:grid-cols-2">
-          <div>
-            <div class="font-display text-3xl font-semibold text-fg tabular-nums">
-              {formatMetric(fastify.throughput, 2)}
-            </div>
-            <div class="mt-1 font-mono text-xs uppercase tracking-wider text-muted">
-              Fastify MB/s
-            </div>
-          </div>
-          <div>
-            <div class="font-display text-3xl font-semibold text-velocity tabular-nums">
-              {throughputMultiplier}×
-            </div>
-            <div class="mt-1 font-mono text-xs uppercase tracking-wider text-muted">
-              faster than Express
-            </div>
-          </div>
-        </div>
+        <BenchStat value={fastify.throughput} unit="MB/s" multiplier={throughputMultiplier} comparison="faster than Express" decimals={2} />
         <BenchBars valueKey="throughput" unit="MB/s" betterIs="higher" decimals={2} />
       </div>
     </div>
