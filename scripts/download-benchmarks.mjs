@@ -120,9 +120,7 @@ function buildBenchmarksJSON(data, date = "Unknown") {
 		frameworks: frameworks
 			.map((framework) => {
 				const item = data.find(({ name }) => name === framework.tag);
-				const requests = Number.isNaN(Number(item.requests))
-					? 0
-					: parseInt(item.requests, 10);
+				const requests = parseMetric(item.requests);
 				const latency = parseMetric(item.latency);
 				const throughput = parseMetric(item.throughput);
 				return {
