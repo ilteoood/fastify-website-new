@@ -92,6 +92,12 @@ export const BENCHMARKS: Bench[] = benchmarksData.frameworks.map(
 	}),
 );
 
+export const formatMetric = (n: number, decimals = 0) =>
+	n.toLocaleString(undefined, {
+		minimumFractionDigits: decimals,
+		maximumFractionDigits: decimals,
+	});
+
 // Derived metrics shared by every benchmark surface (gauge, bars, summary
 // tiles). Computed once at module load so callers stay in sync if the data
 // ever changes.

@@ -3,7 +3,7 @@ import BenchBars from "~/components/BenchBars.astro";
 import ButtonLink from "~/components/ButtonLink.astro";
 import Icon from "~/components/Icon.astro";
 import PageHeader from "~/components/PageHeader.astro";
-import { BENCHMARK_STATS } from "~/data/site";
+import { BENCHMARK_STATS, formatMetric } from "~/data/site";
 import BaseLayout from "~/layouts/BaseLayout.astro";
 
 const {
@@ -46,7 +46,7 @@ const lastUpdated = (
         <div class="mb-8 grid gap-4 sm:grid-cols-2">
           <div>
             <div class="font-display text-3xl font-semibold text-fg tabular-nums">
-              {fastify.reqs.toLocaleString()}
+              {formatMetric(fastify.reqs)}
             </div>
             <div class="mt-1 font-mono text-xs uppercase tracking-wider text-muted">
               Fastify req/s
@@ -73,10 +73,7 @@ const lastUpdated = (
         <div class="mb-8 grid gap-4 sm:grid-cols-2">
           <div>
             <div class="font-display text-3xl font-semibold text-fg tabular-nums">
-              {fastify.latency.toLocaleString(undefined, {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2,
-              })}
+              {formatMetric(fastify.latency, 2)}
             </div>
             <div class="mt-1 font-mono text-xs uppercase tracking-wider text-muted">
               Fastify ms
@@ -103,10 +100,7 @@ const lastUpdated = (
         <div class="mb-8 grid gap-4 sm:grid-cols-2">
           <div>
             <div class="font-display text-3xl font-semibold text-fg tabular-nums">
-              {fastify.throughput.toLocaleString(undefined, {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2,
-              })}
+              {formatMetric(fastify.throughput, 2)}
             </div>
             <div class="mt-1 font-mono text-xs uppercase tracking-wider text-muted">
               Fastify MB/s
