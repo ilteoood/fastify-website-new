@@ -5,6 +5,7 @@ import sitemap from "@astrojs/sitemap";
 import tailwindcss from "@tailwindcss/vite";
 import { defineConfig } from "astro/config";
 import astroInference from "astro-inference";
+import linkValidator from "astro-link-validator";
 import pagefind from "astro-pagefind";
 import baseConfig from "./astro.base.config.mjs";
 import { remarkReadingTime } from "./src/lib/remark-reading-time.mjs";
@@ -29,6 +30,7 @@ export default defineConfig({
 		astroInference({
 			exclude: ["resources/**", "benchmarks/**", "organizations/**"],
 		}),
+		linkValidator({ checkExternal: true }),
 	],
 	vite: {
 		plugins: [tailwindcss()],
