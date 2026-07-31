@@ -30,7 +30,10 @@ export default defineConfig({
 		astroInference({
 			exclude: ["resources/**", "benchmarks/**", "organizations/**"],
 		}),
-		linkValidator({ checkExternal: true }),
+		linkValidator({
+			checkExternal: true,
+			exclude: [`${baseConfig.base}/*`],
+		}),
 	],
 	vite: {
 		plugins: [tailwindcss()],
