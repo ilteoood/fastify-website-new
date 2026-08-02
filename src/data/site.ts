@@ -91,8 +91,8 @@ const fastifyReqPerSecK = Math.round(BENCHMARK_STATS.self.reqs / 1000);
 export const FEATURES: Feature[] = [
 	{
 		title: "Highly performant",
-		metric: `${fastifyReqPerSecK}k req/s`,
-		body: `One of the fastest web frameworks in town. Depending on code complexity, Fastify can serve up to ${fastifyReqPerSecK} thousand requests per second.`,
+		metric: `~${fastifyReqPerSecK}k req/s`,
+		body: `One of the fastest web frameworks in town. Depending on code complexity, Fastify can serve around ${fastifyReqPerSecK} thousand requests per second.`,
 		icon: "bolt",
 	},
 	{
