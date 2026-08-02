@@ -4,64 +4,29 @@ import Icon from "~/components/Icon.astro";
 import InstallCommand from "~/components/InstallCommand.astro";
 import { withBase } from "~/lib/href";
 
-const esmCode = `// Import the framework and instantiate it
-import Fastify from 'fastify'
+const typescriptCode = `import Fastify from 'fastify'
+import { Type } from 'typebox'
+import type { TypeBoxTypeProvider } from '@fastify/type-provider-typebox'
+
 const fastify = Fastify({ logger: true })
+  .withTypeProvider<TypeBoxTypeProvider>()
 
-// Declare a route
-fastify.get('/', async (request, reply) => {
-  return { hello: 'world' }
-})
-
-// Run the server!
-try {
-  await fastify.listen({ port: 3000 })
-} catch (err) {
-  fastify.log.error(err)
-  process.exit(1)
-}`;
-
-const cjsCode = `// Import the framework and instantiate it
-const fastify = require('fastify')({ logger: true })
-
-// Declare a route
-fastify.get('/', (request, reply) => {
-  reply.send({ hello: 'world' })
-})
-
-// Run the server!
-fastify.listen({ port: 3000 }, (err) => {
-  if (err) {
-    fastify.log.error(err)
-    process.exit(1)
-  }
-})`;
-
-const schemaCode = `fastify.route({
-  method: 'GET',
-  url: '/',
+fastify.get('/', {
   schema: {
-    // validate the querystring
-    querystring: {
-      type: 'object',
-      properties: { name: { type: 'string' } },
-      required: ['name'],
-    },
-    // serialize the response — fast by design
+    querystring: Type.Object({
+      name: Type.Optional(Type.String()),
+    }),
     response: {
-      200: {
-        type: 'object',
-        properties: { hello: { type: 'string' } },
-      },
+      200: Type.Object({
+        hello: Type.String(),
+      }),
     },
   },
-  preHandler: async (request, reply) => {
-    // e.g. check authentication
-  },
-  handler: async (request, reply) => {
-    return { hello: 'world' }
-  },
-})`;
+}, async (request) => {
+  return { hello: request.query.name ?? 'world' }
+})
+
+await fastify.listen({ port: 3000 })`;
 ---
 
 <section class="mx-auto max-w-7xl px-4 py-20 sm:px-6 2xl:max-w-[100rem]">
@@ -71,25 +36,19 @@ const schemaCode = `fastify.route({
       <h2
         class="mt-4 font-display text-3xl font-semibold tracking-tight sm:text-4xl"
       >
-        A server in eight lines
+        Type-safe from the start
       </h2>
       <p class="mt-4 text-lg leading-relaxed text-fg-soft">
-        Install Fastify, create <code
+        Install Fastify and TypeBox, then create <code
           class="rounded bg-surface-2 px-1.5 py-0.5 font-mono text-sm text-amber-ink"
-          >server.js</code
-        >, and launch with <code
-          class="rounded bg-surface-2 px-1.5 py-0.5 font-mono text-sm text-amber-ink"
-          >node server</code
-        >. Prefer scaffolding? Reach for <a
-          href="https://github.com/fastify/fastify-cli"
-          class="text-amber-ink underline decoration-border-strong underline-offset-2"
-          >fastify-cli</a
-        >.
+          >server.ts</code
+        >. The same schema validates incoming data, serializes the response,
+        and infers the request type for your handler.
       </p>
-      <div class="mt-6 space-y-3">
-        <InstallCommand command="npm install fastify" />
-        <div class="text-sm text-muted">or scaffold a project:</div>
-        <InstallCommand command="npm init fastify" />
+      <div class="mt-6">
+        <InstallCommand
+          command="npm install fastify @fastify/type-provider-typebox typebox"
+        />
       </div>
       <a
         href={withBase("/docs/latest")}
@@ -99,27 +58,12 @@ const schemaCode = `fastify.route({
       </a>
     </div>
 
-    <div class="min-w-0 space-y-6">
+    <div class="min-w-0">
       <CodeTabs
         id="hello"
-        title="Hello world server"
-        tabs={[
-          { label: "server.mjs", lang: "js", code: esmCode },
-          { label: "server.cjs", lang: "js", code: cjsCode },
-        ]}
+        title="Type-safe hello world server"
+        tabs={[{ label: "server.ts", lang: "ts", code: typescriptCode }]}
       />
-      <div>
-        <p
-          class="mb-2 font-mono text-xs uppercase tracking-[0.16em] text-muted"
-        >
-          // validation + hooks
-        </p>
-        <CodeTabs
-          id="schema"
-          title="Schema based validation"
-          tabs={[{ label: "routes.js", lang: "js", code: schemaCode }]}
-        />
-      </div>
     </div>
   </div>
 </section>
