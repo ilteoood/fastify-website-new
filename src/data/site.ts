@@ -12,7 +12,6 @@ export const SITE = {
 	// (see the stats scripts in BaseLayout) and replaces these values.
 	stars: "0",
 	downloads: "0",
-	reqPerSec: 30_000,
 };
 
 export const NAV = [
@@ -22,52 +21,6 @@ export const NAV = [
 	{ label: "Organizations", href: "/organizations/" },
 	{ label: "Community", href: "/community/" },
 	{ label: "Support", href: "/docs/latest/Reference/LTS/" },
-];
-
-export type Feature = {
-	title: string;
-	metric: string;
-	body: string;
-	icon: string;
-};
-
-export const FEATURES: Feature[] = [
-	{
-		title: "Highly performant",
-		metric: "30k req/s",
-		body: "One of the fastest web frameworks in town. Depending on code complexity, Fastify can serve up to 30 thousand requests per second.",
-		icon: "bolt",
-	},
-	{
-		title: "Extensible",
-		metric: "hooks · plugins",
-		body: "Fully extensible via its hooks, plugins, and decorators. Encapsulation keeps your components isolated and reusable.",
-		icon: "plug",
-	},
-	{
-		title: "Schema based",
-		metric: "JSON Schema",
-		body: "Use JSON Schema to validate routes and serialize outputs. Internally Fastify compiles the schema into a highly performant function.",
-		icon: "schema",
-	},
-	{
-		title: "Logging",
-		metric: "Pino built-in",
-		body: "Logs are important but costly. We chose the fastest logger, Pino, to almost entirely remove that cost.",
-		icon: "log",
-	},
-	{
-		title: "Developer friendly",
-		metric: "DX first",
-		body: "Expressive by design, built to help developers in daily use without sacrificing performance or security.",
-		icon: "heart",
-	},
-	{
-		title: "TypeScript ready",
-		metric: "types included",
-		body: "We work hard to maintain a TypeScript type declaration file to support the growing TypeScript community.",
-		icon: "ts",
-	},
 ];
 
 export type Bench = {
@@ -125,6 +78,54 @@ export const BENCHMARK_STATS = {
 			: null;
 	},
 };
+
+export type Feature = {
+	title: string;
+	metric: string;
+	body: string;
+	icon: string;
+};
+
+const fastifyReqPerSecK = Math.round(BENCHMARK_STATS.self.reqs / 1000);
+
+export const FEATURES: Feature[] = [
+	{
+		title: "Highly performant",
+		metric: `${fastifyReqPerSecK}k req/s`,
+		body: `One of the fastest web frameworks in town. Depending on code complexity, Fastify can serve up to ${fastifyReqPerSecK} thousand requests per second.`,
+		icon: "bolt",
+	},
+	{
+		title: "Extensible",
+		metric: "hooks · plugins",
+		body: "Fully extensible via its hooks, plugins, and decorators. Encapsulation keeps your components isolated and reusable.",
+		icon: "plug",
+	},
+	{
+		title: "Schema based",
+		metric: "JSON Schema",
+		body: "Use JSON Schema to validate routes and serialize outputs. Internally Fastify compiles the schema into a highly performant function.",
+		icon: "schema",
+	},
+	{
+		title: "Logging",
+		metric: "Pino built-in",
+		body: "Logs are important but costly. We chose the fastest logger, Pino, to almost entirely remove that cost.",
+		icon: "log",
+	},
+	{
+		title: "Developer friendly",
+		metric: "DX first",
+		body: "Expressive by design, built to help developers in daily use without sacrificing performance or security.",
+		icon: "heart",
+	},
+	{
+		title: "TypeScript ready",
+		metric: "types included",
+		body: "We work hard to maintain a TypeScript type declaration file to support the growing TypeScript community.",
+		icon: "ts",
+	},
+];
 
 // Financial supporters buy visibility: their logo is rendered larger the higher
 // their tier. `collaborator` covers organizations run by Fastify collaborators.
