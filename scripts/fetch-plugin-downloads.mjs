@@ -82,9 +82,7 @@ async function main() {
 		const plugin = plugins[i];
 		const downloads = await fetchDownloads(plugin.name);
 		enriched.push({ ...plugin, downloads });
-		if ((i + 1) % 25 === 0) {
-			log.info(`${i + 1}/${plugins.length} plugins processed`);
-		}
+		log.info(`${i + 1}/${plugins.length} plugins processed`);
 		if (i < plugins.length - 1) {
 			await setTimeout(REQUEST_DELAY_MS);
 		}
