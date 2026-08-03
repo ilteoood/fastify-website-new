@@ -1,12 +1,15 @@
 // @ts-nocheck
 /**
- * Enrich `src/data/plugins.json` with monthly npm download counts and sort
- * the list by downloads descending. The home page's `slice(0, 6)` then
- * surfaces the top 6 most-downloaded plugins without any runtime fetch.
+ * Reads `src/data/plugins.json` (kept in upstream order by
+ * `scripts/build-plugin-list.mjs` for the /ecosystem/ page) and emits a
+ * downloads-sorted view at `src/data/plugins-by-downloads.json`. The home
+ * page reads the new file and uses `slice(0, 6)` to surface the top
+ * 6 most-downloaded plugins, so the featured plugins stay fresh at
+ * build time without any runtime fetch.
  *
- * Runs after `scripts/build-plugin-list.mjs` in the postinstall / prebuild
- * pipeline. Re-uses the same file the build already produces, so a fresh
- * `plugins.json` from the upstream Ecosystem guide is the only input.
+ * Runs after `scripts/build-plugin-list.mjs` in the postinstall /
+ * prebuild pipeline. Plugins the npm API cannot resolve default to 0
+ * downloads so the build never aborts.
  */
 import { readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
@@ -14,6 +17,7 @@ import pino from "pino";
 
 const ROOT = path.resolve(import.meta.dirname, "..");
 const INPUT = path.join(ROOT, "src/data/plugins.json");
+const OUTPUT = path.join(ROOT, "src/data/plugins-by-downloads.json");
 const NPM_API = "https://api.npmjs.org/downloads/point/last-month";
 const REQUEST_DELAY_MS = 350;
 const MAX_RETRIES = 4;
@@ -87,8 +91,15 @@ async function main() {
 
 	enriched.sort((a, b) => b.downloads - a.downloads);
 
-	await writeFile(INPUT, `${JSON.stringify({ plugins: enriched }, null, 2)}\n`);
+	await writeFile(
+		OUTPUT,
+		`${JSON.stringify({ plugins: enriched }, null, 2)}\n`,
+	);
 	const top = enriched.slice(0, 6).map((p) => p.name);
+	log.info(
+		{ output: path.relative(ROOT, OUTPUT) },
+		"Wrote downloads-sorted view",
+	);
 	log.info({ top }, "Top 6 by downloads");
 }
 
