@@ -287,14 +287,11 @@ const tickValues = [0, Math.round(max / 2), max];
       { threshold: 0.25 },
     );
     io.observe(target);
-    if (document.readyState === "complete") {
+    const startIfInViewport = () => {
       const r = meter.getBoundingClientRect();
       if (r.top < window.innerHeight && r.bottom > 0) setTimeout(trigger, 350);
-    } else {
-      window.addEventListener("load", () => {
-        const r = meter.getBoundingClientRect();
-        if (r.top < window.innerHeight && r.bottom > 0) setTimeout(trigger, 350);
-      });
-    }
+    };
+    if (document.readyState === "complete") startIfInViewport();
+    else window.addEventListener("load", startIfInViewport);
   }
 </script>
