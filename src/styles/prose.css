@@ -139,17 +139,11 @@
 	margin: 2.5rem 0;
 }
 
-/* Shiki dual-theme switching. The site is dark-first (no data-theme = dark),
-   so dark theme colors are the default and we only switch to the light theme
-   variables when [data-theme="light"] is set on the document. `!important` is
-   required to override Shiki's inline color/background styles. */
-.astro-code,
-.astro-code span {
-	/* biome-ignore lint/complexity/noImportantStyles: override Shiki inline styles */
-	color: var(--shiki-dark) !important;
-	/* biome-ignore lint/complexity/noImportantStyles: override Shiki inline styles */
-	background-color: var(--shiki-dark-bg) !important;
-}
+/* Shiki dual-theme switching. Shiki is configured with defaultColor="dark",
+   so it emits the dark theme colors as inline styles and exposes the light
+   theme alternatives as --shiki-light / --shiki-light-bg CSS variables. We
+   only need to override when [data-theme="light"] is set on the document.
+   `!important` is required to beat Shiki's inline color/background styles. */
 [data-theme="light"] .astro-code,
 [data-theme="light"] .astro-code span {
 	/* biome-ignore lint/complexity/noImportantStyles: override Shiki inline styles */
@@ -158,9 +152,9 @@
 	background-color: var(--shiki-light-bg) !important;
 }
 
-/* Code tabs: keep Shiki's <pre> transparent so the card surface shows through,
-   then layer a theme-aware fallback so the code area still has a readable
-   background if the inline Shiki background is ever absent. */
+/* Code tabs: keep Shiki's <pre> transparent so the card surface shows through
+   in dark mode, then re-apply the light theme background when light mode is
+   active. */
 [data-codetabs] .astro-code {
 	/* biome-ignore lint/complexity/noImportantStyles: override Shiki inline styles */
 	background: transparent !important;
