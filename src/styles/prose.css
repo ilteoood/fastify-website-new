@@ -139,8 +139,33 @@
 	margin: 2.5rem 0;
 }
 
-/* Code tabs: let Shiki's <pre> inherit the dark terminal container background
-   so the frame and code area read as one consistent surface in both themes. */
+/* Shiki dual-theme switching. The site is dark-first (no data-theme = dark),
+   so dark theme colors are the default and we only switch to the light theme
+   variables when [data-theme="light"] is set on the document. `!important` is
+   required to override Shiki's inline color/background styles. */
+.astro-code,
+.astro-code span {
+	/* biome-ignore lint/complexity/noImportantStyles: override Shiki inline styles */
+	color: var(--shiki-dark) !important;
+	/* biome-ignore lint/complexity/noImportantStyles: override Shiki inline styles */
+	background-color: var(--shiki-dark-bg) !important;
+}
+[data-theme="light"] .astro-code,
+[data-theme="light"] .astro-code span {
+	/* biome-ignore lint/complexity/noImportantStyles: override Shiki inline styles */
+	color: var(--shiki-light) !important;
+	/* biome-ignore lint/complexity/noImportantStyles: override Shiki inline styles */
+	background-color: var(--shiki-light-bg) !important;
+}
+
+/* Code tabs: keep Shiki's <pre> transparent so the card surface shows through,
+   then layer a theme-aware fallback so the code area still has a readable
+   background if the inline Shiki background is ever absent. */
 [data-codetabs] .astro-code {
-	background: transparent;
+	/* biome-ignore lint/complexity/noImportantStyles: override Shiki inline styles */
+	background: transparent !important;
+}
+[data-theme="light"] [data-codetabs] .astro-code {
+	/* biome-ignore lint/complexity/noImportantStyles: override Shiki inline styles */
+	background: var(--shiki-light-bg) !important;
 }
