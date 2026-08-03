@@ -58,7 +58,7 @@ const { tabs, title, id } = Astro.props;
       class:list={['overflow-x-auto p-4 text-sm', i === 0 ? '' : 'hidden']}
     >
       <div class="hidden" data-raw set:text={tab.code}></div>
-      <Code code={tab.code} lang={tab.lang as any} theme="github-dark" />
+      <Code code={tab.code} lang={tab.lang as any} themes={{ light: "github-light", dark: "github-dark" }} defaultColor="light" />
     </div>
   ))}
 </div>
