@@ -273,20 +273,25 @@ const tickValues = [0, Math.round(max / 2), max];
 
   const meter = document.querySelector("[data-gauge-arc]");
   if (meter) {
+    // Safari iOS does not fire IntersectionObserver reliably on SVG child
+    // path elements; observe the parent <svg> instead.
+    const target = meter.closest("svg") ?? meter;
+    const trigger = () => animate();
     const io = new IntersectionObserver(
       (entries) => {
         if (entries.some((e) => e.isIntersecting)) {
-          animate();
+          trigger();
           io.disconnect();
         }
       },
       { threshold: 0.25 },
     );
-    io.observe(meter);
-    // Fallback: if it's in the initial viewport, animate shortly after load.
-    window.addEventListener("load", () => {
+    io.observe(target);
+    const startIfInViewport = () => {
       const r = meter.getBoundingClientRect();
-      if (r.top < window.innerHeight && r.bottom > 0) setTimeout(animate, 350);
-    });
+      if (r.top < window.innerHeight && r.bottom > 0) setTimeout(trigger, 350);
+    };
+    if (document.readyState === "complete") startIfInViewport();
+    else window.addEventListener("load", startIfInViewport);
   }
 </script>
