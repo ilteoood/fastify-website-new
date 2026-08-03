@@ -13,6 +13,7 @@
  */
 import { readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
+import { setTimeout } from "node:timers/promises";
 import pino from "pino";
 
 const ROOT = path.resolve(import.meta.dirname, "..");
@@ -42,7 +43,7 @@ async function fetchDownloads(packageName) {
 			if (res.status === 429) {
 				const wait = Math.max(Number(res.headers.get("retry-after") || 1), 2);
 				log.warn({ package: packageName, wait }, "rate limited, backing off");
-				await new Promise((r) => setTimeout(r, wait * 1000));
+				await setTimeout(wait * 1000);
 				continue;
 			}
 			if (res.status === 404) return 0;
@@ -62,7 +63,7 @@ async function fetchDownloads(packageName) {
 				{ package: packageName, attempt, backoff },
 				"retrying after error",
 			);
-			await new Promise((r) => setTimeout(r, backoff));
+			await setTimeout(backoff);
 		}
 	}
 	return 0;
@@ -81,11 +82,11 @@ async function main() {
 		const plugin = plugins[i];
 		const downloads = await fetchDownloads(plugin.name);
 		enriched.push({ ...plugin, downloads });
-		if ((i + 1) % 25 === 0 || i === plugins.length - 1) {
-			log.info(`${i + 1}/${plugins.length} processed`);
+		if ((i + 1) % 25 === 0) {
+			log.info(`${i + 1}/${plugins.length} plugins processed`);
 		}
 		if (i < plugins.length - 1) {
-			await new Promise((r) => setTimeout(r, REQUEST_DELAY_MS));
+			await setTimeout(REQUEST_DELAY_MS);
 		}
 	}
 
