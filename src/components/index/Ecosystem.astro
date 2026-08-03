@@ -3,9 +3,10 @@ import ButtonLink from "~/components/ButtonLink.astro";
 import EcosystemCard from "~/components/EcosystemCard.astro";
 import Icon from "~/components/Icon.astro";
 import plugins from "~/data/plugins.json";
+import featuredPluginsData from "~/data/plugins-by-downloads.json";
 import { withBase } from "~/lib/href";
 
-const featuredPlugins = plugins.plugins.slice(0, 6);
+const featuredPlugins = featuredPluginsData.plugins.slice(0, 6);
 const pluginsNumber = plugins.plugins.length;
 ---
 
