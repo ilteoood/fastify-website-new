@@ -9,7 +9,7 @@
  * span assertion whenever the window crosses a DST boundary. Wrapping values in
  * `UTCDate` keeps both stable: UTC has no DST, so every day is exactly 24h.
  */
-import { UTCDate } from "@date-fns/utc";
+import { UTCDate, utc } from "@date-fns/utc";
 import {
 	addDays,
 	differenceInCalendarDays,
@@ -53,8 +53,8 @@ export function isInPeriod(value, period) {
  * @param {string} fromDate @param {string} toDate
  */
 export function splitDateRange(fromDate, toDate) {
-	const start = new UTCDate(`${fromDate}T00:00:00.000Z`);
-	const end = new UTCDate(`${toDate}T00:00:00.000Z`);
+	const start = parseISO(fromDate, { in: utc });
+	const end = parseISO(toDate, { in: utc });
 	if (!isValid(start) || !isValid(end) || start >= end) {
 		return null;
 	}
