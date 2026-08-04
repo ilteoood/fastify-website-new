@@ -25,7 +25,7 @@ export const REQUEST_TIMEOUT_MS = 15_000;
 export const MAX_RETRIES = 4;
 export const MAX_RETRY_WAIT_MS = 60_000;
 export const REVIEW_CONCURRENCY = 5;
-export const API_VERSION = "2022-11-28";
+export const API_VERSION = "2026-03-10";
 export const USER_AGENT = "fastify-website-contributors";
 
 export const log = pino({
