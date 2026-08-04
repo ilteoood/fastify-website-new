@@ -1,5 +1,5 @@
-import benchmarksData from "~/data/benchmarks.json" with { type: "json" };
 import type { ProfileCardPerson } from "~/components/ProfileCard.astro";
+import benchmarksData from "~/data/benchmarks.json" with { type: "json" };
 
 export const SITE = {
 	name: "Fastify",
@@ -206,52 +206,191 @@ export const SPONSORS: Sponsor[] = [
 	},
 ];
 
-export type Person = { name: string; github: string; role?: string };
-
-export const LEADS: Person[] = [
-	{ name: "Matteo Collina", github: "mcollina" },
-	{ name: "Tomas Della Vedova", github: "delvedor" },
-	{ name: "KaKa Ng", github: "climba03003" },
-	{ name: "Manuel Spigolon", github: "eomm" },
-	{ name: "James Sumners", github: "jsumners" },
+export const LEADS: ProfileCardPerson[] = [
+	{
+		name: "Matteo Collina",
+		login: "mcollina",
+		avatarUrl: "https://avatars.githubusercontent.com/mcollina?s=120",
+		profileUrl: "https://github.com/mcollina",
+	},
+	{
+		name: "Tomas Della Vedova",
+		login: "delvedor",
+		avatarUrl: "https://avatars.githubusercontent.com/delvedor?s=120",
+		profileUrl: "https://github.com/delvedor",
+	},
+	{
+		name: "KaKa Ng",
+		login: "climba03003",
+		avatarUrl: "https://avatars.githubusercontent.com/climba03003?s=120",
+		profileUrl: "https://github.com/climba03003",
+	},
+	{
+		name: "Manuel Spigolon",
+		login: "eomm",
+		avatarUrl: "https://avatars.githubusercontent.com/eomm?s=120",
+		profileUrl: "https://github.com/eomm",
+	},
+	{
+		name: "James Sumners",
+		login: "jsumners",
+		avatarUrl: "https://avatars.githubusercontent.com/jsumners?s=120",
+		profileUrl: "https://github.com/jsumners",
+	},
 ];
 
-export const COLLABORATORS: Person[] = [
-	{ name: "Carlos Fuentes", github: "metcoder95" },
-	{ name: "Evan Shortiss", github: "evanshortiss" },
-	{ name: "Luciano Mammino", github: "lmammino" },
-	{ name: "Maksim Sinik", github: "fox1t" },
-	{ name: "Frazer Smith", github: "Fdawgs" },
-	{ name: "Igor Savin", github: "kibertoad" },
-	{ name: "Vincent Le Goff", github: "zekth" },
-	{ name: "Aras Abbasi", github: "uzlopak" },
-	{ name: "Gürgün Dayıoğlu", github: "gurgunday" },
-	{ name: "Dan Castillo", github: "dancastillo" },
-	{ name: "Jean Michelet", github: "jean-michelet" },
-	{ name: "Harry Brundage", github: "airhorns" },
-	{ name: "Luis Orbaiceta", github: "luisorbaiceta" },
-	{ name: "Matteo Pietro Dazzi", github: "ilteoood" },
+export const COLLABORATORS: ProfileCardPerson[] = [
+	{
+		name: "Carlos Fuentes",
+		login: "metcoder95",
+		avatarUrl: "https://avatars.githubusercontent.com/metcoder95?s=120",
+		profileUrl: "https://github.com/metcoder95",
+	},
+	{
+		name: "Evan Shortiss",
+		login: "evanshortiss",
+		avatarUrl: "https://avatars.githubusercontent.com/evanshortiss?s=120",
+		profileUrl: "https://github.com/evanshortiss",
+	},
+	{
+		name: "Luciano Mammino",
+		login: "lmammino",
+		avatarUrl: "https://avatars.githubusercontent.com/lmammino?s=120",
+		profileUrl: "https://github.com/lmammino",
+	},
+	{
+		name: "Maksim Sinik",
+		login: "fox1t",
+		avatarUrl: "https://avatars.githubusercontent.com/fox1t?s=120",
+		profileUrl: "https://github.com/fox1t",
+	},
+	{
+		name: "Frazer Smith",
+		login: "Fdawgs",
+		avatarUrl: "https://avatars.githubusercontent.com/Fdawgs?s=120",
+		profileUrl: "https://github.com/Fdawgs",
+	},
+	{
+		name: "Igor Savin",
+		login: "kibertoad",
+		avatarUrl: "https://avatars.githubusercontent.com/kibertoad?s=120",
+		profileUrl: "https://github.com/kibertoad",
+	},
+	{
+		name: "Vincent Le Goff",
+		login: "zekth",
+		avatarUrl: "https://avatars.githubusercontent.com/zekth?s=120",
+		profileUrl: "https://github.com/zekth",
+	},
+	{
+		name: "Aras Abbasi",
+		login: "uzlopak",
+		avatarUrl: "https://avatars.githubusercontent.com/uzlopak?s=120",
+		profileUrl: "https://github.com/uzlopak",
+	},
+	{
+		name: "Gürgün Dayıoğlu",
+		login: "gurgunday",
+		avatarUrl: "https://avatars.githubusercontent.com/gurgunday?s=120",
+		profileUrl: "https://github.com/gurgunday",
+	},
+	{
+		name: "Dan Castillo",
+		login: "dancastillo",
+		avatarUrl: "https://avatars.githubusercontent.com/dancastillo?s=120",
+		profileUrl: "https://github.com/dancastillo",
+	},
+	{
+		name: "Jean Michelet",
+		login: "jean-michelet",
+		avatarUrl: "https://avatars.githubusercontent.com/jean-michelet?s=120",
+		profileUrl: "https://github.com/jean-michelet",
+	},
+	{
+		name: "Harry Brundage",
+		login: "airhorns",
+		avatarUrl: "https://avatars.githubusercontent.com/airhorns?s=120",
+		profileUrl: "https://github.com/airhorns",
+	},
+	{
+		name: "Luis Orbaiceta",
+		login: "luisorbaiceta",
+		avatarUrl: "https://avatars.githubusercontent.com/luisorbaiceta?s=120",
+		profileUrl: "https://github.com/luisorbaiceta",
+	},
+	{
+		name: "Matteo Pietro Dazzi",
+		login: "ilteoood",
+		avatarUrl: "https://avatars.githubusercontent.com/ilteoood?s=120",
+		profileUrl: "https://github.com/ilteoood",
+	},
 ];
 
-export const PAST_COLLABORATORS: Person[] = [
-	{ name: "Ayoub El Khattabi", github: "AyoubElk" },
-	{ name: "Dustin Deus", github: "StarpTech" },
-	{ name: "Rafael Gonzaga", github: "RafaelGSS" },
-	{ name: "David Clements", github: "davidmarkclements" },
-	{ name: "Salman Mitha", github: "salmanm" },
-	{ name: "Tommaso Allevi", github: "allevo" },
-	{ name: "Ethan Arrowood", github: "Ethan-Arrowood" },
-	{ name: "Çağatay Çalı", github: "cagataycali" },
-	{ name: "Cemre Mengu", github: "cemremengu" },
-	{ name: "Nathan Woltman", github: "nwoltman" },
-	{ name: "Trivikram Kamat", github: "trivikr" },
+export const PAST_COLLABORATORS: ProfileCardPerson[] = [
+	{
+		name: "Ayoub El Khattabi",
+		login: "AyoubElk",
+		avatarUrl: "https://avatars.githubusercontent.com/AyoubElk?s=120",
+		profileUrl: "https://github.com/AyoubElk",
+	},
+	{
+		name: "Dustin Deus",
+		login: "StarpTech",
+		avatarUrl: "https://avatars.githubusercontent.com/StarpTech?s=120",
+		profileUrl: "https://github.com/StarpTech",
+	},
+	{
+		name: "Rafael Gonzaga",
+		login: "RafaelGSS",
+		avatarUrl: "https://avatars.githubusercontent.com/RafaelGSS?s=120",
+		profileUrl: "https://github.com/RafaelGSS",
+	},
+	{
+		name: "David Clements",
+		login: "davidmarkclements",
+		avatarUrl: "https://avatars.githubusercontent.com/davidmarkclements?s=120",
+		profileUrl: "https://github.com/davidmarkclements",
+	},
+	{
+		name: "Salman Mitha",
+		login: "salmanm",
+		avatarUrl: "https://avatars.githubusercontent.com/salmanm?s=120",
+		profileUrl: "https://github.com/salmanm",
+	},
+	{
+		name: "Tommaso Allevi",
+		login: "allevo",
+		avatarUrl: "https://avatars.githubusercontent.com/allevo?s=120",
+		profileUrl: "https://github.com/allevo",
+	},
+	{
+		name: "Ethan Arrowood",
+		login: "Ethan-Arrowood",
+		avatarUrl: "https://avatars.githubusercontent.com/Ethan-Arrowood?s=120",
+		profileUrl: "https://github.com/Ethan-Arrowood",
+	},
+	{
+		name: "Çağatay Çalı",
+		login: "cagataycali",
+		avatarUrl: "https://avatars.githubusercontent.com/cagataycali?s=120",
+		profileUrl: "https://github.com/cagataycali",
+	},
+	{
+		name: "Cemre Mengu",
+		login: "cemremengu",
+		avatarUrl: "https://avatars.githubusercontent.com/cemremengu?s=120",
+		profileUrl: "https://github.com/cemremengu",
+	},
+	{
+		name: "Nathan Woltman",
+		login: "nwoltman",
+		avatarUrl: "https://avatars.githubusercontent.com/nwoltman?s=120",
+		profileUrl: "https://github.com/nwoltman",
+	},
+	{
+		name: "Trivikram Kamat",
+		login: "trivikr",
+		avatarUrl: "https://avatars.githubusercontent.com/trivikr?s=120",
+		profileUrl: "https://github.com/trivikr",
+	},
 ];
-
-export function toProfileCardPerson(person: Person): ProfileCardPerson {
-	return {
-		name: person.name,
-		login: person.github,
-		avatarUrl: `https://avatars.githubusercontent.com/${person.github}?s=120`,
-		profileUrl: `https://github.com/${person.github}`,
-	};
-}

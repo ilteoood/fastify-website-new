@@ -1,9 +1,8 @@
-import contributorsData from "~/data/contributors.json" with { type: "json" };
 import type { ProfileCardPerson } from "~/components/ProfileCard.astro";
+import contributorsData from "~/data/contributors.json" with { type: "json" };
 import { COLLABORATORS, LEADS } from "~/data/site";
 
-const COMMUNITY_CONTRIBUTOR_LIMIT = 20;
-const MAINTAINER_CONTRIBUTOR_LIMIT = 20;
+const CONTRIBUTOR_LIMIT = 10;
 
 export type ContributorActivity = {
 	commits: number;
@@ -39,7 +38,7 @@ export type ContributorsData = {
 export const CONTRIBUTORS_DATA = contributorsData as ContributorsData;
 
 const maintainerLogins = new Set(
-	[...LEADS, ...COLLABORATORS].map(({ github }) => github.toLowerCase()),
+	[...LEADS, ...COLLABORATORS].map(({ login }) => login.toLowerCase()),
 );
 
 function rankContributors(contributors: Contributor[]): Contributor[] {
@@ -50,10 +49,11 @@ function rankContributors(contributors: Contributor[]): Contributor[] {
 }
 
 export const ACTIVE_MAINTAINERS = rankContributors(
-	CONTRIBUTORS_DATA.contributors.filter((contributor) =>
-		maintainerLogins.has(contributor.login.toLowerCase()),
-	)
-	.slice(0, MAINTAINER_CONTRIBUTOR_LIMIT),
+	CONTRIBUTORS_DATA.contributors
+		.filter((contributor) =>
+			maintainerLogins.has(contributor.login.toLowerCase()),
+		)
+		.slice(0, CONTRIBUTOR_LIMIT),
 );
 
 export const COMMUNITY_CONTRIBUTORS = rankContributors(
@@ -61,10 +61,12 @@ export const COMMUNITY_CONTRIBUTORS = rankContributors(
 		.filter(
 			(contributor) => !maintainerLogins.has(contributor.login.toLowerCase()),
 		)
-		.slice(0, COMMUNITY_CONTRIBUTOR_LIMIT),
+		.slice(0, CONTRIBUTOR_LIMIT),
 );
 
-export function toProfileCardPerson(contributor: Contributor): ProfileCardPerson {
+export function toProfileCardPerson(
+	contributor: Contributor,
+): ProfileCardPerson {
 	return {
 		login: contributor.login,
 		avatarUrl: contributor.avatarUrl,
