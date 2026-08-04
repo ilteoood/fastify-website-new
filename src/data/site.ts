@@ -1,4 +1,5 @@
 import benchmarksData from "~/data/benchmarks.json" with { type: "json" };
+import type { ProfileCardPerson } from "~/components/ProfileCard.astro";
 
 export const SITE = {
 	name: "Fastify",
@@ -245,3 +246,12 @@ export const PAST_COLLABORATORS: Person[] = [
 	{ name: "Nathan Woltman", github: "nwoltman" },
 	{ name: "Trivikram Kamat", github: "trivikr" },
 ];
+
+export function toProfileCardPerson(person: Person): ProfileCardPerson {
+	return {
+		name: person.name,
+		login: person.github,
+		avatarUrl: `https://avatars.githubusercontent.com/${person.github}?s=120`,
+		profileUrl: `https://github.com/${person.github}`,
+	};
+}
