@@ -10,10 +10,7 @@ import { createPeriod, isInPeriod } from "./dates.mjs";
  */
 export function isHumanActor(actor) {
 	if (!actor?.login) return false;
-	if (
-		actor.__typename === "Bot" ||
-		actor.__typename === "Organization"
-	) {
+	if (actor.__typename === "Bot" || actor.__typename === "Organization") {
 		return false;
 	}
 	return !actor.login.toLowerCase().endsWith("[bot]");
@@ -24,7 +21,11 @@ export function isHumanActor(actor) {
  * @param {{ from: string; to: string }} period
  * @param {number} [limit]
  */
-export function aggregateContributors(activity, period, limit = Number.POSITIVE_INFINITY) {
+export function aggregateContributors(
+	activity,
+	period,
+	limit = Number.POSITIVE_INFINITY,
+) {
 	/** @type {Map<string, any>} */
 	const people = new Map();
 	const seenCommits = new Set();
@@ -139,8 +140,8 @@ export function buildContributorsData(activity, now = new Date()) {
 		generatedAt: now.toISOString(),
 		period,
 		methodology: { weights: WEIGHTS },
-		// Keep the complete ranking so the page can select 20 community contributors
-		// without active maintainers consuming those positions.
+		// Keep the complete ranking so the page can select the top community
+		// contributors without active maintainers consuming those positions.
 		contributors: aggregateContributors(
 			activity,
 			period,
