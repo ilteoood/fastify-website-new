@@ -13,3 +13,6 @@ src/data/versions.json
 src/data/plugins.json
 src/data/plugins-by-downloads.json
 src/data/benchmarks.json
+
+# Contributor ranking generated during postinstall.
+src/data/contributors.json

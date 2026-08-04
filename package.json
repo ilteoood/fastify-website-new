@@ -14,7 +14,7 @@
 		"format": "biome check --write",
 		"format:check": "biome check",
 		"check": "astro check",
-		"postinstall": "node scripts/fetch-docs.mjs && node scripts/build-plugin-list.mjs && node scripts/fetch-plugin-downloads.mjs && node scripts/download-benchmarks.mjs"
+		"postinstall": "node scripts/fetch-docs.mjs && node scripts/build-plugin-list.mjs && node scripts/fetch-plugin-downloads.mjs && node scripts/download-benchmarks.mjs && node scripts/fetch-contributors.mjs"
 	},
 	"dependencies": {
 		"@astrojs/mdx": "^7.0.5",

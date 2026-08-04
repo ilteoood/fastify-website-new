@@ -221,7 +221,18 @@ const channels = [
         </div>
       </div>
 
-      <div class="mt-10 grid gap-4 sm:grid-cols-2">
+      <div class="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <a
+          href={withBase("/contributors/")}
+          class="card group flex items-center justify-between gap-4 p-5 transition-colors hover:border-border-strong"
+        >
+          <div>
+            <p class="font-mono text-xs uppercase tracking-[0.18em] text-amber-ink">[last 30 days]</p>
+            <h3 class="mt-2 font-display text-lg font-semibold">Active contributors</h3>
+            <p class="mt-1 text-sm text-fg-soft">Meet the people moving Fastify forward right now.</p>
+          </div>
+          <Icon name="arrow" size={18} class="text-muted transition-transform group-hover:translate-x-0.5" />
+        </a>
         <a
           href="https://github.com/fastify/fastify/blob/main/CONTRIBUTING.md"
           target="_blank"
