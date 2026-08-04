@@ -9,7 +9,4 @@ node_modules/
 # The content lives in that repository and must stay there.
 src/content/docs/
 public/docs/
-src/data/versions.json
-src/data/plugins.json
-src/data/plugins-by-downloads.json
-src/data/benchmarks.json
+src/data/**.json

@@ -1,0 +1,52 @@
+---
+import Icon from "~/components/Icon.astro";
+import type { Contributor } from "~/data/contributors";
+
+interface Props {
+	contributor: Contributor;
+	priority?: boolean;
+}
+
+const { contributor, priority = false } = Astro.props;
+const imageSize = 56;
+const sourceSize = imageSize;
+const avatar = new URL(contributor.avatarUrl);
+avatar.searchParams.set("s", String(sourceSize));
+const avatar2x = new URL(contributor.avatarUrl);
+avatar2x.searchParams.set("s", String(sourceSize * 2));
+const rankLabel = String(contributor.rank).padStart(2, "0");
+---
+
+<a
+  href={contributor.profileUrl}
+  target="_blank"
+  rel="noopener noreferrer"
+  class="group relative flex h-full min-h-24 min-w-0 items-center gap-4 bg-surface px-4 py-5 transition-colors hover:bg-telemetry focus-visible:z-10 sm:px-5"
+  aria-label={`Rank ${contributor.rank}: @${contributor.login} on GitHub`}
+>
+  <span
+    class="w-7 shrink-0 font-mono text-xs tracking-[0.12em] text-amber-ink"
+    aria-hidden="true"
+  >
+    {rankLabel}
+  </span>
+  <img
+    src={avatar.href}
+    srcset={`${avatar.href} 1x, ${avatar2x.href} 2x`}
+    alt=""
+    width={imageSize}
+    height={imageSize}
+    loading={priority ? "eager" : "lazy"}
+    fetchpriority={priority ? "high" : "auto"}
+    class="size-14 shrink-0 rounded-full border border-border grayscale transition-[filter,border-color] group-hover:border-amber group-hover:grayscale-0"
+  />
+  <span class="min-w-0 flex-1 truncate font-display text-base font-semibold text-fg-soft transition-colors group-hover:text-fg">
+    @{contributor.login}
+  </span>
+  <span
+    class="shrink-0 text-muted opacity-0 transition-[color,opacity] group-hover:text-amber-ink group-hover:opacity-100 group-focus-visible:text-amber-ink group-focus-visible:opacity-100"
+    aria-hidden="true"
+  >
+    <Icon name="external" size={15} />
+  </span>
+</a>
