@@ -41,36 +41,25 @@ const maintainerLogins = new Set(
 	[...LEADS, ...COLLABORATORS].map(({ login }) => login.toLowerCase()),
 );
 
-function rankContributors(contributors: Contributor[]): Contributor[] {
-	return contributors.map((contributor, index) => ({
-		...contributor,
-		rank: index + 1,
-	}));
+function rankContributors(contributors: Contributor[]): ProfileCardPerson[] {
+	return contributors.map(
+		(contributor, index): ProfileCardPerson => ({
+			login: contributor.login,
+			avatarUrl: contributor.avatarUrl,
+			profileUrl: contributor.profileUrl,
+			rank: index + 1,
+		}),
+	);
 }
 
 export const ACTIVE_MAINTAINERS = rankContributors(
-	CONTRIBUTORS_DATA.contributors
-		.filter((contributor) =>
-			maintainerLogins.has(contributor.login.toLowerCase()),
-		)
-		.slice(0, CONTRIBUTOR_LIMIT),
-);
+	CONTRIBUTORS_DATA.contributors.filter((contributor) =>
+		maintainerLogins.has(contributor.login.toLowerCase()),
+	),
+).slice(0, CONTRIBUTOR_LIMIT);
 
 export const COMMUNITY_CONTRIBUTORS = rankContributors(
-	CONTRIBUTORS_DATA.contributors
-		.filter(
-			(contributor) => !maintainerLogins.has(contributor.login.toLowerCase()),
-		)
-		.slice(0, CONTRIBUTOR_LIMIT),
-);
-
-export function toProfileCardPerson(
-	contributor: Contributor,
-): ProfileCardPerson {
-	return {
-		login: contributor.login,
-		avatarUrl: contributor.avatarUrl,
-		profileUrl: contributor.profileUrl,
-		rank: contributor.rank,
-	};
-}
+	CONTRIBUTORS_DATA.contributors.filter(
+		(contributor) => !maintainerLogins.has(contributor.login.toLowerCase()),
+	),
+).slice(0, CONTRIBUTOR_LIMIT);
