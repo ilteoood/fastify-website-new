@@ -2,18 +2,16 @@
 /**
  * Turn raw GitHub activity into a weighted contributor ranking.
  */
-import { ORGANIZATION, RESULT_LIMIT, WEIGHTS } from "./config.mjs";
+import { ORGANIZATION, WEIGHTS } from "./config.mjs";
 import { createPeriod, isInPeriod } from "./dates.mjs";
 
 /**
- * @param {{ login?: string; type?: string; __typename?: string } | null | undefined} actor
+ * @param {{ login?: string; __typename?: string } | null | undefined} actor
  */
 export function isHumanActor(actor) {
 	if (!actor?.login) return false;
 	if (
-		actor.type === "Bot" ||
 		actor.__typename === "Bot" ||
-		actor.type === "Organization" ||
 		actor.__typename === "Organization"
 	) {
 		return false;
@@ -26,7 +24,7 @@ export function isHumanActor(actor) {
  * @param {{ from: string; to: string }} period
  * @param {number} [limit]
  */
-export function aggregateContributors(activity, period, limit = RESULT_LIMIT) {
+export function aggregateContributors(activity, period, limit = Number.POSITIVE_INFINITY) {
 	/** @type {Map<string, any>} */
 	const people = new Map();
 	const seenCommits = new Set();
@@ -124,8 +122,7 @@ export function aggregateContributors(activity, period, limit = RESULT_LIMIT) {
 		.sort(
 			(a, b) =>
 				b.score - a.score ||
-				a.login.localeCompare(b.login, "en", { sensitivity: "base" }) ||
-				a.login.localeCompare(b.login, "en"),
+				a.login.localeCompare(b.login, "en", { sensitivity: "base" }),
 		)
 		.slice(0, limit)
 		.map((person, index) => ({ rank: index + 1, ...person }));

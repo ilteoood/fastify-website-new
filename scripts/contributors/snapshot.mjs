@@ -90,7 +90,7 @@ export async function writeSnapshot(data, output = OUTPUT) {
 	validateContributorsData(data);
 	const temporary = `${output}.${process.pid}.tmp`;
 	try {
-		await writeFile(temporary, `${JSON.stringify(data, null, "\t")}\n`);
+		await writeFile(temporary, `${JSON.stringify(data, null, 2)}\n`);
 		await rename(temporary, output);
 	} catch (error) {
 		await unlink(temporary).catch(() => {});

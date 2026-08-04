@@ -19,23 +19,15 @@ import { readSnapshot, writeSnapshot } from "./snapshot.mjs";
  *   token?: string;
  *   now?: Date;
  *   output?: string;
- *   client?: ReturnType<typeof createGitHubClient>;
- *   collect?: typeof collectGitHubActivity;
- *   read?: typeof readSnapshot;
- *   write?: typeof writeSnapshot;
- *   logger?: Pick<typeof log, "info" | "warn">;
  * }} [options]
  */
 export async function runGenerator(options = {}) {
 	const token = options.token ?? "";
 	const output = options.output ?? OUTPUT;
-	const logger = options.logger ?? log;
-	const read = options.read ?? readSnapshot;
-	const write = options.write ?? writeSnapshot;
 	if (!token) {
 		try {
-			const snapshot = await read(output);
-			logger.warn(
+			const snapshot = await readSnapshot(output);
+			log.warn(
 				"GH_TOKEN is not set; keeping the existing generated contributor snapshot",
 			);
 			return { refreshed: false, data: snapshot };
@@ -51,8 +43,8 @@ export async function runGenerator(options = {}) {
 		}
 
 		const data = buildContributorsData({}, options.now ?? new Date());
-		await write(data, output);
-		logger.warn(
+		await writeSnapshot(data, output);
+		log.warn(
 			"GH_TOKEN is not set; created an empty contributor snapshot for local builds",
 		);
 		return { refreshed: false, data };
@@ -60,15 +52,14 @@ export async function runGenerator(options = {}) {
 
 	const now = options.now ?? new Date();
 	const period = createPeriod(now);
-	const client = options.client ?? createGitHubClient({ token });
-	logger.info(
+	const client = createGitHubClient({ token });
+	log.info(
 		`Collecting ${ORGANIZATION} activity from ${period.from} through ${period.to}`,
 	);
-	const collect = options.collect ?? collectGitHubActivity;
-	const activity = await collect(client, period, ORGANIZATION);
+	const activity = await collectGitHubActivity(client, period, ORGANIZATION);
 	const data = buildContributorsData(activity, now);
-	await write(data, output);
-	logger.info(
+	await writeSnapshot(data, output);
+	log.info(
 		`Wrote ${data.contributors.length} contributors to ${path.relative(ROOT, output)}`,
 	);
 	return { refreshed: true, data };

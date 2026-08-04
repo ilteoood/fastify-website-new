@@ -7,7 +7,6 @@ import pino from "pino";
 
 export const ORGANIZATION = "fastify";
 export const WINDOW_DAYS = 30;
-export const RESULT_LIMIT = 20;
 export const WEIGHTS = Object.freeze({
 	commits: 1,
 	pullRequestsOpened: 3,
