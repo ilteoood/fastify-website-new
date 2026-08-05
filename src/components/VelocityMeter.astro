@@ -150,6 +150,7 @@ const tickValues = [0, Math.round(max / 2), max];
           const o = polar(a, R + 16);
           return (
             <text
+              class="tick-label"
               x={o.x}
               y={o.y}
               fill="var(--muted)"
@@ -236,6 +237,12 @@ const tickValues = [0, Math.round(max / 2), max];
   .peer:hover .peer-marker {
     stroke: var(--teal);
     opacity: 1;
+  }
+  .tick-label {
+    transition: opacity 0.15s ease-out;
+  }
+  svg:has(.peer:hover) .tick-label {
+    opacity: 0;
   }
 </style>
 
