@@ -1,4 +1,3 @@
-import type { ProfileCardPerson } from "~/components/ProfileCard.astro";
 import contributorsData from "~/data/contributors.json" with { type: "json" };
 import { COLLABORATORS, LEADS } from "~/data/site";
 
@@ -17,8 +16,6 @@ export type Contributor = {
 	login: string;
 	avatarUrl: string;
 	profileUrl: string;
-	score: number;
-	activity: ContributorActivity;
 };
 
 export type ContributorsData = {
@@ -41,25 +38,14 @@ const maintainerLogins = new Set(
 	[...LEADS, ...COLLABORATORS].map(({ login }) => login.toLowerCase()),
 );
 
-function rankContributors(contributors: Contributor[]): ProfileCardPerson[] {
-	return contributors.map(
-		(contributor, index): ProfileCardPerson => ({
-			login: contributor.login,
-			avatarUrl: contributor.avatarUrl,
-			profileUrl: contributor.profileUrl,
-			rank: index + 1,
-		}),
-	);
-}
-
-export const ACTIVE_MAINTAINERS = rankContributors(
-	CONTRIBUTORS_DATA.contributors.filter((contributor) =>
+export const ACTIVE_MAINTAINERS = CONTRIBUTORS_DATA.contributors
+	.filter((contributor) =>
 		maintainerLogins.has(contributor.login.toLowerCase()),
-	),
-).slice(0, CONTRIBUTOR_LIMIT);
+	)
+	.slice(0, CONTRIBUTOR_LIMIT);
 
-export const COMMUNITY_CONTRIBUTORS = rankContributors(
-	CONTRIBUTORS_DATA.contributors.filter(
+export const COMMUNITY_CONTRIBUTORS = CONTRIBUTORS_DATA.contributors
+	.filter(
 		(contributor) => !maintainerLogins.has(contributor.login.toLowerCase()),
-	),
-).slice(0, CONTRIBUTOR_LIMIT);
+	)
+	.slice(0, CONTRIBUTOR_LIMIT);

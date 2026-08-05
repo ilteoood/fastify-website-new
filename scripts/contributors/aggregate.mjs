@@ -135,6 +135,16 @@ export function aggregateContributors(
  */
 export function buildContributorsData(activity, now = new Date()) {
 	const period = createPeriod(now);
+	const contributors = aggregateContributors(
+		activity,
+		period,
+		Number.POSITIVE_INFINITY,
+	).map(({ rank, login, avatarUrl, profileUrl }) => ({
+		rank,
+		login,
+		avatarUrl,
+		profileUrl,
+	}));
 	return {
 		organization: ORGANIZATION,
 		generatedAt: now.toISOString(),
@@ -142,10 +152,6 @@ export function buildContributorsData(activity, now = new Date()) {
 		methodology: { weights: WEIGHTS },
 		// Keep the complete ranking so the page can select the top community
 		// contributors without active maintainers consuming those positions.
-		contributors: aggregateContributors(
-			activity,
-			period,
-			Number.POSITIVE_INFINITY,
-		),
+		contributors,
 	};
 }

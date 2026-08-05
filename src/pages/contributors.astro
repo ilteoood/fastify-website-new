@@ -16,7 +16,6 @@ const rosters = [
 		description:
 			"The most active contributors outside the current maintainer team.",
 		contributors: COMMUNITY_CONTRIBUTORS,
-		gridClass: "xl:grid-cols-4",
 	},
 	{
 		id: "active-maintainers",
@@ -25,7 +24,6 @@ const rosters = [
 		description:
 			"Lead maintainers and collaborators active during the same window.",
 		contributors: ACTIVE_MAINTAINERS,
-		gridClass: "xl:grid-cols-2",
 	},
 ];
 const dateFormatter = new Intl.DateTimeFormat("en", {
@@ -96,10 +94,7 @@ const generatedAt = dateFormatter.format(
             <div class="overflow-hidden border border-border bg-border">
               {roster.contributors.length > 0 ? (
                 <ol
-                  class:list={[
-                    "grid list-none grid-cols-1 gap-px bg-border sm:grid-cols-2",
-                    roster.gridClass,
-                  ]}
+                  class="grid list-none grid-cols-1 gap-px bg-border sm:grid-cols-2"
                 >
                   {roster.contributors.map((contributor, index) => (
                     <li value={contributor.rank} class="min-w-0 bg-bg">
@@ -125,10 +120,11 @@ const generatedAt = dateFormatter.format(
 
   <section class="border-t border-border px-4 py-12 sm:px-6">
     <p class="mx-auto max-w-3xl text-center text-sm leading-relaxed text-muted">
-      Rankings include activity in public <span class="font-mono text-fg-soft">fastify/*</span>&nbsp;
+      Rankings include activity in public <span class="font-mono text-fg-soft">fastify/*</span>{' '}
       repositories: authored commits, opened pull requests and issues, merged work, and submitted
-      reviews. Each roster is ranked independently; the maintainer roster includes current lead
-      maintainers and collaborators. Automated accounts are excluded.
+      reviews. Both rosters preserve their position in the organization-wide activity ranking; the
+      maintainer roster includes current lead maintainers and collaborators. Automated accounts are
+      excluded.
     </p>
   </section>
 </BaseLayout>
