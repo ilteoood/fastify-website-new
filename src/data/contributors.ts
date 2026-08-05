@@ -1,7 +1,7 @@
 import contributorsData from "~/data/contributors.json" with { type: "json" };
 import { COLLABORATORS, LEADS } from "~/data/site";
 
-const COMMUNITY_CONTRIBUTOR_LIMIT = 20;
+const CONTRIBUTOR_LIMIT = 10;
 
 export type ContributorActivity = {
 	commits: number;
@@ -16,8 +16,6 @@ export type Contributor = {
 	login: string;
 	avatarUrl: string;
 	profileUrl: string;
-	score: number;
-	activity: ContributorActivity;
 };
 
 export type ContributorsData = {
@@ -37,26 +35,17 @@ export type ContributorsData = {
 export const CONTRIBUTORS_DATA = contributorsData as ContributorsData;
 
 const maintainerLogins = new Set(
-	[...LEADS, ...COLLABORATORS].map(({ github }) => github.toLowerCase()),
+	[...LEADS, ...COLLABORATORS].map(({ login }) => login.toLowerCase()),
 );
 
-function rankContributors(contributors: Contributor[]): Contributor[] {
-	return contributors.map((contributor, index) => ({
-		...contributor,
-		rank: index + 1,
-	}));
-}
-
-export const ACTIVE_MAINTAINERS = rankContributors(
-	CONTRIBUTORS_DATA.contributors.filter((contributor) =>
+export const ACTIVE_MAINTAINERS = CONTRIBUTORS_DATA.contributors
+	.filter((contributor) =>
 		maintainerLogins.has(contributor.login.toLowerCase()),
-	),
-);
+	)
+	.slice(0, CONTRIBUTOR_LIMIT);
 
-export const COMMUNITY_CONTRIBUTORS = rankContributors(
-	CONTRIBUTORS_DATA.contributors
-		.filter(
-			(contributor) => !maintainerLogins.has(contributor.login.toLowerCase()),
-		)
-		.slice(0, COMMUNITY_CONTRIBUTOR_LIMIT),
-);
+export const COMMUNITY_CONTRIBUTORS = CONTRIBUTORS_DATA.contributors
+	.filter(
+		(contributor) => !maintainerLogins.has(contributor.login.toLowerCase()),
+	)
+	.slice(0, CONTRIBUTOR_LIMIT);

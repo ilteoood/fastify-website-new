@@ -57,9 +57,7 @@ export function validateContributorsData(data) {
 			typeof contributor.login !== "string" ||
 			!contributor.login ||
 			!URL.canParse(contributor.avatarUrl) ||
-			!URL.canParse(contributor.profileUrl) ||
-			!Number.isFinite(contributor.score) ||
-			!contributor.activity
+			!URL.canParse(contributor.profileUrl)
 		) {
 			throw new Error(`Snapshot contributor at rank ${index + 1} is invalid`);
 		}
@@ -67,14 +65,6 @@ export function validateContributorsData(data) {
 		if (logins.has(key))
 			throw new Error(`Duplicate contributor ${contributor.login}`);
 		logins.add(key);
-		for (const field of Object.keys(WEIGHTS)) {
-			if (
-				!Number.isInteger(contributor.activity[field]) ||
-				contributor.activity[field] < 0
-			) {
-				throw new Error(`Invalid ${field} count for ${contributor.login}`);
-			}
-		}
 	}
 	return snapshot;
 }
