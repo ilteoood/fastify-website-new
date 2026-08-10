@@ -7,8 +7,9 @@ import { fetchPluginDownloads } from "./fetch-plugin-downloads.mjs";
 const tasks = [
 	downloadBenchmarks(),
 	fetchContributors(),
-	fetchDocs().then(() => buildPluginList()),
-	fetchPluginDownloads(),
+	fetchDocs()
+		.then(() => buildPluginList())
+		.then(() => fetchPluginDownloads()),
 ];
 
 for (const task of tasks) {
