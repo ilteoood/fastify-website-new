@@ -12,12 +12,6 @@ const tasks = [
 		.then(() => fetchPluginDownloads()),
 ];
 
-for (const task of tasks) {
-	await task;
-}
-
-console.log("Post-install tasks completed successfully.");
-
 await Promise.all(tasks).catch((err) => {
 	console.error(err);
 	process.exit(1);
