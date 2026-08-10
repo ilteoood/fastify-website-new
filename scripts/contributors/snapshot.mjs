@@ -55,9 +55,7 @@ export function validateContributorsData(data) {
 		if (
 			contributor.rank !== index + 1 ||
 			typeof contributor.login !== "string" ||
-			!contributor.login ||
-			!URL.canParse(contributor.avatarUrl) ||
-			!URL.canParse(contributor.profileUrl)
+			!contributor.login
 		) {
 			throw new Error(`Snapshot contributor at rank ${index + 1} is invalid`);
 		}
