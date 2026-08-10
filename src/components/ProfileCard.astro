@@ -5,8 +5,6 @@ import { githubAvatarUrl } from "~/lib/avatar";
 export type ProfileCardPerson = {
 	name?: string;
 	login: string;
-	avatarUrl: string;
-	profileUrl: string;
 	rank?: number;
 };
 
@@ -23,18 +21,18 @@ const config = {
 	chip: { avatar: 80, img: 40 },
 	roster: { avatar: 56, img: 56 },
 } as const;
-const { avatar, img } = config[variant];
+const { avatar, img: imageSize } = config[variant];
 
-const imageSize = img;
-const avatar1x = person.avatarUrl;
-const avatar2x = variant === "roster" ? githubAvatarUrl(person.avatarUrl, avatar * 2) : avatar1x;
+const avatar1x = githubAvatarUrl(person);
+const avatar2x = variant === "roster" ? githubAvatarUrl(person, avatar * 2) : avatar1x;
 const rankLabel = person.rank ? String(person.rank).padStart(2, "0") : "";
+const profileUrl = `https://github.com/${person.login}`;
 ---
 
 {
 	variant === "card" && (
 		<a
-			href={person.profileUrl}
+			href={profileUrl}
 			target="_blank"
 			rel="noopener noreferrer"
 			class="card group flex flex-col items-center gap-3 p-6 transition-colors hover:border-border-strong"
@@ -58,7 +56,7 @@ const rankLabel = person.rank ? String(person.rank).padStart(2, "0") : "";
 {
 	variant === "chip" && (
 		<a
-			href={person.profileUrl}
+			href={profileUrl}
 			target="_blank"
 			rel="noopener noreferrer"
 			class="group flex items-center gap-3 rounded-lg border border-border bg-surface/40 p-3 transition-colors hover:border-border-strong"
@@ -81,7 +79,7 @@ const rankLabel = person.rank ? String(person.rank).padStart(2, "0") : "";
 {
 	variant === "roster" && (
 		<a
-			href={person.profileUrl}
+			href={profileUrl}
 			target="_blank"
 			rel="noopener noreferrer"
 			class="group relative flex h-full min-h-24 min-w-0 items-center gap-4 bg-surface px-4 py-5 transition-colors hover:bg-telemetry focus-visible:z-10 sm:px-5"

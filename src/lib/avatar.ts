@@ -1,10 +1,10 @@
-export const githubAvatarUrl = (githubOrUrl: string, size: number): string => {
-	const isFullUrl = githubOrUrl.startsWith("http");
-	const url = new URL(
-		isFullUrl
-			? githubOrUrl
-			: `https://avatars.githubusercontent.com/${githubOrUrl}`,
-	);
+import type { ProfileCardPerson } from "~/components/ProfileCard.astro";
+
+export const githubAvatarUrl = (
+	person: ProfileCardPerson,
+	size: number = 120,
+): string => {
+	const url = new URL(`https://avatars.githubusercontent.com/${person.login}`);
 	url.searchParams.set("s", String(size));
 	return url.href;
 };
