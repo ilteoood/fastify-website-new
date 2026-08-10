@@ -41,12 +41,6 @@ export function aggregateContributors(
 		if (!person) {
 			person = {
 				login: actor.login,
-				avatarUrl:
-					actor.avatarUrl ??
-					actor.avatar_url ??
-					`https://avatars.githubusercontent.com/${actor.login}`,
-				profileUrl:
-					actor.html_url ?? actor.url ?? `https://github.com/${actor.login}`,
 				activity: {
 					commits: 0,
 					pullRequestsOpened: 0,
