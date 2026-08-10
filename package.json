@@ -11,10 +11,10 @@
 		"astro": "astro",
 		"lint": "biome lint",
 		"lint:fix": "biome lint --write",
-		"format": "biome check --write",
-		"format:check": "biome check",
+		"format": "biome check",
+		"format:fix": "biome check --write",
 		"check": "astro check",
-		"postinstall": "node scripts/fetch-docs.mjs && node scripts/build-plugin-list.mjs && node scripts/fetch-plugin-downloads.mjs && node scripts/download-benchmarks.mjs && node scripts/fetch-contributors.mjs"
+		"postinstall": "node scripts/postinstall.mjs"
 	},
 	"dependencies": {
 		"@astrojs/mdx": "^7.0.5",

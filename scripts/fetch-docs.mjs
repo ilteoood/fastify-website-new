@@ -68,6 +68,7 @@ const GUIDE_ORDER = [
 
 const log = pino({
 	level: process.env.LOG_LEVEL || "debug",
+	msgPrefix: "[fetch-docs] ",
 	transport: {
 		target: "pino-pretty",
 		options: { colorize: true },
@@ -303,7 +304,7 @@ async function isNonEmptyDir(dir) {
 	}
 }
 
-async function main() {
+export async function fetchDocs() {
 	let versions;
 	try {
 		versions = listVersions();
@@ -367,8 +368,3 @@ async function main() {
 	if (!process.env.KEEP_CACHE)
 		await rm(CACHE, { recursive: true, force: true }).catch(() => {});
 }
-
-main().catch((err) => {
-	log.error(err);
-	process.exit(1);
-});

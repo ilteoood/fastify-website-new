@@ -9,6 +9,7 @@
  * each plugin's `[name](url)` plus the trailing description out of the list
  * items.
  */
+
 import { existsSync } from "node:fs";
 import { readFile, stat, writeFile } from "node:fs/promises";
 import path from "node:path";
@@ -21,6 +22,7 @@ const OUTPUT = path.join(ROOT, "src/data/plugins.json");
 
 const log = pino({
 	level: process.env.LOG_LEVEL || "debug",
+	msgPrefix: "[build-plugin-list] ",
 	transport: {
 		target: "pino-pretty",
 		options: { colorize: true },
@@ -145,7 +147,7 @@ function withOfficialFlag(entries) {
 	return entries.map((entry) => ({ ...entry, official: true }));
 }
 
-async function main() {
+export async function buildPluginList() {
 	if (await skipIfGenerated()) {
 		log.info(
 			`Source missing and ${path.relative(ROOT, OUTPUT)} already exists — skipping.`,
@@ -183,8 +185,3 @@ async function main() {
 	await writeFile(OUTPUT, `${JSON.stringify({ plugins }, null, 2)}\n`);
 	log.info(`Wrote ${plugins.length} plugins to ${path.relative(ROOT, OUTPUT)}`);
 }
-
-main().catch((err) => {
-	log.error(err);
-	process.exit(1);
-});

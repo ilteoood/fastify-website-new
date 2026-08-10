@@ -29,6 +29,7 @@ export const USER_AGENT = "fastify-website-contributors";
 
 export const log = pino({
 	level: process.env.LOG_LEVEL || "info",
+	msgPrefix: "[fetch-contributors] ",
 	transport: {
 		target: "pino-pretty",
 		options: { colorize: true },

@@ -32,26 +32,22 @@ const TIMEOUT_MS = 10_000;
 
 const log = pino({
 	level: process.env.LOG_LEVEL || "debug",
+	msgPrefix: "[download-benchmarks] ",
 	transport: {
 		target: "pino-pretty",
 		options: { colorize: true },
 	},
 });
 
-main().catch((err) => {
-	log.error(err);
-	process.exit(1);
-});
-
-async function main() {
-	const data = await downloadBenchmarks(URL_BENCHMARK);
+export async function downloadBenchmarks() {
+	const data = await downloadBenchmarksFromUrl(URL_BENCHMARK);
 	await writeFile(OUTPUT, `${JSON.stringify(data, null, 2)}\n`);
 	log.info(
 		`Wrote ${data.frameworks.length} frameworks (reference ${data.reference}) to ${path.relative(ROOT, OUTPUT)}`,
 	);
 }
 
-async function downloadBenchmarks(githubUrl) {
+async function downloadBenchmarksFromUrl(githubUrl) {
 	const data = await getJSON(githubUrl);
 	if (isValidBenchmark(data)) {
 		const date = await getBenchmarkDate();

@@ -26,6 +26,7 @@ const TIMEOUT_MS = 10_000;
 
 const log = pino({
 	level: process.env.LOG_LEVEL || "info",
+	msgPrefix: "[fetch-plugin-downloads] ",
 	transport: {
 		target: "pino-pretty",
 		options: { colorize: true },
@@ -69,7 +70,7 @@ async function fetchDownloads(packageName) {
 	return 0;
 }
 
-async function main() {
+export async function fetchPluginDownloads() {
 	const raw = await readFile(INPUT, "utf8");
 	const { plugins } = JSON.parse(raw);
 	if (!Array.isArray(plugins) || plugins.length === 0) {
@@ -101,8 +102,3 @@ async function main() {
 	);
 	log.info({ top }, "Top 6 by downloads");
 }
-
-main().catch((err) => {
-	log.error(err);
-	process.exit(1);
-});
