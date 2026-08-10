@@ -324,6 +324,18 @@ export const COLLABORATORS: ProfileCardPerson[] = [
 		avatarUrl: "https://avatars.githubusercontent.com/ilteoood?s=120",
 		profileUrl: "https://github.com/ilteoood",
 	},
+	{
+		name: "Antonio Tripodi",
+		login: "tony133",
+		avatarUrl: "https://avatars.githubusercontent.com/tony133?s=120",
+		profileUrl: "https://github.com/tony133",
+	},
+	{
+		name: "Issei Horie",
+		login: "is2ei",
+		avatarUrl: "https://avatars.githubusercontent.com/is2ei?s=120",
+		profileUrl: "https://github.com/is2ei",
+	},
 ];
 
 export const PAST_COLLABORATORS: ProfileCardPerson[] = [
