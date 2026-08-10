@@ -5,10 +5,9 @@ import { fetchDocs } from "./fetch-docs.mjs";
 import { fetchPluginDownloads } from "./fetch-plugin-downloads.mjs";
 
 const tasks = [
-	buildPluginList(),
 	downloadBenchmarks(),
 	fetchContributors(),
-	fetchDocs(),
+	fetchDocs().then(() => buildPluginList()),
 	fetchPluginDownloads(),
 ];
 
